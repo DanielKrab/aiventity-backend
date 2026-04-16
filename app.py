@@ -42,7 +42,7 @@ def save_json(path, data):
 # ── App setup ──────────────────────────────────────────────────────────────
 config = load_json(CONFIG_FILE)
 
-app = Flask(__name__)
+app = Flask(__name__, instance_path=BASE_DIR, template_folder=os.path.join(BASE_DIR, 'templates'))
 app.secret_key = config.get('secret_key', secrets.token_hex(32))
 
 
@@ -635,6 +635,70 @@ def preview():
 def public_site():
     """Alias for /website — share this URL with customers."""
     return redirect(url_for('website'))
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# NETLIFY PUBLISH
+# ══════════════════════════════════════════════════════════════════════════
+
+@app.route('/publish-netlify')
+@login_required
+def publish_netlify():
+    import urllib.request, hashlib
+    cfg = load_json(CONFIG_FILE)
+    token = cfg.get('netlify_token', '')
+    site_id = cfg.get('netlify_site_id', '')
+
+    if not token or not site_id:
+        flash('Netlify token of site ID ontbreekt in config.', 'error')
+        return redirect(url_for('dashboard'))
+
+    try:
+        # Render website HTML from template
+        html = render_template('website.html', content=load_json(CONTENT_FILE), site_config=cfg)
+        html_bytes = html.encode('utf-8')
+
+        headers_bytes = b"/*\n  Content-Type: text/html; charset=utf-8\n"
+
+        html_sha1 = hashlib.sha1(html_bytes).hexdigest()
+        hdrs_sha1 = hashlib.sha1(headers_bytes).hexdigest()
+
+        # Create deploy manifest
+        import json as _json
+        manifest = _json.dumps({"files": {"/index.html": html_sha1, "/_headers": hdrs_sha1}}).encode()
+        req = urllib.request.Request(
+            f"https://api.netlify.com/api/v1/sites/{site_id}/deploys",
+            data=manifest,
+            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req) as r:
+            deploy = _json.loads(r.read())
+
+        deploy_id = deploy["id"]
+        required = deploy.get("required", [])
+
+        files_map = {
+            html_sha1: ("index.html", html_bytes, "text/html; charset=utf-8"),
+            hdrs_sha1: ("_headers", headers_bytes, "text/plain"),
+        }
+        for sha in required:
+            if sha in files_map:
+                path, content, ctype = files_map[sha]
+                req2 = urllib.request.Request(
+                    f"https://api.netlify.com/api/v1/deploys/{deploy_id}/files/{path}",
+                    data=content,
+                    headers={"Authorization": f"Bearer {token}", "Content-Type": ctype},
+                    method="PUT"
+                )
+                with urllib.request.urlopen(req2) as r2:
+                    r2.read()
+
+        flash('✅ Website gepubliceerd op aiventity.netlify.app!', 'success')
+    except Exception as e:
+        flash(f'Fout bij publiceren: {str(e)}', 'error')
+
+    return redirect(url_for('dashboard'))
 
 
 # ══════════════════════════════════════════════════════════════════════════

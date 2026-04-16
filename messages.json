@@ -1,0 +1,10 @@
+[
+  {
+    "naam": "Test",
+    "email": "test@test.nl",
+    "onderwerp": "Demo",
+    "bericht": "Test bericht",
+    "timestamp": "2026-04-15T20:27:38.329984",
+    "read": false
+  }
+]

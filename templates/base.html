@@ -209,7 +209,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px)}
   </div>
 
   <div class="sidebar-bottom">
-    <a href="{{ url_for('website') }}" target="_blank" class="view-site">
+    <a href="https://aiventity.netlify.app" target="_blank" class="view-site">
       <span>↗</span> Bekijk website
     </a>
     <a href="{{ url_for('logout') }}" class="logout">
@@ -223,7 +223,8 @@ input:checked+.toggle-slider:before{transform:translateX(20px)}
   <div class="topbar">
     <div class="topbar-title">{% block page_title %}Dashboard{% endblock %}</div>
     <div class="topbar-actions">
-      <a href="{{ url_for('website') }}" target="_blank" class="btn btn-ghost btn-sm">↗ Bekijk website</a>
+      <a href="https://aiventity.netlify.app" target="_blank" class="btn btn-ghost btn-sm">↗ Bekijk website</a>
+      <a href="{{ url_for('publish_netlify') }}" class="btn btn-primary btn-sm" onclick="this.textContent='Publiceren...';this.style.opacity='.7'">🚀 Publiceer</a>
       <a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm">Uitloggen</a>
     </div>
   </div>
