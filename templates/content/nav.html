@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}Navigatie bewerken{% endblock %}
+{% block page_title %}Navigatie{% endblock %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('content_nav') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start">
+
+    <!-- Nav links -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Menu-items</div>
+          <div class="card-subtitle">Links die in de navigatiebalk verschijnen</div>
+        </div>
+        <button type="button" class="add-btn" onclick="addLink()">+ Link toevoegen</button>
+      </div>
+      <div class="card-body">
+        <div id="links-container">
+          {% for link in content.nav.links %}
+          <div class="array-item">
+            <div class="item-fields">
+              <div class="form-row cols-2">
+                <div>
+                  <label class="form-label">Label</label>
+                  <input type="text" name="link_label[]" class="form-control"
+                         value="{{ link.label }}" placeholder="Platform">
+                </div>
+                <div>
+                  <label class="form-label">Link (href)</label>
+                  <input type="text" name="link_href[]" class="form-control"
+                         value="{{ link.href }}" placeholder="#platform">
+                </div>
+              </div>
+            </div>
+            <button type="button" class="remove-btn" onclick="this.closest('.array-item').remove()">×</button>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA + info -->
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">CTA knop</div>
+        </div>
+        <div class="card-body">
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">Knop label</label>
+            <input type="text" name="cta_label" class="form-control"
+                   value="{{ content.nav.cta_label }}" placeholder="Boek een intro">
+            <div class="form-hint">De blauwe knop rechts in de navigatie</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="background:#eff6ff;border-color:#bfdbfe">
+        <div class="card-body" style="padding:18px">
+          <div style="font-size:12px;font-weight:700;color:#1e40af;margin-bottom:8px">Tip</div>
+          <div style="font-size:12px;color:#3b82f6;line-height:1.6">
+            Gebruik <strong>#sectie-id</strong> als href om naar een sectie op de pagina te scrollen, of een volledig URL voor externe links.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body" style="padding:18px">
+          <div style="font-size:12px;font-weight:600;color:#454f5c;margin-bottom:10px">Huidige volgorde</div>
+          {% for link in content.nav.links %}
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0f2f5">
+            <span style="font-size:12px;color:#8a96b0;width:20px">{{ loop.index }}.</span>
+            <span style="font-size:13px;font-weight:600;color:#1a1a2e">{{ link.label }}</span>
+            <span style="font-size:11px;color:#8a96b0;margin-left:auto">{{ link.href }}</span>
+          </div>
+          {% endfor %}
+          <div style="padding:6px 0">
+            <span style="font-size:12px;color:#2563EB;font-weight:600">CTA:</span>
+            <span style="font-size:13px;color:#1a1a2e;margin-left:6px">{{ content.nav.cta_label }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Save bar -->
+  <div style="position:sticky;bottom:0;background:#f0f2f5;padding:16px 0;margin-top:24px;display:flex;gap:12px;align-items:center">
+    <button type="submit" class="btn btn-primary">Opslaan</button>
+    <a href="{{ url_for('content_index') }}" class="btn btn-ghost">Annuleren</a>
+    <a href="{{ url_for('website') }}" target="_blank" class="btn btn-ghost btn-sm" style="margin-left:auto">↗ Live preview</a>
+  </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function addLink() {
+  var container = document.getElementById('links-container');
+  var div = document.createElement('div');
+  div.className = 'array-item';
+  div.innerHTML = `<div class="item-fields">
+    <div class="form-row cols-2">
+      <div>
+        <label class="form-label">Label</label>
+        <input type="text" name="link_label[]" class="form-control" placeholder="Nieuw item">
+      </div>
+      <div>
+        <label class="form-label">Link (href)</label>
+        <input type="text" name="link_href[]" class="form-control" placeholder="#sectie">
+      </div>
+    </div>
+  </div>
+  <button type="button" class="remove-btn" onclick="this.closest('.array-item').remove()">×</button>`;
+  container.appendChild(div);
+  div.querySelector('input').focus();
+}
+</script>
+{% endblock %}

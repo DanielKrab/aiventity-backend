@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% block title %}Beveiliging{% endblock %}
+{% block page_title %}Beveiliging{% endblock %}
+
+{% block content %}
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start">
+
+  <!-- Left column -->
+  <div style="display:flex;flex-direction:column;gap:20px">
+
+    <!-- Change password -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Wachtwoord wijzigen</div>
+          <div class="card-subtitle">Verander het admin wachtwoord</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <form method="POST" action="{{ url_for('security') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <input type="hidden" name="action" value="change_password">
+          <div class="form-group">
+            <label class="form-label">Huidig wachtwoord</label>
+            <input type="password" name="current_password" class="form-control"
+                   placeholder="••••••••" required autocomplete="current-password">
+          </div>
+          <div class="form-row cols-2">
+            <div class="form-group">
+              <label class="form-label">Nieuw wachtwoord</label>
+              <input type="password" name="new_password" class="form-control"
+                     placeholder="••••••••" required autocomplete="new-password" minlength="6">
+              <div class="form-hint">Minimaal 6 tekens</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Bevestig nieuw wachtwoord</label>
+              <input type="password" name="confirm_password" class="form-control"
+                     placeholder="••••••••" required autocomplete="new-password">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Wachtwoord wijzigen</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Security settings -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Beveiligingsinstellingen</div>
+          <div class="card-subtitle">HTTPS, rate limiting en onderhoudsmodus</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <form method="POST" action="{{ url_for('security') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <input type="hidden" name="action" value="save_settings">
+
+          <div class="toggle-group">
+            <div class="toggle-info">
+              <div class="toggle-label">Force HTTPS redirect</div>
+              <div class="toggle-desc">Stuur alle HTTP-verkeer automatisch door naar HTTPS</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" name="force_https" {% if cfg.force_https %}checked{% endif %}>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-group">
+            <div class="toggle-info">
+              <div class="toggle-label">Rate limiting</div>
+              <div class="toggle-desc">Beperk het aantal verzoeken per minuut per IP-adres</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" name="rate_limit_enabled" {% if cfg.rate_limit_enabled %}checked{% endif %}>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="form-group" style="margin:16px 0 4px;padding-left:0">
+            <label class="form-label">Verzoeken per minuut</label>
+            <input type="number" name="rate_limit_per_minute" class="form-control"
+                   value="{{ cfg.rate_limit_per_minute }}" min="1" max="1000" style="max-width:200px">
+            <div class="form-hint">Maximaal aantal requests per minuut per IP (standaard: 60)</div>
+          </div>
+
+          <div class="toggle-group">
+            <div class="toggle-info">
+              <div class="toggle-label">Onderhoudsmodus</div>
+              <div class="toggle-desc">Toon een onderhoudspagina aan bezoekers. Jij blijft ingelogd.</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" name="maintenance_mode" {% if cfg.maintenance_mode %}checked{% endif %}>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="form-group">
+            <label class="form-label">Google Analytics ID</label>
+            <input type="text" name="google_analytics_id" class="form-control"
+                   value="{{ cfg.google_analytics_id }}" placeholder="G-XXXXXXXXXX">
+            <div class="form-hint">Laat leeg om tracking uit te schakelen</div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:20px">
+            <label class="form-label">Contact e-mailadres</label>
+            <input type="email" name="contact_email" class="form-control"
+                   value="{{ cfg.contact_email }}" placeholder="info@aiventity.nl">
+            <div class="form-hint">Gebruikt in de CTA-sectie van de website</div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Instellingen opslaan</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Right column: status -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Beveiligingsstatus</div>
+    </div>
+    <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
+
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f2f5">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#1a1a2e">HTTPS redirect</div>
+          <div style="font-size:11px;color:#8a96b0">Automatisch doorsturen</div>
+        </div>
+        {% if cfg.force_https %}
+          <span class="badge badge-green"><span class="status-dot"></span> Aan</span>
+        {% else %}
+          <span class="badge badge-gray"><span class="status-dot"></span> Uit</span>
+        {% endif %}
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f2f5">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#1a1a2e">Rate limiting</div>
+          <div style="font-size:11px;color:#8a96b0">{{ cfg.rate_limit_per_minute }} req/min</div>
+        </div>
+        {% if cfg.rate_limit_enabled %}
+          <span class="badge badge-green"><span class="status-dot"></span> Aan</span>
+        {% else %}
+          <span class="badge badge-red"><span class="status-dot"></span> Uit</span>
+        {% endif %}
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f2f5">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#1a1a2e">Onderhoudsmodus</div>
+          <div style="font-size:11px;color:#8a96b0">Site zichtbaar voor bezoekers</div>
+        </div>
+        {% if cfg.maintenance_mode %}
+          <span class="badge badge-yellow"><span class="status-dot"></span> Actief</span>
+        {% else %}
+          <span class="badge badge-green"><span class="status-dot"></span> Uit</span>
+        {% endif %}
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f2f5">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#1a1a2e">SSL</div>
+          <div style="font-size:11px;color:#8a96b0">HTTPS certificaat</div>
+        </div>
+        {% if cfg.ssl_enabled %}
+          <span class="badge badge-green"><span class="status-dot"></span> Actief</span>
+        {% else %}
+          <span class="badge badge-gray"><span class="status-dot"></span> Niet ingesteld</span>
+        {% endif %}
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f2f5">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#1a1a2e">Google Analytics</div>
+          <div style="font-size:11px;color:#8a96b0">Tracking ID</div>
+        </div>
+        {% if cfg.google_analytics_id %}
+          <span class="badge badge-green"><span class="status-dot"></span> Ingesteld</span>
+        {% else %}
+          <span class="badge badge-gray"><span class="status-dot"></span> Niet ingesteld</span>
+        {% endif %}
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#1a1a2e">CSRF-beveiliging</div>
+          <div style="font-size:11px;color:#8a96b0">Formulierbeveiliging</div>
+        </div>
+        <span class="badge badge-green"><span class="status-dot"></span> Actief</span>
+      </div>
+
+      <div class="divider" style="margin:4px 0"></div>
+
+      <div style="background:#f9f9fb;border-radius:8px;padding:12px">
+        <div style="font-size:11px;font-weight:700;color:#454f5c;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Aanbevelingen</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          {% if not cfg.domain %}
+          <div style="font-size:12px;color:#92400e;display:flex;gap:6px;align-items:flex-start">
+            <span>⚠</span> Stel een domein in via <a href="{{ url_for('domain') }}" style="color:#2563EB">Domein</a>
+          </div>
+          {% endif %}
+          {% if not cfg.ssl_enabled %}
+          <div style="font-size:12px;color:#92400e;display:flex;gap:6px;align-items:flex-start">
+            <span>⚠</span> Activeer SSL voor productie
+          </div>
+          {% endif %}
+          {% if not cfg.force_https %}
+          <div style="font-size:12px;color:#6b7280;display:flex;gap:6px;align-items:flex-start">
+            <span>💡</span> Overweeg HTTPS redirect in te schakelen
+          </div>
+          {% endif %}
+          {% if cfg.domain and cfg.ssl_enabled and cfg.force_https and cfg.rate_limit_enabled %}
+          <div style="font-size:12px;color:#166534;display:flex;gap:6px;align-items:flex-start">
+            <span>✓</span> Alle aanbevolen instellingen zijn actief
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

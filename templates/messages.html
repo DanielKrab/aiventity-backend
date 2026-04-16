@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Berichten{% endblock %}
+{% block page_title %}Berichten{% endblock %}
+
+{% block content %}
+<div class="stats-row" style="grid-template-columns:repeat(3,1fr)">
+  <div class="stat-card">
+    <div class="stat-label">Totaal</div>
+    <div class="stat-value">{{ messages|length }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Ongelezen</div>
+    <div class="stat-value">{{ messages|selectattr('read','equalto',false)|list|length }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Vandaag</div>
+    <div class="stat-value">{{ messages|selectattr('timestamp','defined')|list|length }}</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="card-title">Ontvangen berichten</div>
+      <div class="card-subtitle">Berichten via het contactformulier op de website</div>
+    </div>
+  </div>
+  <div class="card-body" style="padding:0">
+    {% if messages %}
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead>
+        <tr style="border-bottom:1.5px solid #e5e9f0">
+          <th style="text-align:left;padding:12px 16px;color:#8a96b0;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase">Naam</th>
+          <th style="text-align:left;padding:12px 16px;color:#8a96b0;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase">Onderwerp</th>
+          <th style="text-align:left;padding:12px 16px;color:#8a96b0;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase">Bericht</th>
+          <th style="text-align:left;padding:12px 16px;color:#8a96b0;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase">Datum</th>
+          <th style="text-align:right;padding:12px 16px;color:#8a96b0;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase">Acties</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for msg in messages %}
+        <tr style="border-bottom:1px solid #f0f2f5;{% if not msg.read %}background:#f7fbff{% endif %}" id="msg-{{ loop.index0 }}">
+          <td style="padding:14px 16px;vertical-align:top">
+            <div style="font-weight:600;color:#1a1a2e">{{ msg.naam }}</div>
+            <div style="font-size:12px;color:#8a96b0;margin-top:2px">{{ msg.email }}</div>
+          </td>
+          <td style="padding:14px 16px;vertical-align:top;color:#454f5c">{{ msg.onderwerp or '—' }}</td>
+          <td style="padding:14px 16px;vertical-align:top;color:#454f5c;max-width:320px">
+            <div style="white-space:pre-wrap;line-height:1.5;max-height:60px;overflow:hidden" onclick="this.style.maxHeight=this.style.maxHeight==='none'?'60px':'none';this.style.cursor='pointer'" title="Klik om uit te vouwen">{{ msg.bericht }}</div>
+          </td>
+          <td style="padding:14px 16px;vertical-align:top;color:#8a96b0;font-size:12px;white-space:nowrap">{{ msg.timestamp[:16].replace('T',' ') }}</td>
+          <td style="padding:14px 16px;vertical-align:top;text-align:right;white-space:nowrap">
+            {% if not msg.read %}
+            <button class="btn btn-ghost btn-sm" onclick="markRead({{ loop.index0 }})">Gelezen</button>
+            {% endif %}
+            <button class="btn btn-danger btn-sm" onclick="if(confirm('Bericht verwijderen?'))deleteMsg({{ loop.index0 }})">×</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div style="padding:48px 24px;text-align:center;color:#8a96b0">
+      <div style="font-size:32px;margin-bottom:8px">📭</div>
+      <div style="font-size:14px;font-weight:600;color:#454f5c;margin-bottom:4px">Nog geen berichten</div>
+      <div style="font-size:13px">Berichten verschijnen hier zodra bezoekers het contactformulier invullen.</div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function markRead(idx){
+  fetch('/api/messages/'+idx+'/read',{method:'POST'}).then(function(){
+    var row=document.getElementById('msg-'+idx);
+    if(row){row.style.background='#fff';row.querySelector('.btn-ghost')?.remove()}
+  });
+}
+function deleteMsg(idx){
+  fetch('/api/messages/'+idx+'/delete',{method:'POST'}).then(function(){location.reload()});
+}
+</script>
+{% endblock %}

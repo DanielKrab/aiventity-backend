@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}Platform bewerken{% endblock %}
+{% block page_title %}Platform sectie{% endblock %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('content_platform') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+  <!-- Section header -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">
+      <div class="card-title">Sectie koptekst</div>
+    </div>
+    <div class="card-body">
+      <div class="form-row cols-2">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Sectie label</label>
+          <input type="text" name="section_label" class="form-control"
+                 value="{{ content.platform.section_label }}" placeholder="Platform">
+          <div class="form-hint">Klein label boven de titel (blauw, hoofdletters)</div>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Sectie titel</label>
+          <input type="text" name="title" class="form-control"
+                 value="{{ content.platform.title }}" placeholder="Niet nóg een AI-tool.">
+          <div class="form-hint">Gebruik \n voor een regelafbreking</div>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:16px;margin-bottom:0">
+        <label class="form-label">Subtitel</label>
+        <textarea name="subtitle" class="form-control" rows="2">{{ content.platform.subtitle }}</textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cards -->
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Feature cards</div>
+        <div class="card-subtitle">De vier kaarten in het platform raster</div>
+      </div>
+      <button type="button" class="add-btn" onclick="addCard()">+ Voeg card toe</button>
+    </div>
+    <div class="card-body">
+      <div id="cards-container">
+        {% for card in content.platform.cards %}
+        <div class="nested-card" style="margin-bottom:12px">
+          <div class="nested-card-header">
+            Card {{ loop.index }}
+            <button type="button" class="remove-btn" style="width:auto;padding:2px 10px;font-size:12px;border-radius:5px"
+                    onclick="this.closest('.nested-card').remove()">Verwijderen</button>
+          </div>
+          <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+            <div class="form-row cols-2">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Icoon (emoji)</label>
+                <input type="text" name="card_icon[]" class="form-control"
+                       value="{{ card.icon_emoji }}" placeholder="🧠">
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Icoon achtergrond (CSS kleur)</label>
+                <input type="text" name="card_icon_bg[]" class="form-control"
+                       value="{{ card.icon_bg }}" placeholder="var(--purple-bg) of #EFF6FF">
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">Titel</label>
+              <input type="text" name="card_title[]" class="form-control"
+                     value="{{ card.title }}" placeholder="Card titel">
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">Beschrijving</label>
+              <textarea name="card_desc[]" class="form-control" rows="3">{{ card.desc }}</textarea>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Save bar -->
+  <div style="position:sticky;bottom:0;background:#f0f2f5;padding:16px 0;margin-top:24px;display:flex;gap:12px;align-items:center">
+    <button type="submit" class="btn btn-primary">Opslaan</button>
+    <a href="{{ url_for('content_index') }}" class="btn btn-ghost">Annuleren</a>
+    <a href="{{ url_for('website') }}" target="_blank" class="btn btn-ghost btn-sm" style="margin-left:auto">↗ Live preview</a>
+  </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+var cardIndex = {{ content.platform.cards|length }};
+function addCard() {
+  cardIndex++;
+  var container = document.getElementById('cards-container');
+  var div = document.createElement('div');
+  div.className = 'nested-card';
+  div.style.marginBottom = '12px';
+  div.innerHTML = `
+    <div class="nested-card-header">
+      Card ${cardIndex}
+      <button type="button" class="remove-btn" style="width:auto;padding:2px 10px;font-size:12px;border-radius:5px"
+              onclick="this.closest('.nested-card').remove()">Verwijderen</button>
+    </div>
+    <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+      <div class="form-row cols-2">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Icoon (emoji)</label>
+          <input type="text" name="card_icon[]" class="form-control" placeholder="🧠">
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Icoon achtergrond</label>
+          <input type="text" name="card_icon_bg[]" class="form-control" placeholder="#EFF6FF">
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Titel</label>
+        <input type="text" name="card_title[]" class="form-control" placeholder="Card titel">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Beschrijving</label>
+        <textarea name="card_desc[]" class="form-control" rows="3" placeholder="Beschrijving..."></textarea>
+      </div>
+    </div>`;
+  container.appendChild(div);
+}
+</script>
+{% endblock %}

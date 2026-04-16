@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Welcome card -->
+<div class="card" style="margin-bottom:24px">
+  <div class="card-body" style="display:flex;align-items:center;justify-content:space-between;padding:24px 28px">
+    <div>
+      <h2 style="font-size:20px;font-weight:800;color:#1a1a2e;margin-bottom:4px">Welkom terug 👋</h2>
+      <p style="font-size:13px;color:#8a96b0">
+        Beheer de inhoud en instellingen van de Aiventity website.
+        {% if cfg.maintenance_mode %}
+          <span class="badge badge-yellow" style="margin-left:8px">⚠ Onderhoudsmodus actief</span>
+        {% else %}
+          <span class="badge badge-green" style="margin-left:8px">● Site online</span>
+        {% endif %}
+      </p>
+    </div>
+    <a href="{{ url_for('website') }}" target="_blank" class="btn btn-primary">↗ Bekijk website</a>
+  </div>
+</div>
+
+<!-- Stats row -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-label">Secties</div>
+    <div class="stat-value">{{ sections|length }}</div>
+    <div class="stat-sub">Bewerkbare onderdelen</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Status</div>
+    <div class="stat-value" style="font-size:18px">
+      {% if cfg.maintenance_mode %}
+        <span class="badge badge-yellow">Onderhoud</span>
+      {% else %}
+        <span class="badge badge-green">Online</span>
+      {% endif %}
+    </div>
+    <div class="stat-sub">Website status</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Domein</div>
+    <div class="stat-value" style="font-size:16px;margin-top:4px">
+      {% if cfg.domain %}
+        <span style="color:#2563EB">{{ cfg.domain }}</span>
+      {% else %}
+        <span style="color:#d1d5db">Niet ingesteld</span>
+      {% endif %}
+    </div>
+    <div class="stat-sub">
+      {% if cfg.ssl_enabled %}<span class="badge badge-green">SSL</span>{% else %}<span class="badge badge-gray">Geen SSL</span>{% endif %}
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Beveiliging</div>
+    <div class="stat-value" style="font-size:16px;margin-top:4px">
+      {% if cfg.rate_limit_enabled %}
+        <span class="badge badge-green">Rate limit aan</span>
+      {% else %}
+        <span class="badge badge-red">Rate limit uit</span>
+      {% endif %}
+    </div>
+    <div class="stat-sub">
+      {% if cfg.force_https %}<span class="badge badge-green">HTTPS</span>{% else %}<span class="badge badge-gray">HTTP</span>{% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Grid: Quick actions + Recent changes -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+
+  <!-- Quick actions -->
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Snelle acties</div>
+        <div class="card-subtitle">Veelgebruikte bewerkingen</div>
+      </div>
+    </div>
+    <div class="card-body" style="padding:16px">
+      <div class="quick-actions">
+        <a href="{{ url_for('content_hero') }}" class="quick-action">
+          <div class="qa-icon">🏠</div>
+          <div>
+            <div class="qa-title">Hero bewerken</div>
+            <div class="qa-sub">Titel, subtitel, stats</div>
+          </div>
+        </a>
+        <a href="{{ url_for('content_services') }}" class="quick-action">
+          <div class="qa-icon">💼</div>
+          <div>
+            <div class="qa-title">Diensten bewerken</div>
+            <div class="qa-sub">3 service cards</div>
+          </div>
+        </a>
+        <a href="{{ url_for('content_agents') }}" class="quick-action">
+          <div class="qa-icon">🤖</div>
+          <div>
+            <div class="qa-title">Agents bewerken</div>
+            <div class="qa-sub">Agent cards & features</div>
+          </div>
+        </a>
+        <a href="{{ url_for('content_platform') }}" class="quick-action">
+          <div class="qa-icon">🧩</div>
+          <div>
+            <div class="qa-title">Platform bewerken</div>
+            <div class="qa-sub">Platform feature cards</div>
+          </div>
+        </a>
+        <a href="{{ url_for('security') }}" class="quick-action">
+          <div class="qa-icon">🔒</div>
+          <div>
+            <div class="qa-title">Beveiliging</div>
+            <div class="qa-sub">Wachtwoord, HTTPS</div>
+          </div>
+        </a>
+        <a href="{{ url_for('domain') }}" class="quick-action">
+          <div class="qa-icon">🌐</div>
+          <div>
+            <div class="qa-title">Domein instellen</div>
+            <div class="qa-sub">DNS & nginx config</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent changes -->
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Recente wijzigingen</div>
+        <div class="card-subtitle">Laatste aanpassingen aan bestanden</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div style="display:flex;flex-direction:column;gap:14px">
+
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:#f9f9fb;border-radius:8px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:18px">📄</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1a1a2e">content.json</div>
+              <div style="font-size:11px;color:#8a96b0">Website inhoud</div>
+            </div>
+          </div>
+          <span class="badge badge-blue">{{ content_modified }}</span>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:#f9f9fb;border-radius:8px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:18px">⚙️</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1a1a2e">config.json</div>
+              <div style="font-size:11px;color:#8a96b0">Serverconfiguratie</div>
+            </div>
+          </div>
+          <span class="badge badge-blue">{{ config_modified }}</span>
+        </div>
+
+        <div class="divider" style="margin:4px 0"></div>
+
+        <div style="padding:12px;background:#eff6ff;border-radius:8px;border:1px solid #bfdbfe">
+          <div style="font-size:12px;font-weight:700;color:#1e40af;margin-bottom:6px">Sectie overzicht</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            {% for section in sections %}
+              <span class="badge badge-blue">{{ section }}</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <a href="{{ url_for('content_index') }}" class="btn btn-ghost" style="text-align:center;justify-content:center">
+          Alle secties bewerken →
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

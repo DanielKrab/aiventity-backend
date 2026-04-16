@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% block title %}Thema{% endblock %}
+{% block page_title %}Thema instellingen{% endblock %}
+
+{% block extra_head %}
+<style>
+.color-swatch{display:flex;align-items:center;gap:10px}
+.color-swatch input[type="color"]{width:44px;height:36px;border:1.5px solid #e5e9f0;border-radius:8px;padding:2px;cursor:pointer;background:#fff}
+.color-swatch .color-hex{width:100px}
+.preview-strip{display:flex;gap:10px;margin-top:16px;padding:16px;background:#f9f9fb;border-radius:10px}
+.preview-card{flex:1;padding:16px;border-radius:var(--prev-radius, 20px);border:1px solid #e5e9f0;text-align:center}
+.range-row{display:flex;align-items:center;gap:12px}
+.range-row input[type="range"]{flex:1;accent-color:#2563EB}
+.range-row .range-val{min-width:40px;text-align:right;font-size:13px;color:#8a96b0;font-variant-numeric:tabular-nums}
+</style>
+{% endblock %}
+
+{% block content %}
+{% set theme = cfg.get('theme', {}) %}
+
+<form method="POST">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+  <div class="card" style="margin-bottom:24px">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Kleuren</div>
+        <div class="card-subtitle">Pas de hoofdkleuren van de website aan</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-row cols-2" style="gap:20px">
+        <div class="form-group">
+          <label class="form-label">Primaire kleur</label>
+          <div class="color-swatch">
+            <input type="color" name="primary_color" value="{{ theme.get('primary_color', '#2563EB') }}" oninput="this.nextElementSibling.value=this.value">
+            <input type="text" class="form-control color-hex" value="{{ theme.get('primary_color', '#2563EB') }}" onchange="this.previousElementSibling.value=this.value" name="_pc_hex">
+          </div>
+          <div class="form-hint">Knoppen, links, accenten</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Accent kleur</label>
+          <div class="color-swatch">
+            <input type="color" name="accent_color" value="{{ theme.get('accent_color', '#0d6e52') }}" oninput="this.nextElementSibling.value=this.value">
+            <input type="text" class="form-control color-hex" value="{{ theme.get('accent_color', '#0d6e52') }}" onchange="this.previousElementSibling.value=this.value" name="_ac_hex">
+          </div>
+          <div class="form-hint">Secondaire elementen</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Achtergrondkleur</label>
+          <div class="color-swatch">
+            <input type="color" name="bg_color" value="{{ theme.get('bg_color', '#ffffff') }}" oninput="this.nextElementSibling.value=this.value">
+            <input type="text" class="form-control color-hex" value="{{ theme.get('bg_color', '#ffffff') }}" onchange="this.previousElementSibling.value=this.value" name="_bg_hex">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Vlak/kaart kleur</label>
+          <div class="color-swatch">
+            <input type="color" name="surface_color" value="{{ theme.get('surface_color', '#f9f9fa') }}" oninput="this.nextElementSibling.value=this.value">
+            <input type="text" class="form-control color-hex" value="{{ theme.get('surface_color', '#f9f9fa') }}" onchange="this.previousElementSibling.value=this.value" name="_sf_hex">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tekstkleur</label>
+          <div class="color-swatch">
+            <input type="color" name="text_color" value="{{ theme.get('text_color', '#171717') }}" oninput="this.nextElementSibling.value=this.value">
+            <input type="text" class="form-control color-hex" value="{{ theme.get('text_color', '#171717') }}" onchange="this.previousElementSibling.value=this.value" name="_tx_hex">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Typografie</div>
+        <div class="card-subtitle">Lettertypen en groottes</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-row cols-2">
+        <div class="form-group">
+          <label class="form-label">Kopletter</label>
+          <select name="heading_font" class="form-control">
+            {% for f in ['Outfit','Space Grotesk','Syne','Playfair Display','DM Serif Display','Inter'] %}
+            <option value="{{ f }}" {{ 'selected' if theme.get('heading_font','Outfit')==f else '' }}>{{ f }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tekstletter</label>
+          <select name="body_font" class="form-control">
+            {% for f in ['DM Sans','Inter','Lato','Source Sans 3','Nunito'] %}
+            <option value="{{ f }}" {{ 'selected' if theme.get('body_font','DM Sans')==f else '' }}>{{ f }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Basisgrootte tekst</label>
+        <div class="range-row">
+          <input type="range" name="base_font_size" min="14" max="20" value="{{ theme.get('base_font_size', '16') }}" oninput="this.nextElementSibling.textContent=this.value+'px'">
+          <span class="range-val">{{ theme.get('base_font_size', '16') }}px</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Layout</div>
+        <div class="card-subtitle">Afstanden en vormen</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-group">
+        <label class="form-label">Ruimte tussen secties</label>
+        <div class="range-row">
+          <input type="range" name="section_spacing" min="60" max="140" value="{{ theme.get('section_spacing', '100') }}" oninput="this.nextElementSibling.textContent=this.value+'px'">
+          <span class="range-val">{{ theme.get('section_spacing', '100') }}px</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Hoekradius kaarten</label>
+        <div class="range-row">
+          <input type="range" name="card_radius" min="0" max="32" value="{{ theme.get('card_radius', '20') }}" oninput="this.nextElementSibling.textContent=this.value+'px'">
+          <span class="range-val">{{ theme.get('card_radius', '20') }}px</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px">
+    <button type="submit" class="btn btn-primary">Thema opslaan</button>
+    <a href="{{ url_for('website') }}" target="_blank" class="btn btn-ghost">↗ Bekijk voorbeeld</a>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% block title %}Domein{% endblock %}
+{% block page_title %}Domein configuratie{% endblock %}
+
+{% block content %}
+
+{% set domain = cfg.domain or '' %}
+{% set domain_clean = domain.replace('https://', '').replace('http://', '') %}
+
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start">
+
+  <!-- Left column -->
+  <div style="display:flex;flex-direction:column;gap:20px">
+
+    <!-- Domain input -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Domeinnaam</div>
+          <div class="card-subtitle">De URL waarop uw website bereikbaar is</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <form method="POST" action="{{ url_for('domain') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <div class="form-group">
+            <label class="form-label">Domein</label>
+            <input type="text" name="domain" class="form-control"
+                   value="{{ cfg.domain }}" placeholder="aiventity.nl"
+                   style="font-size:16px;padding:12px 16px">
+            <div class="form-hint">Zonder https:// — bijvoorbeeld: aiventity.nl of www.aiventity.nl</div>
+          </div>
+          <button type="submit" class="btn btn-primary">Opslaan</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Step by step -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Stap-voor-stap domein instellen</div>
+      </div>
+      <div class="card-body">
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Koop een domeinnaam</h4>
+            <p>Registreer uw domeinnaam bij een betrouwbare registrar:<br>
+              <a href="https://www.transip.nl" target="_blank">TransIP</a> (aanbevolen voor NL) &nbsp;·&nbsp;
+              <a href="https://www.namecheap.com" target="_blank">Namecheap</a> &nbsp;·&nbsp;
+              <a href="https://domains.google" target="_blank">Google Domains</a>
+            </p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Stel DNS-records in</h4>
+            <p>Voeg de volgende records toe in het DNS-beheer van uw registrar:</p>
+            <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
+              <div style="background:#f9f9fb;border-radius:8px;padding:12px;font-family:'Courier New',monospace;font-size:12px">
+                <div style="color:#8a96b0;margin-bottom:6px;font-family:'Segoe UI',sans-serif;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">A Record</div>
+                <div><span style="color:#2563EB">Naam:</span> @ (of {{ domain_clean or 'uwdomein.nl' }})</div>
+                <div><span style="color:#2563EB">Type:</span> A</div>
+                <div><span style="color:#2563EB">Waarde:</span> [IP-adres van uw server]</div>
+                <div><span style="color:#2563EB">TTL:</span> 3600</div>
+              </div>
+              <div style="background:#f9f9fb;border-radius:8px;padding:12px;font-family:'Courier New',monospace;font-size:12px">
+                <div style="color:#8a96b0;margin-bottom:6px;font-family:'Segoe UI',sans-serif;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">CNAME Record (www)</div>
+                <div><span style="color:#2563EB">Naam:</span> www</div>
+                <div><span style="color:#2563EB">Type:</span> CNAME</div>
+                <div><span style="color:#2563EB">Waarde:</span> {{ domain_clean or 'uwdomein.nl' }}</div>
+                <div><span style="color:#2563EB">TTL:</span> 3600</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Installeer Nginx</h4>
+            <p>Installeer Nginx op uw server en gebruik de gegenereerde configuratie rechts. Sla op als <code style="background:#f0f2f5;padding:2px 6px;border-radius:4px">/etc/nginx/sites-available/{{ domain_clean or 'aiventity' }}</code></p>
+            <div style="margin-top:8px;font-size:12px;color:#6b7280">
+              Zie het codblok rechts voor de volledige configuratie.
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>SSL met Certbot (Let's Encrypt)</h4>
+            <p>Voer de volgende commando's uit op uw server om een gratis SSL-certificaat te installeren:</p>
+            <div style="margin-top:10px;position:relative">
+              <div class="code-block" id="certbot-code">sudo apt install certbot python3-certbot-nginx -y
+sudo certbot --nginx -d {{ domain_clean or 'uwdomein.nl' }}{% if domain_clean %} -d www.{{ domain_clean }}{% endif %}
+sudo systemctl reload nginx
+# Automatische verlenging testen:
+sudo certbot renew --dry-run</div>
+              <button class="copy-btn" onclick="copyCode('certbot-code', this)">Kopiëren</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h4>Start de Flask app</h4>
+            <p>Zorg dat de Flask app draait en bereikbaar is op poort 5001. Gebruik een process manager voor betrouwbaarheid:</p>
+            <div style="margin-top:10px;position:relative">
+              <div class="code-block" id="systemd-code"># Installeer gunicorn
+pip3 install gunicorn
+
+# Start met gunicorn (productie)
+cd /pad/naar/backend
+gunicorn -w 4 -b 127.0.0.1:5001 app:app
+
+# Of gebruik systemd voor automatisch starten
+# Maak /etc/systemd/system/aiventity.service aan</div>
+              <button class="copy-btn" onclick="copyCode('systemd-code', this)">Kopiëren</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Right column: nginx config + status -->
+  <div style="display:flex;flex-direction:column;gap:20px">
+
+    <!-- Status -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Status</div>
+      </div>
+      <div class="card-body" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:13px;color:#454f5c;font-weight:600">Domein</span>
+          {% if cfg.domain %}
+            <span class="badge badge-green">Ingesteld</span>
+          {% else %}
+            <span class="badge badge-gray">Niet ingesteld</span>
+          {% endif %}
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:13px;color:#454f5c;font-weight:600">SSL</span>
+          {% if cfg.ssl_enabled %}
+            <span class="badge badge-green">Actief</span>
+          {% else %}
+            <span class="badge badge-gray">Niet actief</span>
+          {% endif %}
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:13px;color:#454f5c;font-weight:600">HTTPS redirect</span>
+          {% if cfg.force_https %}
+            <span class="badge badge-green">Aan</span>
+          {% else %}
+            <span class="badge badge-gray">Uit</span>
+          {% endif %}
+        </div>
+        {% if cfg.domain %}
+        <div style="margin-top:4px">
+          <a href="https://{{ domain_clean }}" target="_blank" class="btn btn-ghost" style="width:100%;justify-content:center">
+            ↗ Open {{ domain_clean }}
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Generated nginx config -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Nginx configuratie</div>
+          <div class="card-subtitle">Gegenereerd op basis van uw domein</div>
+        </div>
+      </div>
+      <div class="card-body" style="padding:16px">
+        <div style="position:relative">
+          <div class="code-block" id="nginx-code" style="font-size:11px;line-height:1.6">{% if domain_clean %}server {
+    listen 80;
+    server_name {{ domain_clean }} www.{{ domain_clean }};
+
+    # Redirect HTTP naar HTTPS
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name {{ domain_clean }} www.{{ domain_clean }};
+
+    # SSL (ingevuld door Certbot)
+    ssl_certificate /etc/letsencrypt/live/{{ domain_clean }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ domain_clean }}/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
+    add_header Referrer-Policy "strict-origin-when-cross-origin";
+
+    location / {
+        proxy_pass http://127.0.0.1:5001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Static files
+    location /static/ {
+        alias /pad/naar/backend/static/;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+}{% else %}# Stel eerst een domein in
+# De configuratie wordt hier gegenereerd
+# zodra u een domeinnaam heeft opgeslagen.
+
+server {
+    listen 80;
+    server_name uwdomein.nl www.uwdomein.nl;
+
+    location / {
+        proxy_pass http://127.0.0.1:5001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}{% endif %}</div>
+          <button class="copy-btn" onclick="copyCode('nginx-code', this)">Kopiëren</button>
+        </div>
+        {% if domain_clean %}
+        <div style="margin-top:12px;font-size:11px;color:#8a96b0">
+          Sla op als: <code style="background:#f0f2f5;padding:2px 6px;border-radius:4px">/etc/nginx/sites-available/{{ domain_clean }}</code><br>
+          Activeer: <code style="background:#f0f2f5;padding:2px 6px;border-radius:4px">sudo ln -s /etc/nginx/sites-available/{{ domain_clean }} /etc/nginx/sites-enabled/</code>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function copyCode(id, btn) {
+  var text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(function() {
+    var orig = btn.textContent;
+    btn.textContent = 'Gekopieerd!';
+    setTimeout(function() { btn.textContent = orig; }, 2000);
+  });
+}
+</script>
+{% endblock %}

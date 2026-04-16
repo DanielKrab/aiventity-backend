@@ -1,0 +1,787 @@
+{% set theme = cfg.get('theme', {}) %}
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ cfg.site_title }} — Agentic AI Platform</title>
+<meta name="description" content="Aiventity levert autonome AI-agents die samenwerken, automatiseren en meeschalen met uw teams. Platform, Agents & Consultancy.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Fragment+Mono&family={{ theme.get('heading_font','Outfit')|urlencode }}:wght@400;500;600;700;800;900&family={{ theme.get('body_font','DM Sans')|urlencode }}:wght@400;500;600;700&display=swap" rel="stylesheet">
+{% if cfg.google_analytics_id %}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ cfg.google_analytics_id }}"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','{{ cfg.google_analytics_id }}');</script>
+{% endif %}
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-dark:{{ theme.get('bg_color', '#ffffff') }};--bg-dark-alt:{{ theme.get('surface_color', '#f9f9fa') }};--bg-light:{{ theme.get('surface_color', '#f9f9fa') }};--bg-warm:#faf8f4;--bg-blue:#f7fbff;
+  --surface:{{ theme.get('bg_color', '#ffffff') }};--border:#eaedf0;--border2:#cbd2d9;--text:{{ theme.get('text_color', '#171717') }};--text2:#454f5c;--text3:#9fa1a6;
+  --purple:{{ theme.get('primary_color', '#2563EB') }};--purple-light:{{ theme.get('primary_color', '#2563EB') }};--purple-bg:color-mix(in srgb, {{ theme.get('primary_color', '#2563EB') }} 8%, white);--purple-dark:color-mix(in srgb, {{ theme.get('primary_color', '#2563EB') }} 100%, black 20%);
+  --pink:#ff187f;--pink-light:#ff3395;--pink-bg:rgba(255,24,127,.08);
+  --teal:{{ theme.get('accent_color', '#9bbdb7') }};--yellow:#ecd046;--blue:#2E86DE;--green:#27AE60;--amber:#E67E22;
+  --card-radius:{{ theme.get('card_radius', '20') }}px;
+  --section-pad:{{ theme.get('section_spacing', '100') }}px;
+  --font-size:{{ theme.get('base_font_size', '16') }}px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg-dark);color:var(--text);font-family:'{{ theme.get("body_font","DM Sans") }}',system-ui,sans-serif;font-size:var(--font-size);line-height:1.6;overflow-x:hidden}
+.container{max-width:1200px;margin:0 auto;padding:0 32px}
+.section-pad{padding:var(--section-pad) 0}
+.text-center{text-align:center}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 0;transition:background .3s,backdrop-filter .3s}
+nav.scrolled{background:rgba(255,255,255,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-family:'{{ theme.get("heading_font","Outfit") }}',sans-serif;font-size:20px;font-weight:800;color:var(--text);text-decoration:none;letter-spacing:-.5px}
+.nav-brand span{color:var(--purple-light)}
+.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
+.nav-links a{color:var(--text2);font-size:14px;font-weight:500;text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--purple);color:#fff!important;padding:10px 22px;border-radius:50px;font-weight:600;transition:background .2s,transform .2s}
+.nav-cta:hover{background:var(--purple-dark);transform:translateY(-1px)}
+.mobile-menu-btn{display:none;background:none;border:none;color:var(--text);font-size:24px;cursor:pointer}
+.hero{padding:160px 0 120px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(83,74,183,.06) 0%,transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-100px;left:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(155,189,183,.05) 0%,transparent 70%);pointer-events:none}
+.hero-pills{display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap}
+.hero-pill{padding:6px 16px;border:1px solid var(--border);border-radius:100px;font-size:12px;color:var(--text2);background:var(--surface);font-weight:500}
+.hero h1{font-family:'{{ theme.get("heading_font","Outfit") }}',sans-serif;font-size:clamp(40px,6vw,72px);font-weight:800;line-height:1;letter-spacing:-2.5px;margin-bottom:24px;max-width:800px;color:var(--text)}
+.hero h1 .accent{color:var(--purple)}
+.hero-sub{font-size:18px;color:var(--text2);max-width:560px;line-height:1.7;margin-bottom:40px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+.btn-primary{background:var(--purple);color:#fff;padding:14px 32px;border-radius:50px;font-family:'{{ theme.get("heading_font","Outfit") }}',sans-serif;font-weight:700;font-size:15px;text-decoration:none;transition:all .2s;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:var(--purple-dark);transform:translateY(-2px);box-shadow:0 8px 30px rgba(83,74,183,.3)}
+.btn-ghost{background:transparent;color:var(--text);padding:14px 32px;border-radius:50px;font-family:'{{ theme.get("heading_font","Outfit") }}',sans-serif;font-weight:600;font-size:15px;text-decoration:none;border:1.5px solid var(--border2);transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-ghost:hover{border-color:var(--text3);background:var(--bg-light)}
+.hero-stats{display:flex;gap:48px;margin-top:64px;padding-top:40px;border-top:1px solid var(--border)}
+.stat-num{font-family:'{{ theme.get("heading_font","Outfit") }}',sans-serif;font-size:32px;font-weight:800;color:var(--purple)}
+.stat-label{font-size:13px;color:var(--text3);margin-top:4px}
+.section-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--purple-light);margin-bottom:12px}
+.section-title{font-family:'{{ theme.get("heading_font","Outfit") }}',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-1.5px;margin-bottom:16px;color:var(--text)}
+.section-sub{font-size:16px;color:var(--text2);max-width:560px;line-height:1.7}
+.platform{background:var(--bg-light);color:var(--text)}
+.platform .section-label{color:var(--purple)}
+.platform-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:48px}
+.platform-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);padding:32px 28px;transition:all .3s}
+.platform-card:hover{border-color:var(--border2);box-shadow:0 8px 32px rgba(0,0,0,.06);transform:translateY(-2px)}
+.platform-card .card-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:22px}
+.platform-card h3{font-family:'{{ theme.get("heading_font","Outfit") }}',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;letter-spacing:-.3px}
+.platform-card p{font-size:14px;color:var(--text2);line-height:1.65}
+.services{background:#fff}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.service-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);padding:36px 28px;transition:all .3s;position:relative;overflow:hidden}
+.service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--purple);opacity:0;transition:opacity .3s}
+.service-card:hover{border-color:var(--border2);box-shadow:0 8px 32px rgba(0,0,0,.06);transform:translateY(-3px)}
+.service-card:hover::before{opacity:1}
+.service-card .card-num{font-family:'{{ theme.get("heading_font","Outfit") }}',sans-serif;font-size:48px;font-weight:800;color:rgba(0,0,0,.04);position:absolute;top:16px;right:24px;line-height:1}
+.service-card .card-badge{display:inline-flex;padding:5px 14px;border-radius:100px;font-size:11px;font-weight:600;margin-bottom:20px}
+.badge-purple{background:var(--purple-bg);color:var(--purple-dark)}
+.badge-teal{background:rgba(155,189,183,.15);color:var(--teal)}
+.badge-yellow{background:rgba(236,208,70,.12);color:#b8a020}
+.service-card h3{font-family:'{{ theme.get("heading_font","Outfit") }}',sans-serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:10px;letter-spacing:-.3px}
+.service-card p{font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:20px}
+.service-card ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.service-card li{font-size:13px;color:var(--text2);display:flex;align-items:center;gap:10px}
+.service-card li::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.service-card:nth-child(1) li::before{background:var(--purple-light)}
+.service-card:nth-child(2) li::before{background:var(--teal)}
+.service-card:nth-child(3) li::before{background:var(--yellow)}
+.agents{background:var(--bg-warm);color:var(--text)}
+.agents .section-label{color:var(--purple)}
+.agents-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+.agent-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:28px 24px;display:flex;flex-direction:column;transition:all .3s}
+.agent-card:hover{border-color:var(--border2);box-shadow:0 6px 24px rgba(0,0,0,.07);transform:translateY(-2px)}
+.agent-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:22px}
+.agent-name{font-family:'{{ theme.get("heading_font","Outfit") }}',sans-serif;font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px;letter-spacing:-.2px}
+.agent-role{font-size:12px;color:var(--text3);font-weight:500;margin-bottom:16px}
+.agent-feats{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;flex:1}
+.agent-feats li{font-size:13px;color:var(--text2);display:flex;gap:9px;align-items:flex-start;line-height:1.55}
+.agent-feats li::before{content:'✓';color:var(--purple);font-weight:700;flex-shrink:0;margin-top:1px}
+.agent-moment{border-radius:10px;padding:12px 14px;margin-top:auto;background:var(--purple-bg)}
+.agent-moment-label{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px;color:var(--purple-dark)}
+.agent-moment-text{font-size:12px;line-height:1.55;font-style:italic;color:var(--text2)}
+.hitl{background:var(--bg-light);color:var(--text)}
+.hitl .section-label{color:var(--purple)}
+.hitl-track{display:flex;gap:12px;margin-top:48px}
+.hitl-level{flex:1;border:1px solid var(--border);border-radius:16px;padding:24px 20px;background:var(--surface);transition:all .3s}
+.hitl-level:hover{border-color:var(--border2);box-shadow:0 4px 16px rgba(0,0,0,.06);transform:translateY(-2px)}
+.hitl-num{font-family:'{{ theme.get("heading_font","Outfit") }}',sans-serif;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px}
+.hitl-title{font-family:'{{ theme.get("heading_font","Outfit") }}',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px}
+.hitl-desc{font-size:13px;color:var(--text2);line-height:1.6}
+.hitl-connector{display:flex;align-items:center;padding-top:24px;flex-shrink:0;color:var(--border2)}
+.consultancy{background:#fff}
+.consult-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:48px}
+.consult-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px 28px;transition:all .3s}
+.consult-card:hover{border-color:var(--border2);box-shadow:0 8px 32px rgba(0,0,0,.06)}
+.consult-card h3{font-family:'{{ theme.get("heading_font","Outfit") }}',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:20px;letter-spacing:-.3px}
+.consult-card ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.consult-card li{font-size:14px;color:var(--text2);display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.consult-card li:last-child{border:none}
+.c-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;display:inline-block}
+.trust{background:var(--bg-light);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.trust-items{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;padding:32px 0}
+.trust-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text3)}
+.trust-item svg{width:18px;height:18px;color:var(--teal);flex-shrink:0}
+.cta-section{background:#fff;padding:100px 0}
+.cta-box{background:var(--purple-bg);border:1.5px solid rgba(37,99,235,.2);border-radius:24px;padding:64px 48px;text-align:center;position:relative;overflow:hidden}
+.cta-box::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.08) 0%,transparent 70%);pointer-events:none}
+.cta-box h2{font-family:'{{ theme.get("heading_font","Outfit") }}',sans-serif;font-size:clamp(28px,4vw,40px);font-weight:800;color:var(--purple-dark);margin-bottom:16px;letter-spacing:-1px;position:relative;white-space:pre-line}
+.cta-box p{font-size:16px;color:var(--text2);max-width:480px;margin:0 auto 32px;line-height:1.7;position:relative}
+footer{background:var(--bg-light);border-top:1px solid var(--border);padding:48px 0 32px;color:var(--text)}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px}
+.footer-brand{font-family:'{{ theme.get("heading_font","Outfit") }}',sans-serif;font-size:20px;font-weight:800;margin-bottom:12px}
+.footer-brand span{color:var(--purple-light)}
+.footer-desc{font-size:13px;color:var(--text3);line-height:1.6;max-width:280px}
+.footer-col h4{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin-bottom:16px}
+.footer-col a{display:block;font-size:14px;color:var(--text3);text-decoration:none;padding:4px 0;transition:color .2s}
+.footer-col a:hover{color:var(--text)}
+.footer-bottom{margin-top:40px;padding-top:24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.footer-copy{font-size:12px;color:var(--text3)}
+.footer-legal a{font-size:12px;color:var(--text3);text-decoration:none;margin-left:24px}
+.footer-legal a:hover{color:var(--text)}
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+.admin-bar{position:fixed;bottom:0;left:0;right:0;background:#0f1623;color:#fff;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;z-index:9999;font-size:13px}
+.admin-bar a{color:#3B82F6;text-decoration:none;font-weight:600}
+.admin-bar a:hover{color:#60a5fa}
+.diagram-wrap{background:transparent;border-radius:20px;padding:24px 20px 20px;border:none;overflow:hidden;margin-top:32px;max-width:620px;margin-left:auto;margin-right:auto}
+.diagram-wrap svg{width:100%;height:auto;display:block;max-height:200px}
+@media(max-width:1024px){.platform-grid,.consult-grid{grid-template-columns:1fr 1fr}.services-grid,.agents-grid{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr 1fr}.hero-stats{gap:32px}}
+@media(max-width:768px){.nav-links{display:none}.mobile-menu-btn{display:block}.hero{padding:120px 0 80px}.hero h1{font-size:36px;letter-spacing:-1.5px}.hero-stats{flex-direction:column;gap:20px}.platform-grid,.consult-grid,.services-grid,.agents-grid{grid-template-columns:1fr}.hitl-track{flex-direction:column}.hitl-connector{display:none}.section-pad{padding:64px 0}.container{padding:0 20px}.footer-grid{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:12px;text-align:center}.cta-box{padding:40px 24px}}
+</style>
+</head>
+<body>
+
+{% if content.hitl is defined %}
+{% set hitl = content.hitl %}
+{% endif %}
+
+<!-- Admin visual editor -->
+<style>
+.ve-bar{position:fixed;bottom:0;left:0;right:0;background:#0f1623;color:#fff;padding:10px 20px;display:flex;align-items:center;gap:10px;z-index:9999;font-size:13px;font-family:'DM Sans',system-ui,sans-serif}
+.ve-bar a,.ve-bar button{font-family:inherit}
+.ve-btn{padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.ve-btn-ghost{background:rgba(255,255,255,.08);color:#a8b5c8}.ve-btn-ghost:hover{background:rgba(255,255,255,.14);color:#fff}
+.ve-btn-blue{background:#2563EB;color:#fff}.ve-btn-blue:hover{background:#1d4ed8}
+.ve-btn-green{background:#16a34a;color:#fff}.ve-btn-green:hover{background:#15803d}
+.ve-spacer{flex:1}
+body.ve-editing [data-ve]{outline:1.5px dashed rgba(37,99,235,.4);border-radius:3px;cursor:text;transition:outline-color .15s}
+body.ve-editing [data-ve]:hover{outline-color:rgba(37,99,235,.8);background:rgba(37,99,235,.03)}
+body.ve-editing [data-ve]:focus{outline:2px solid #2563EB;background:rgba(37,99,235,.05)}
+#ve-mini{position:fixed;z-index:9997;background:#fff;border:1px solid #eaedf0;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.15);padding:8px;display:none;gap:6px;align-items:center;font-size:12px}
+#ve-mini.show{display:flex}
+#ve-mini select,#ve-mini input{font-family:inherit;font-size:11px;border:1.5px solid #eaedf0;border-radius:6px;padding:4px 6px;outline:none;background:#fff;color:#1a1a2e}
+#ve-mini select{width:120px}
+#ve-mini input[type=number]{width:48px;text-align:center}
+#ve-mini input[type=color]{width:26px;height:26px;border-radius:6px;padding:1px;cursor:pointer}
+#ve-mini label{color:#9fa1a6;font-size:10px;font-weight:600;letter-spacing:.5px}
+.ve-tip{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#0f1623;color:#fff;padding:7px 16px;border-radius:8px;font-size:12px;z-index:9998;display:none;pointer-events:none;white-space:nowrap}
+body.ve-editing .ve-tip{display:block}
+#ve-design{position:fixed;right:0;top:0;bottom:48px;width:272px;background:#fff;border-left:1px solid #eaedf0;z-index:9998;transform:translateX(102%);transition:transform .25s ease;overflow-y:auto;padding:18px 16px;font-size:12.5px}
+#ve-design.open{transform:translateX(0)}
+.ve-dh{font-size:14px;font-weight:700;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;color:#1a1a2e}
+.ve-ds{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #f0f2f5}
+.ve-ds:last-child{border-bottom:none}
+.ve-dl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9fa1a6;margin-bottom:8px}
+.ve-dr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:6px}
+.ve-dn{font-size:12px;color:#454f5c}
+.ve-sw{width:28px;height:28px;border-radius:6px;border:1.5px solid #eaedf0;overflow:hidden;cursor:pointer;padding:0;flex-shrink:0}
+.ve-sw input[type=color]{width:40px;height:40px;border:none;cursor:pointer;margin:-6px}
+.ve-sel{width:100%;padding:6px 8px;border:1.5px solid #eaedf0;border-radius:6px;font-size:12px;color:#1a1a2e;background:#fff;outline:none;font-family:inherit;cursor:pointer}
+.ve-rr{display:flex;align-items:center;gap:8px;margin-top:2px}
+.ve-rr input[type=range]{flex:1;accent-color:#2563EB}
+.ve-rv{font-size:11px;color:#9fa1a6;min-width:32px;text-align:right}
+#ve-blocks{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(15,22,35,.55);backdrop-filter:blur(4px)}
+#ve-blocks.open{display:flex}
+.ve-bm{background:#fff;border-radius:16px;padding:24px;width:480px;max-width:90vw;box-shadow:0 24px 64px rgba(0,0,0,.25)}
+.ve-bg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.ve-bo{background:#f9f9fb;border:1.5px solid #eaedf0;border-radius:12px;padding:14px 12px;cursor:pointer;transition:all .15s;text-align:left;width:100%;font-family:inherit}
+.ve-bo:hover{border-color:#2563EB;background:#EFF6FF}
+</style>
+
+<div class="ve-bar">
+  <a href="{{ url_for('dashboard') }}" class="ve-btn ve-btn-ghost">← Dashboard</a>
+  <button class="ve-btn ve-btn-ghost" id="ve-edit-btn" onclick="veToggleEdit()">✏️ Bewerken</button>
+  <button class="ve-btn ve-btn-ghost" id="ve-undo-btn" onclick="veUndo()" style="display:none">↩ Ongedaan</button>
+  <button class="ve-btn ve-btn-ghost" id="ve-block-btn" onclick="document.getElementById('ve-blocks').classList.add('open')" style="display:none">＋ Blok</button>
+  <button class="ve-btn ve-btn-ghost" id="ve-style-btn" onclick="document.getElementById('ve-design').classList.toggle('open')" style="display:none">🎨 Stijl</button>
+  <span class="ve-spacer"></span>
+  <button class="ve-btn ve-btn-green" id="ve-save-btn" onclick="veSave()" style="display:none">↓ Opslaan</button>
+  <a href="{{ url_for('website') }}" class="ve-btn ve-btn-ghost" target="_blank">↗</a>
+</div>
+<div class="ve-tip">Klik op tekst om te bewerken · ⌘Z ongedaan</div>
+<div id="ve-mini">
+  <label>Font</label>
+  <select id="ve-mf" onchange="veMiniFont(this.value)">
+    <option value="">— kies —</option>
+    <option>Outfit</option><option>DM Sans</option><option>Inter</option><option>Space Grotesk</option><option>Syne</option><option>Playfair Display</option><option>Lato</option><option>Nunito</option><option>Source Sans 3</option><option>DM Serif Display</option>
+  </select>
+  <label>Px</label>
+  <input type="number" id="ve-ms" min="10" max="80" onchange="veMiniSize(this.value)">
+  <label>Kleur</label>
+  <input type="color" id="ve-mc" oninput="veMiniColor(this.value)">
+</div>
+
+<!-- Design panel -->
+<div id="ve-design">
+  <div class="ve-dh">Stijl <button onclick="document.getElementById('ve-design').classList.remove('open')" style="background:none;border:none;font-size:18px;cursor:pointer;color:#9fa1a6">×</button></div>
+  <div class="ve-ds">
+    <div class="ve-dl">Kleuren</div>
+    <div class="ve-dr"><span class="ve-dn">Primair</span><label class="ve-sw"><input type="color" value="{{ theme.get('primary_color','#2563EB') }}" oninput="veColor('--purple',this.value)"></label></div>
+    <div class="ve-dr"><span class="ve-dn">Accent</span><label class="ve-sw"><input type="color" value="{{ theme.get('accent_color','#0d6e52') }}" oninput="veColor('--teal',this.value)"></label></div>
+    <div class="ve-dr"><span class="ve-dn">Achtergrond</span><label class="ve-sw"><input type="color" value="{{ theme.get('bg_color','#ffffff') }}" oninput="veColor('--bg-dark',this.value);veColor('--surface',this.value)"></label></div>
+    <div class="ve-dr"><span class="ve-dn">Tekst</span><label class="ve-sw"><input type="color" value="{{ theme.get('text_color','#171717') }}" oninput="veColor('--text',this.value)"></label></div>
+  </div>
+  <div class="ve-ds">
+    <div class="ve-dl">Lettertype kop</div>
+    <select class="ve-sel" onchange="veHeadFont(this.value)">
+      {% for f in ['Outfit','Space Grotesk','Syne','Playfair Display','DM Serif Display'] %}
+      <option value="{{ f }}" {{ 'selected' if theme.get('heading_font','Outfit')==f }}>{{ f }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="ve-ds">
+    <div class="ve-dl">Lettertype tekst</div>
+    <select class="ve-sel" onchange="veBodyFont(this.value)">
+      {% for f in ['DM Sans','Inter','Lato','Source Sans 3','Nunito'] %}
+      <option value="{{ f }}" {{ 'selected' if theme.get('body_font','DM Sans')==f }}>{{ f }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="ve-ds">
+    <div class="ve-dl">Tekstgrootte</div>
+    <div class="ve-rr"><input type="range" min="14" max="20" value="{{ theme.get('base_font_size','16') }}" oninput="document.body.style.fontSize=this.value+'px';this.nextElementSibling.textContent=this.value+'px'"><span class="ve-rv">{{ theme.get('base_font_size','16') }}px</span></div>
+  </div>
+  <div class="ve-ds">
+    <div class="ve-dl">Sectieruimte</div>
+    <div class="ve-rr"><input type="range" min="60" max="140" value="{{ theme.get('section_spacing','100') }}" oninput="document.documentElement.style.setProperty('--section-pad',this.value+'px');this.nextElementSibling.textContent=this.value+'px'"><span class="ve-rv">{{ theme.get('section_spacing','100') }}px</span></div>
+  </div>
+  <div class="ve-ds">
+    <div class="ve-dl">Hoekradius</div>
+    <div class="ve-rr"><input type="range" min="0" max="32" value="{{ theme.get('card_radius','20') }}" oninput="document.documentElement.style.setProperty('--card-radius',this.value+'px');this.nextElementSibling.textContent=this.value+'px'"><span class="ve-rv">{{ theme.get('card_radius','20') }}px</span></div>
+  </div>
+</div>
+
+<!-- Block picker -->
+<div id="ve-blocks" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="ve-bm">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div style="font-size:15px;font-weight:700;color:#1a1a2e">Blok toevoegen</div>
+      <button onclick="document.getElementById('ve-blocks').classList.remove('open')" style="background:none;border:none;font-size:20px;cursor:pointer;color:#9fa1a6">×</button>
+    </div>
+    <div class="ve-bg">
+      <button class="ve-bo" onclick="veAddBlock('text')"><div style="font-size:18px">📝</div><div style="font-size:13px;font-weight:600;margin-top:4px">Tekstsectie</div><div style="font-size:11px;color:#9fa1a6">Koptekst + alinea</div></button>
+      <button class="ve-bo" onclick="veAddBlock('stats')"><div style="font-size:18px">📊</div><div style="font-size:13px;font-weight:600;margin-top:4px">Statistieken</div><div style="font-size:11px;color:#9fa1a6">Drie cijferkaarten</div></button>
+      <button class="ve-bo" onclick="veAddBlock('quote')"><div style="font-size:18px">💬</div><div style="font-size:13px;font-weight:600;margin-top:4px">Citaat</div><div style="font-size:11px;color:#9fa1a6">Quote met auteur</div></button>
+      <button class="ve-bo" onclick="veAddBlock('columns')"><div style="font-size:18px">⚡</div><div style="font-size:13px;font-weight:600;margin-top:4px">Twee kolommen</div><div style="font-size:11px;color:#9fa1a6">Vergelijkingsoverzicht</div></button>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">Ai<span>ventity</span></a>
+    <ul class="nav-links">
+      {% for link in content.nav.links %}
+      <li><a href="{{ link.href }}">{{ link.label }}</a></li>
+      {% endfor %}
+      <li><a href="#contact" class="nav-cta">{{ content.nav.cta_label }}</a></li>
+    </ul>
+    <button class="mobile-menu-btn" aria-label="Menu">☰</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-pills">
+      {% for pill in content.hero.pills %}
+      <span class="hero-pill">{{ pill }}</span>
+      {% endfor %}
+    </div>
+    <h1 class="fade-up">{{ content.hero.title }}<br><span class="accent">{{ content.hero.title_accent }}</span></h1>
+    <p class="hero-sub fade-up">{{ content.hero.subtitle }}</p>
+    <div class="hero-ctas fade-up">
+      <a href="#contact" class="btn-primary">{{ content.hero.cta_primary }}</a>
+      <a href="#platform" class="btn-ghost">{{ content.hero.cta_secondary }}</a>
+    </div>
+    <div class="hero-stats fade-up">
+      {% for stat in content.hero.stats %}
+      <div>
+        <div class="stat-num">{{ stat.num }}</div>
+        <div class="stat-label">{{ stat.label }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORM -->
+<section class="platform section-pad" id="platform">
+  <div class="container">
+    <div class="section-label fade-up">{{ content.platform.section_label }}</div>
+    <h2 class="section-title fade-up" style="white-space:pre-line">{{ content.platform.title }}</h2>
+    <p class="section-sub fade-up">{{ content.platform.subtitle }}</p>
+    <div class="platform-grid">
+      {% for card in content.platform.cards %}
+      <div class="platform-card fade-up">
+        <div class="card-icon" style="background:{{ card.icon_bg }}">{{ card.icon_emoji }}</div>
+        <h3>{{ card.title }}</h3>
+        <p>{{ card.desc }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- DIENSTEN -->
+<section class="services section-pad" id="diensten">
+  <div class="container">
+    <div class="section-label fade-up">{{ content.services.section_label }}</div>
+    <h2 class="section-title fade-up" style="white-space:pre-line">{{ content.services.title }}</h2>
+    <p class="section-sub fade-up">{{ content.services.subtitle }}</p>
+    <div class="services-grid">
+      {% for card in content.services.cards %}
+      <div class="service-card fade-up">
+        <div class="card-num">{{ card.num }}</div>
+        <div class="card-badge badge-{{ card.badge_color }}">{{ card.badge_label }}</div>
+        <h3>{{ card.title }}</h3>
+        <p>{{ card.desc }}</p>
+        <ul>
+          {% for item in card['items'] %}
+          <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- AGENTS -->
+<section class="agents section-pad" id="agents">
+  <div class="container">
+    <div class="section-label fade-up">{{ content.agents.section_label }}</div>
+    <h2 class="section-title fade-up">{{ content.agents.title }}</h2>
+    <p class="section-sub fade-up">{{ content.agents.subtitle }}</p>
+
+    <!-- Diagram -->
+    <div class="diagram-wrap fade-up">
+      <svg viewBox="0 0 680 318" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <path id="pf" d="M 112 150 C 112 185 285 196 340 198"/>
+          <path id="ps" d="M 568 150 C 568 185 395 196 340 198"/>
+        </defs>
+        <path d="M 112 150 C 112 185 285 196 340 198" stroke="#0d6e52" stroke-width="1.5" stroke-dasharray="5 4" fill="none" opacity="0.55">
+          <animate attributeName="stroke-dashoffset" from="9" to="0" dur="1.2s" repeatCount="indefinite"/>
+        </path>
+        <path d="M 568 150 C 568 185 395 196 340 198" stroke="#92580a" stroke-width="1.5" stroke-dasharray="5 4" fill="none" opacity="0.55">
+          <animate attributeName="stroke-dashoffset" from="9" to="0" dur="1.5s" repeatCount="indefinite"/>
+        </path>
+        <circle r="4" fill="#0d6e52" opacity="0.85"><animateMotion dur="2s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#pf"/></animateMotion></circle>
+        <circle r="2.5" fill="#0d6e52" opacity="0.4"><animateMotion dur="2s" begin="1s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#pf"/></animateMotion></circle>
+        <circle r="4" fill="#92580a" opacity="0.85"><animateMotion dur="2.4s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#ps"/></animateMotion></circle>
+        <circle r="2.5" fill="#92580a" opacity="0.4"><animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#ps"/></animateMotion></circle>
+        <circle cx="340" cy="246" r="1" fill="none" stroke="#2563EB" stroke-width="1.5"><animate attributeName="r" values="48;100" dur="2.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.28;0" dur="2.8s" repeatCount="indefinite"/></circle>
+        <circle cx="340" cy="246" r="1" fill="none" stroke="#2563EB" stroke-width="1"><animate attributeName="r" values="48;130" dur="2.8s" begin="1s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.14;0" dur="2.8s" begin="1s" repeatCount="indefinite"/></circle>
+        <circle cx="340" cy="198" r="4" fill="#2563EB"><animate attributeName="opacity" values="0.5;0.15;0.5" dur="2s" repeatCount="indefinite"/><animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite"/></circle>
+        <rect x="16" y="24" width="192" height="126" rx="14" fill="#f0faf5" fill-opacity="0.5" stroke="#0d6e52" stroke-width="1.5"/>
+        <text x="112" y="60" text-anchor="middle" font-family="'Outfit',sans-serif" font-weight="800" font-size="15" fill="#0b5c44">Finance Agent</text>
+        <text x="112" y="79" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11.5" fill="#4a9e7a">Budget &amp; marge</text>
+        <line x1="28" y1="91" x2="196" y2="91" stroke="#0d6e52" stroke-width="0.8" opacity="0.15"/>
+        <rect x="27" y="99" width="80" height="21" rx="10.5" fill="#0d6e52" opacity="0.1"/>
+        <text x="67" y="113" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9.5" fill="#0d6e52">Real-time marge</text>
+        <rect x="114" y="99" width="80" height="21" rx="10.5" fill="#0d6e52" opacity="0.1"/>
+        <text x="154" y="113" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9.5" fill="#0d6e52">Budget scenario's</text>
+        <rect x="27" y="126" width="167" height="21" rx="10.5" fill="#0d6e52" opacity="0.07"/>
+        <text x="110" y="140" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9.5" fill="#2d7a56">Alarmeert bij overschrijding</text>
+        <rect x="472" y="24" width="192" height="126" rx="14" fill="#fff8f0" fill-opacity="0.5" stroke="#92580a" stroke-width="1.5"/>
+        <text x="568" y="60" text-anchor="middle" font-family="'Outfit',sans-serif" font-weight="800" font-size="15" fill="#7a4508">Sourcing &amp; Ops</text>
+        <text x="568" y="79" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11.5" fill="#b07030">Inkoop &amp; uitvoering</text>
+        <line x1="484" y1="91" x2="652" y2="91" stroke="#92580a" stroke-width="0.8" opacity="0.15"/>
+        <rect x="483" y="99" width="76" height="21" rx="10.5" fill="#92580a" opacity="0.1"/>
+        <text x="521" y="113" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9.5" fill="#92580a">Auto-offertes</text>
+        <rect x="565" y="99" width="85" height="21" rx="10.5" fill="#92580a" opacity="0.1"/>
+        <text x="607" y="113" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9.5" fill="#92580a">Dag-coördinatie</text>
+        <rect x="483" y="126" width="167" height="21" rx="10.5" fill="#92580a" opacity="0.07"/>
+        <text x="566" y="140" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9.5" fill="#a06020">Bewaakt voorraden &amp; weer</text>
+        <rect x="205" y="194" width="270" height="106" rx="19" fill="#2563EB" opacity="0.04"/>
+        <rect x="208" y="197" width="264" height="100" rx="16" fill="#EFF6FF" fill-opacity="0.5" stroke="#2563EB" stroke-width="2"/>
+        <text x="340" y="235" text-anchor="middle" font-family="'Outfit',sans-serif" font-weight="800" font-size="17" fill="#1D4ED8">Eventmanager Agent</text>
+        <text x="340" y="255" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="12" fill="#60A5FA">De Verkeerstoren</text>
+        <line x1="222" y1="266" x2="458" y2="266" stroke="#2563EB" stroke-width="0.8" opacity="0.18"/>
+        <rect x="222" y="273" width="104" height="21" rx="10.5" fill="#2563EB" opacity="0.1"/>
+        <text x="274" y="287" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9.5" fill="#2563EB">Chaos → acties</text>
+        <rect x="334" y="273" width="120" height="21" rx="10.5" fill="#2563EB" opacity="0.1"/>
+        <text x="394" y="287" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9.5" fill="#2563EB">Verbindt alle agents</text>
+      </svg>
+    </div>
+
+    <!-- Agent cards -->
+    <div class="agents-grid">
+      {% for card in content.agents.cards %}
+      <div class="agent-card fade-up">
+        <div class="agent-icon" style="background:var(--purple-bg)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div class="agent-name">{{ card.name }}</div>
+        <div class="agent-role">{{ card.role }}</div>
+        <ul class="agent-feats">
+          {% for feat in card.features %}
+          <li><span>{{ feat }}</span></li>
+          {% endfor %}
+        </ul>
+        <div class="agent-moment">
+          <div class="agent-moment-label">Voorbeeld</div>
+          <div class="agent-moment-text">"{{ card.example }}"</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- HITL -->
+<section class="hitl section-pad">
+  <div class="container">
+    <div class="section-label fade-up">{{ content.hitl.section_label }}</div>
+    <h2 class="section-title fade-up">{{ content.hitl.title }}</h2>
+    <p class="section-sub fade-up">{{ content.hitl.subtitle }}</p>
+    <div class="hitl-track fade-up">
+      {% for level in content.hitl.levels %}
+      <div class="hitl-level">
+        <div class="hitl-num" style="color:{{ level.num_color }}">{{ level.num_label }}</div>
+        <div class="hitl-title">{{ level.title }}</div>
+        <div class="hitl-desc">{{ level.desc }}</div>
+      </div>
+      {% if not loop.last %}
+      <div class="hitl-connector">
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M4 8H12M9 5L12 8L9 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CONSULTANCY -->
+<section class="consultancy section-pad" id="consultancy">
+  <div class="container">
+    <div class="section-label fade-up">{{ content.consultancy.section_label }}</div>
+    <h2 class="section-title fade-up" style="white-space:pre-line">{{ content.consultancy.title }}</h2>
+    <p class="section-sub fade-up">{{ content.consultancy.subtitle }}</p>
+    <div class="consult-grid">
+      {% for card in content.consultancy.cards %}
+      <div class="consult-card fade-up">
+        <h3>{{ card.title }}</h3>
+        <ul>
+          {% for item in card['items'] %}
+          <li><span class="c-dot" style="background:{{ item.color }}"></span>{{ item.label }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<section class="trust">
+  <div class="container">
+    <div class="trust-items">
+      {% for item in content.trust['items'] %}
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>{{ item }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CUSTOM BLOCKS -->
+{% if content.get('custom_blocks') %}
+<div id="custom-blocks">
+{% for block in content.custom_blocks %}
+  {% if block.type == 'text' %}
+  <section class="section-pad" style="background:{% if loop.index is odd %}var(--bg-light){% else %}#fff{% endif %}">
+    <div class="container fade-up">
+      <div class="section-label">{{ block.label }}</div>
+      <h2 class="section-title">{{ block.title }}</h2>
+      <p class="section-sub">{{ block.text }}</p>
+    </div>
+  </section>
+  {% elif block.type == 'stats' %}
+  <section class="section-pad" style="background:{% if loop.index is odd %}var(--bg-light){% else %}#fff{% endif %}">
+    <div class="container">
+      <div class="section-label fade-up">{{ block.label }}</div>
+      <h2 class="section-title fade-up">{{ block.title }}</h2>
+      <div class="hero-stats fade-up" style="margin-top:32px;border-top:none;padding-top:0">
+        {% for item in block.get('items', []) %}
+        <div><div class="stat-num">{{ item.num }}</div><div class="stat-label">{{ item.label }}</div></div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% elif block.type == 'quote' %}
+  <section style="padding:64px 0;background:{% if loop.index is odd %}var(--bg-light){% else %}#fff{% endif %}">
+    <div class="container fade-up">
+      <div style="border-left:3px solid var(--purple);padding-left:24px;max-width:640px">
+        <p style="font-size:20px;font-style:italic;color:var(--text);line-height:1.7">"{{ block.text }}"</p>
+        <p style="font-size:14px;color:var(--text3);margin-top:12px">{{ block.title }}</p>
+      </div>
+    </div>
+  </section>
+  {% elif block.type == 'columns' %}
+  <section class="section-pad" style="background:{% if loop.index is odd %}var(--bg-light){% else %}#fff{% endif %}">
+    <div class="container">
+      <div class="section-label fade-up">{{ block.label }}</div>
+      <h2 class="section-title fade-up">{{ block.title }}</h2>
+      <div class="consult-grid fade-up" style="margin-top:32px">
+        <div class="consult-card">
+          <h3>{{ block.get('col_a_title', 'Kolom A') }}</h3>
+          <ul>{% for item in block.get('items', []) %}<li><span class="c-dot" style="background:var(--purple)"></span>{{ item.col_a }}</li>{% endfor %}</ul>
+        </div>
+        <div class="consult-card">
+          <h3>{{ block.get('col_b_title', 'Kolom B') }}</h3>
+          <ul>{% for item in block.get('items', []) %}<li><span class="c-dot" style="background:var(--teal)"></span>{{ item.col_b }}</li>{% endfor %}</ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+{% endfor %}
+</div>
+{% endif %}
+
+<!-- CONTACT -->
+{% set contact = content.get('contact', {}) %}
+<section class="section-pad" id="contact" style="background:#fff">
+  <div class="container">
+    <div class="section-label fade-up">{{ contact.get('section_label', 'Contact') }}</div>
+    <h2 class="section-title fade-up">{{ contact.get('title', 'Stuur een bericht') }}</h2>
+    <p class="section-sub fade-up">{{ contact.get('subtitle', 'Vul het formulier in — we reageren binnen één werkdag.') }}</p>
+    <form id="contact-form" class="fade-up" style="margin-top:32px;max-width:560px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.3px">Naam *</label>
+          <input type="text" name="naam" required placeholder="Uw naam" style="width:100%;padding:12px 16px;border:1.5px solid var(--border);border-radius:12px;font-family:inherit;font-size:14px;color:var(--text);background:var(--surface);outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--purple)'" onblur="this.style.borderColor='var(--border)'">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.3px">E-mail *</label>
+          <input type="email" name="email" required placeholder="uw@email.nl" style="width:100%;padding:12px 16px;border:1.5px solid var(--border);border-radius:12px;font-family:inherit;font-size:14px;color:var(--text);background:var(--surface);outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--purple)'" onblur="this.style.borderColor='var(--border)'">
+        </div>
+      </div>
+      <div>
+        <label style="display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.3px">Onderwerp</label>
+        <input type="text" name="onderwerp" placeholder="Bijv. kennismaking, demo aanvragen…" style="width:100%;padding:12px 16px;border:1.5px solid var(--border);border-radius:12px;font-family:inherit;font-size:14px;color:var(--text);background:var(--surface);outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--purple)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div>
+        <label style="display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.3px">Bericht *</label>
+        <textarea name="bericht" required rows="5" placeholder="Vertel ons over uw organisatie en wat u zoekt…" style="width:100%;padding:12px 16px;border:1.5px solid var(--border);border-radius:12px;font-family:inherit;font-size:14px;color:var(--text);background:var(--surface);outline:none;resize:vertical;min-height:120px;transition:border-color .2s" onfocus="this.style.borderColor='var(--purple)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+      </div>
+      <div id="contact-success" style="display:none;padding:14px 18px;background:color-mix(in srgb, var(--teal) 10%, white);border:1px solid var(--teal);border-radius:12px;color:var(--teal);font-size:14px;font-weight:500">{{ contact.get('success_msg', 'Bedankt! We nemen zo snel mogelijk contact op.') }}</div>
+      <div id="contact-error" style="display:none;padding:14px 18px;background:#fee2e2;border:1px solid #fca5a5;border-radius:12px;color:#dc2626;font-size:14px;font-weight:500"></div>
+      <button type="submit" class="btn-primary" style="width:fit-content">{{ contact.get('btn_label', 'Verstuur bericht →') }}</button>
+    </form>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-box fade-up">
+      <h2>{{ content.cta.title }}</h2>
+      <p>{{ content.cta.desc }}</p>
+      <a href="#contact" class="btn-primary">{{ content.cta.btn_label }}</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Ai<span>ventity</span></div>
+        <p class="footer-desc">{{ content.footer.tagline }}</p>
+      </div>
+      {% for col in content.footer.columns %}
+      <div class="footer-col">
+        <h4>{{ col.title }}</h4>
+        {% for link in col.links %}
+        <a href="{{ link.href }}">{{ link.label }}</a>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">{{ content.footer.copyright }}</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Voorwaarden</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+var nav = document.getElementById('navbar');
+window.addEventListener('scroll', function() {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+}, {threshold: 0.1, rootMargin: '0px 0px -40px 0px'});
+document.querySelectorAll('.fade-up').forEach(function(el) { observer.observe(el); });
+
+// Contact form
+var cForm=document.getElementById('contact-form');
+if(cForm){cForm.addEventListener('submit',function(e){
+  e.preventDefault();
+  var fd={naam:cForm.naam.value,email:cForm.email.value,onderwerp:cForm.onderwerp.value,bericht:cForm.bericht.value};
+  document.getElementById('contact-error').style.display='none';
+  fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(fd)})
+  .then(function(r){return r.json()})
+  .then(function(d){
+    if(d.ok){document.getElementById('contact-success').style.display='block';cForm.reset();}
+    else{var el=document.getElementById('contact-error');el.textContent=d.error||'Er ging iets mis.';el.style.display='block';}
+  })
+  .catch(function(){var el=document.getElementById('contact-error');el.textContent='Verbindingsfout. Probeer het opnieuw.';el.style.display='block';});
+});}
+
+// ─── VISUAL EDITOR ──────────────────────────────────────
+var veOn=false;
+var VE_SEL='.section-label,.section-title,.section-sub,.hero h1,.hero-sub,.stat-num,.stat-label,.agent-name,.agent-role,.agent-feats li span,.agent-moment-text,.hitl-title,.hitl-desc,.hitl-num,.service-card h3,.service-card p,.service-card li,.platform-card h3,.platform-card p,.consult-card h3,.consult-card li,.footer-desc,.footer-copy,.cta-box h2,.cta-box p';
+
+function veToggleEdit(){
+  veOn=!veOn;
+  document.body.classList.toggle('ve-editing',veOn);
+  ['ve-undo-btn','ve-block-btn','ve-style-btn','ve-save-btn'].forEach(function(id){
+    document.getElementById(id).style.display=veOn?'inline-flex':'none';
+  });
+  document.getElementById('ve-edit-btn').textContent=veOn?'← Klaar':'✏️ Bewerken';
+  document.querySelectorAll(VE_SEL).forEach(function(el){
+    if(veOn){el.setAttribute('data-ve','1');el.contentEditable='true';el.spellcheck=false;}
+    else{el.removeAttribute('data-ve');el.contentEditable='false';}
+  });
+  if(!veOn){document.getElementById('ve-design').classList.remove('open');}
+}
+
+function veColor(v,val){document.documentElement.style.setProperty(v,val)}
+function veHeadFont(name){
+  var l=document.getElementById('ve-xfont-h')||document.createElement('link');
+  l.id='ve-xfont-h';l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+encodeURIComponent(name)+':wght@400;500;600;700;800;900&display=swap';
+  document.head.appendChild(l);
+  document.querySelectorAll('.section-title,.hero h1,.stat-num,.cta-box h2,.nav-brand,.footer-brand,.hitl-num,.service-card .card-num').forEach(function(el){el.style.fontFamily="'"+name+"',sans-serif"});
+}
+function veBodyFont(name){
+  var l=document.getElementById('ve-xfont-b')||document.createElement('link');
+  l.id='ve-xfont-b';l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+encodeURIComponent(name)+':wght@400;500;600;700&display=swap';
+  document.head.appendChild(l);
+  document.body.style.fontFamily="'"+name+"',system-ui,sans-serif";
+}
+
+function veAddBlock(type){
+  document.getElementById('ve-blocks').classList.remove('open');
+  var tpl={
+    text:'<section class="section-pad" style="background:var(--bg-light)"><div class="container"><div class="section-label" data-ve contenteditable="true">Label</div><h2 class="section-title" data-ve contenteditable="true">Nieuwe sectie titel</h2><p class="section-sub" data-ve contenteditable="true">Beschrijvende tekst hier. Klik om te bewerken.</p></div></section>',
+    stats:'<section class="section-pad" style="background:var(--bg-light)"><div class="container"><div class="section-label" data-ve contenteditable="true">Statistieken</div><h2 class="section-title" data-ve contenteditable="true">Sectie titel</h2><div class="hero-stats" style="margin-top:32px;border-top:none;padding-top:0"><div><div class="stat-num" data-ve contenteditable="true">—</div><div class="stat-label" data-ve contenteditable="true">Omschrijving</div></div><div><div class="stat-num" data-ve contenteditable="true">—</div><div class="stat-label" data-ve contenteditable="true">Omschrijving</div></div><div><div class="stat-num" data-ve contenteditable="true">—</div><div class="stat-label" data-ve contenteditable="true">Omschrijving</div></div></div></div></section>',
+    quote:'<section style="padding:64px 0;background:var(--bg-light)"><div class="container"><div style="border-left:3px solid var(--purple);padding-left:24px;max-width:640px"><p style="font-size:20px;font-style:italic;color:var(--text);line-height:1.7" data-ve contenteditable="true">"Voeg hier een citaat toe."</p><p style="font-size:14px;color:var(--text3);margin-top:12px" data-ve contenteditable="true">Naam — Functie</p></div></div></section>',
+    columns:'<section class="section-pad" style="background:var(--bg-light)"><div class="container"><div class="section-label" data-ve contenteditable="true">Vergelijking</div><h2 class="section-title" data-ve contenteditable="true">Sectie titel</h2><div class="consult-grid" style="margin-top:32px"><div class="consult-card"><h3 data-ve contenteditable="true">Kolom A</h3><ul><li data-ve contenteditable="true"><span class="c-dot" style="background:var(--purple)"></span>Punt één</li><li data-ve contenteditable="true"><span class="c-dot" style="background:var(--purple)"></span>Punt twee</li></ul></div><div class="consult-card"><h3 data-ve contenteditable="true">Kolom B</h3><ul><li data-ve contenteditable="true"><span class="c-dot" style="background:var(--teal)"></span>Punt één</li><li data-ve contenteditable="true"><span class="c-dot" style="background:var(--teal)"></span>Punt twee</li></ul></div></div></div></section>'
+  };
+  var wrap=document.getElementById('custom-blocks')||document.createElement('div');
+  if(!wrap.id){wrap.id='custom-blocks';document.querySelector('.cta-section').parentNode.insertBefore(wrap,document.querySelector('.cta-section'));}
+  wrap.style.display='block';
+  wrap.insertAdjacentHTML('beforeend',tpl[type]);
+  wrap.lastElementChild.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function veUndo(){
+  fetch('/api/undo',{method:'POST'}).then(function(r){return r.json()}).then(function(d){
+    if(d.ok)location.reload();
+    else alert(d.error||'Geen undo beschikbaar');
+  });
+}
+
+function veSave(){
+  var btn=document.getElementById('ve-save-btn');
+  btn.textContent='Opslaan...';btn.disabled=true;
+  // Collect theme from panel inputs
+  var dp=document.getElementById('ve-design');
+  var colors=dp.querySelectorAll('input[type=color]');
+  var selects=dp.querySelectorAll('select');
+  var ranges=dp.querySelectorAll('input[type=range]');
+  var theme={
+    primary_color:colors[0]?colors[0].value:'#2563EB',
+    accent_color:colors[1]?colors[1].value:'#0d6e52',
+    bg_color:colors[2]?colors[2].value:'#ffffff',
+    text_color:colors[3]?colors[3].value:'#171717',
+    surface_color:colors[2]?colors[2].value:'#f9f9fa',
+    heading_font:selects[0]?selects[0].value:'Outfit',
+    body_font:selects[1]?selects[1].value:'DM Sans',
+    base_font_size:ranges[0]?ranges[0].value:'16',
+    section_spacing:ranges[1]?ranges[1].value:'100',
+    card_radius:ranges[2]?ranges[2].value:'20'
+  };
+  // Save theme to config
+  fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({theme:theme})})
+  .then(function(){
+    btn.textContent='✓ Opgeslagen';btn.disabled=false;
+    setTimeout(function(){btn.textContent='↓ Opslaan'},2000);
+  })
+  .catch(function(){btn.textContent='↓ Opslaan';btn.disabled=false;alert('Opslaan mislukt')});
+}
+
+// ─── MINI TOOLBAR (per-element font/size/color) ─────
+var _veActive=null;
+document.addEventListener('focusin',function(e){
+  if(!veOn)return;
+  var el=e.target.closest('[data-ve]');
+  if(!el){document.getElementById('ve-mini').classList.remove('show');_veActive=null;return;}
+  _veActive=el;
+  var mini=document.getElementById('ve-mini');
+  var r=el.getBoundingClientRect();
+  mini.style.top=Math.max(8,r.top-44)+'px';
+  mini.style.left=Math.max(8,r.left)+'px';
+  mini.classList.add('show');
+  var cs=getComputedStyle(el);
+  document.getElementById('ve-ms').value=parseInt(cs.fontSize);
+  document.getElementById('ve-mc').value=rgbToHex(cs.color);
+  var ff=cs.fontFamily.split(',')[0].replace(/['"]/g,'').trim();
+  var sel=document.getElementById('ve-mf');
+  sel.value='';
+  for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===ff){sel.value=ff;break;}}
+});
+document.addEventListener('click',function(e){
+  if(!veOn)return;
+  if(!e.target.closest('[data-ve]')&&!e.target.closest('#ve-mini')){
+    document.getElementById('ve-mini').classList.remove('show');_veActive=null;
+  }
+});
+function veMiniFont(name){
+  if(!_veActive||!name)return;
+  var l=document.getElementById('ve-xfont-m')||document.createElement('link');
+  l.id='ve-xfont-m';l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+encodeURIComponent(name)+':wght@400;500;600;700;800;900&display=swap';
+  document.head.appendChild(l);
+  _veActive.style.fontFamily="'"+name+"',sans-serif";
+}
+function veMiniSize(v){if(_veActive)_veActive.style.fontSize=v+'px'}
+function veMiniColor(v){if(_veActive)_veActive.style.color=v}
+function rgbToHex(c){
+  if(c.startsWith('#'))return c;
+  var m=c.match(/\d+/g);
+  if(!m||m.length<3)return'#000000';
+  return '#'+m.slice(0,3).map(function(x){return parseInt(x).toString(16).padStart(2,'0')}).join('');
+}
+
+// Keyboard shortcut
+document.addEventListener('keydown',function(e){
+  if((e.metaKey||e.ctrlKey)&&e.key==='z'&&veOn){e.preventDefault();veUndo();}
+});
+</script>
+</body>
+</html>

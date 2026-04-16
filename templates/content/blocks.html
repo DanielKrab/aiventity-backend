@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% block title %}Blokken{% endblock %}
+{% block page_title %}Custom blokken{% endblock %}
+
+{% block content %}
+{% set blocks = content.get('custom_blocks', []) %}
+
+<div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap">
+  <button class="btn btn-primary" onclick="document.getElementById('add-modal').style.display='flex'">＋ Blok toevoegen</button>
+  <a href="{{ url_for('website') }}#custom-blocks" target="_blank" class="btn btn-ghost">↗ Bekijk op website</a>
+  <form method="POST" style="margin-left:auto">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="action" value="undo">
+  </form>
+</div>
+
+{% if blocks %}
+{% for block in blocks %}
+<div class="card" style="margin-bottom:16px">
+  <div class="card-header">
+    <div>
+      <div class="card-title">{{ block.title }}</div>
+      <div class="card-subtitle">
+        <span class="badge badge-blue">{{ block.type }}</span>
+        <span style="margin-left:8px;color:#8a96b0">{{ block.label }}</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost btn-sm" onclick="editBlock('{{ block.id }}')">Bewerken</button>
+      <form method="POST" style="display:inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="action" value="delete">
+        <input type="hidden" name="block_id" value="{{ block.id }}">
+        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Blok verwijderen?')">×</button>
+      </form>
+    </div>
+  </div>
+  <div class="card-body">
+    {% if block.type == 'text' %}
+      <p style="color:#454f5c;font-size:13px">{{ block.text or 'Geen tekst' }}</p>
+    {% elif block.type == 'stats' %}
+      <div style="display:flex;gap:16px">
+        {% for item in block.get('items', []) %}
+        <div style="text-align:center;flex:1;padding:12px;background:#f9f9fb;border-radius:8px">
+          <div style="font-size:20px;font-weight:800;color:#2563EB">{{ item.num }}</div>
+          <div style="font-size:12px;color:#8a96b0;margin-top:4px">{{ item.label }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    {% elif block.type == 'quote' %}
+      <blockquote style="border-left:3px solid #2563EB;padding-left:16px;color:#454f5c;font-style:italic;font-size:14px">"{{ block.text }}"</blockquote>
+    {% elif block.type == 'columns' %}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><strong style="font-size:12px;color:#8a96b0">{{ block.get('col_a_title','Kolom A') }}</strong>
+          {% for item in block.get('items',[]) %}<div style="font-size:13px;color:#454f5c;padding:4px 0">{{ item.col_a }}</div>{% endfor %}
+        </div>
+        <div><strong style="font-size:12px;color:#8a96b0">{{ block.get('col_b_title','Kolom B') }}</strong>
+          {% for item in block.get('items',[]) %}<div style="font-size:13px;color:#454f5c;padding:4px 0">{{ item.col_b }}</div>{% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card">
+  <div class="card-body" style="text-align:center;padding:48px">
+    <div style="font-size:32px;margin-bottom:8px">📦</div>
+    <div style="font-size:14px;font-weight:600;color:#454f5c;margin-bottom:4px">Geen custom blokken</div>
+    <div style="font-size:13px;color:#8a96b0">Voeg blokken toe die op de website verschijnen boven het contactformulier.</div>
+  </div>
+</div>
+{% endif %}
+
+<!-- Add Block Modal -->
+<div id="add-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:999;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:16px;padding:28px;width:560px;max-width:92vw;max-height:80vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.2)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3 style="font-size:16px;font-weight:700">Blok toevoegen</h3>
+      <button onclick="document.getElementById('add-modal').style.display='none'" style="background:none;border:none;font-size:20px;cursor:pointer;color:#8a96b0">×</button>
+    </div>
+    <div id="type-picker" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <button class="btn btn-ghost" style="padding:20px;flex-direction:column;height:auto" onclick="showForm('text')">
+        <div style="font-size:20px;margin-bottom:6px">📝</div>
+        <div style="font-weight:700">Tekstsectie</div>
+        <div style="font-size:11px;color:#8a96b0;margin-top:2px">Koptekst met alinea</div>
+      </button>
+      <button class="btn btn-ghost" style="padding:20px;flex-direction:column;height:auto" onclick="showForm('stats')">
+        <div style="font-size:20px;margin-bottom:6px">📊</div>
+        <div style="font-weight:700">Statistieken</div>
+        <div style="font-size:11px;color:#8a96b0;margin-top:2px">Drie cijferkaarten</div>
+      </button>
+      <button class="btn btn-ghost" style="padding:20px;flex-direction:column;height:auto" onclick="showForm('quote')">
+        <div style="font-size:20px;margin-bottom:6px">💬</div>
+        <div style="font-weight:700">Citaat</div>
+        <div style="font-size:11px;color:#8a96b0;margin-top:2px">Quote met auteur</div>
+      </button>
+      <button class="btn btn-ghost" style="padding:20px;flex-direction:column;height:auto" onclick="showForm('columns')">
+        <div style="font-size:20px;margin-bottom:6px">⚡</div>
+        <div style="font-weight:700">Twee kolommen</div>
+        <div style="font-size:11px;color:#8a96b0;margin-top:2px">Vergelijkingsoverzicht</div>
+      </button>
+    </div>
+    <div id="block-form" style="display:none">
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('type-picker').style.display='grid';document.getElementById('block-form').style.display='none'" style="margin-bottom:16px">← Terug</button>
+      <form method="POST" id="add-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="action" value="add">
+        <input type="hidden" name="block_type" id="block_type">
+        <div class="form-group">
+          <label class="form-label">Label (sectie-label boven titel)</label>
+          <input type="text" name="label" class="form-control" placeholder="Bijv. Resultaten">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Titel</label>
+          <input type="text" name="title" class="form-control" placeholder="Sectietitel" required>
+        </div>
+        <div id="text-fields">
+          <div class="form-group">
+            <label class="form-label">Tekst</label>
+            <textarea name="text" class="form-control" placeholder="Beschrijving..."></textarea>
+          </div>
+        </div>
+        <div id="stats-fields" style="display:none">
+          <div class="form-group">
+            <label class="form-label">Statistieken (3 kaarten)</label>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;gap:8px"><input type="text" name="stat_num[]" class="form-control" placeholder="30%+" style="width:100px"><input type="text" name="stat_label[]" class="form-control" placeholder="Omschrijving"></div>
+              <div style="display:flex;gap:8px"><input type="text" name="stat_num[]" class="form-control" placeholder="3×" style="width:100px"><input type="text" name="stat_label[]" class="form-control" placeholder="Omschrijving"></div>
+              <div style="display:flex;gap:8px"><input type="text" name="stat_num[]" class="form-control" placeholder="24/7" style="width:100px"><input type="text" name="stat_label[]" class="form-control" placeholder="Omschrijving"></div>
+            </div>
+          </div>
+        </div>
+        <div id="columns-fields" style="display:none">
+          <div class="form-row cols-2">
+            <div class="form-group">
+              <label class="form-label">Kolom A titel</label>
+              <input type="text" name="col_a_title" class="form-control" placeholder="Kolom A">
+              <div style="display:flex;flex-direction:column;gap:4px;margin-top:8px">
+                <input type="text" name="col_a[]" class="form-control" placeholder="Punt 1">
+                <input type="text" name="col_a[]" class="form-control" placeholder="Punt 2">
+                <input type="text" name="col_a[]" class="form-control" placeholder="Punt 3">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Kolom B titel</label>
+              <input type="text" name="col_b_title" class="form-control" placeholder="Kolom B">
+              <div style="display:flex;flex-direction:column;gap:4px;margin-top:8px">
+                <input type="text" name="col_b[]" class="form-control" placeholder="Punt 1">
+                <input type="text" name="col_b[]" class="form-control" placeholder="Punt 2">
+                <input type="text" name="col_b[]" class="form-control" placeholder="Punt 3">
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top:12px">Toevoegen</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function showForm(type){
+  document.getElementById('type-picker').style.display='none';
+  document.getElementById('block-form').style.display='block';
+  document.getElementById('block_type').value=type;
+  document.getElementById('text-fields').style.display=type==='text'||type==='quote'?'block':'none';
+  document.getElementById('stats-fields').style.display=type==='stats'?'block':'none';
+  document.getElementById('columns-fields').style.display=type==='columns'?'block':'none';
+}
+function editBlock(id){
+  // Simple: redirect to same page with edit param (could enhance later)
+  alert('Gebruik de verwijder + opnieuw toevoegen workflow, of bewerk direct via Dashboard > Overzicht.');
+}
+</script>
+{% endblock %}

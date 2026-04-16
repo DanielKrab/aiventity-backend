@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inloggen — Aiventity Admin</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0f1623;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-wrap{width:100%;max-width:400px}
+.login-logo{text-align:center;margin-bottom:32px}
+.login-logo a{font-size:28px;font-weight:800;color:#fff;text-decoration:none;letter-spacing:-.5px}
+.login-logo a span{color:#3B82F6}
+.login-logo p{font-size:13px;color:#5a6680;margin-top:6px}
+.login-card{background:#fff;border-radius:16px;padding:36px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.login-card h2{font-size:20px;font-weight:700;color:#1a1a2e;margin-bottom:6px}
+.login-card p{font-size:13px;color:#8a96b0;margin-bottom:28px}
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:12px;font-weight:600;color:#454f5c;margin-bottom:6px;letter-spacing:.3px;text-transform:uppercase}
+.form-control{width:100%;padding:11px 14px;border:1.5px solid #e5e9f0;border-radius:8px;font-size:14px;color:#1a1a2e;background:#fff;transition:border-color .15s;font-family:inherit}
+.form-control:focus{outline:none;border-color:#2563EB;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.btn-login{width:100%;padding:13px;background:#2563EB;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:background .15s;margin-top:4px}
+.btn-login:hover{background:#1d4ed8}
+.flash{padding:12px 14px;border-radius:8px;margin-bottom:16px;font-size:13px;font-weight:500}
+.flash.error{background:#fee2e2;color:#991b1b;border:1px solid #fecaca}
+.flash.success{background:#dcfce7;color:#166534;border:1px solid #bbf7d0}
+.login-footer{text-align:center;margin-top:20px;font-size:12px;color:#5a6680}
+</style>
+</head>
+<body>
+<div class="login-wrap">
+  <div class="login-logo">
+    <a href="#">Ai<span>ventity</span></a>
+    <p>Admin Panel</p>
+  </div>
+  <div class="login-card">
+    <h2>Welkom terug</h2>
+    <p>Log in om het beheerpaneel te openen.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('login') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <div class="form-group">
+        <label class="form-label" for="password">Wachtwoord</label>
+        <input type="password" id="password" name="password" class="form-control"
+               placeholder="••••••••" required autofocus>
+      </div>
+      <button type="submit" class="btn-login">Inloggen →</button>
+    </form>
+  </div>
+  <div class="login-footer">Aiventity Admin · Beveiligd paneel</div>
+</div>
+</body>
+</html>
