@@ -625,6 +625,15 @@ def website():
     return render_template('website.html', content=content, cfg=cfg)
 
 
+@app.route('/logo.png')
+def logo_png():
+    """Serve the Aiventity logo from the static folder."""
+    import os
+    from flask import send_from_directory
+    static_dir = os.path.join(os.path.dirname(__file__), 'static')
+    return send_from_directory(static_dir, 'logo.png', mimetype='image/png')
+
+
 @app.route('/preview')
 @login_required
 def preview():
@@ -644,7 +653,8 @@ def public_site():
 @app.route('/publish-netlify')
 @login_required
 def publish_netlify():
-    import urllib.request, hashlib
+    import urllib.request, hashlib, re as _re, os as _os
+    import json as _json
     cfg = load_json(CONFIG_FILE)
     token = cfg.get('netlify_token', '')
     site_id = cfg.get('netlify_site_id', '')
@@ -654,18 +664,30 @@ def publish_netlify():
         return redirect(url_for('dashboard'))
 
     try:
-        # Render website HTML from template
-        html = render_template('website.html', content=load_json(CONTENT_FILE), site_config=cfg)
+        # Render website HTML and strip the Flask admin bar
+        html = render_template('website.html', content=load_json(CONTENT_FILE), cfg=cfg)
+        html = _re.sub(r'<!-- Flask Admin Bar -->.*?</div>\n', '', html, flags=_re.DOTALL)
         html_bytes = html.encode('utf-8')
 
-        headers_bytes = b"/*\n  Content-Type: text/html; charset=utf-8\n"
+        headers_bytes = b"/*\n  Content-Type: text/html; charset=utf-8\n  Cache-Control: public, max-age=0, must-revalidate\n"
 
-        html_sha1 = hashlib.sha1(html_bytes).hexdigest()
-        hdrs_sha1 = hashlib.sha1(headers_bytes).hexdigest()
+        # Load logo
+        logo_path = _os.path.join(_os.path.dirname(__file__), 'static', 'logo.png')
+        with open(logo_path, 'rb') as f:
+            logo_bytes = f.read()
 
-        # Create deploy manifest
-        import json as _json
-        manifest = _json.dumps({"files": {"/index.html": html_sha1, "/_headers": hdrs_sha1}}).encode()
+        html_sha1  = hashlib.sha1(html_bytes).hexdigest()
+        hdrs_sha1  = hashlib.sha1(headers_bytes).hexdigest()
+        logo_sha1  = hashlib.sha1(logo_bytes).hexdigest()
+
+        # Create deploy manifest (HTML + headers + logo)
+        manifest = _json.dumps({"files": {
+            "/index.html":   html_sha1,
+            "/website.html": html_sha1,
+            "/_headers":     hdrs_sha1,
+            "/logo.png":     logo_sha1,
+        }}).encode()
+
         req = urllib.request.Request(
             f"https://api.netlify.com/api/v1/sites/{site_id}/deploys",
             data=manifest,
@@ -676,25 +698,26 @@ def publish_netlify():
             deploy = _json.loads(r.read())
 
         deploy_id = deploy["id"]
-        required = deploy.get("required", [])
+        required  = deploy.get("required", [])
 
         files_map = {
-            html_sha1: ("index.html", html_bytes, "text/html; charset=utf-8"),
-            hdrs_sha1: ("_headers", headers_bytes, "text/plain"),
+            html_sha1:  ("index.html",   html_bytes,    "text/html; charset=utf-8"),
+            hdrs_sha1:  ("_headers",     headers_bytes, "text/plain"),
+            logo_sha1:  ("logo.png",     logo_bytes,    "image/png"),
         }
         for sha in required:
             if sha in files_map:
-                path, content, ctype = files_map[sha]
+                path, data, ctype = files_map[sha]
                 req2 = urllib.request.Request(
                     f"https://api.netlify.com/api/v1/deploys/{deploy_id}/files/{path}",
-                    data=content,
+                    data=data,
                     headers={"Authorization": f"Bearer {token}", "Content-Type": ctype},
                     method="PUT"
                 )
                 with urllib.request.urlopen(req2) as r2:
                     r2.read()
 
-        flash('✅ Website gepubliceerd op aiventity.netlify.app!', 'success')
+        flash('✅ Website gepubliceerd op aiventitytool.netlify.app!', 'success')
     except Exception as e:
         flash(f'Fout bij publiceren: {str(e)}', 'error')
 
