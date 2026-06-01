@@ -223,5 +223,10 @@
     "ts": "2026-06-01T20:10:18.406Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: airtable-database-spreadsheet-logo-application-software-slack-logo.jpg"
+  },
+  {
+    "ts": "2026-06-01T20:10:24.233Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: integration"
   }
 ]
