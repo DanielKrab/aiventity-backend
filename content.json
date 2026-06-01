@@ -56,7 +56,7 @@
     "mcep_text_nl": "Model Context Protocol is de ruggengraat van Aiventity's integraties. Het onderhoudt live, bidirectionele context tussen uw agent en elk verbonden tool — zodat wanneer een budget verandert in een spreadsheet, uw tijdlijn en leverancierslijst automatisch bijwerken.",
     "tool1_name": "Salesforce",
     "tool1_icon": "",
-    "tool1_logo": "",
+    "tool1_logo": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/Salesforce.com_logo.svg.png",
     "tool2_name": "Pinterest",
     "tool2_icon": "📌",
     "tool2_logo": "",
