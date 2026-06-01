@@ -63,5 +63,10 @@
     "ts": "2026-06-01T17:23:53.662Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: tempImagebSju9c.gif"
+  },
+  {
+    "ts": "2026-06-01T17:36:38.572Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero"
   }
 ]
