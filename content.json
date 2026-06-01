@@ -65,7 +65,7 @@
     "tool3_logo": "",
     "tool4_name": "Google Sheets",
     "tool4_icon": "",
-    "tool4_logo": "",
+    "tool4_logo": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/formation-google-sheet-belgique.png",
     "tool5_name": "Monday",
     "tool5_icon": "",
     "tool5_logo": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/monday-1.svg",
