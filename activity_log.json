@@ -133,5 +133,10 @@
     "ts": "2026-06-01T19:59:47.699Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: monday-1.svg"
+  },
+  {
+    "ts": "2026-06-01T19:59:53.616Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: integration"
   }
 ]
