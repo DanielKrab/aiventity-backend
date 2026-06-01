@@ -115,7 +115,7 @@ def logout():
 # DASHBOARD
 # ══════════════════════════════════════════════════════════════════════════
 
-@app.route('/')
+@app.route('/admin')
 @login_required
 def dashboard():
     cfg = load_json(CONFIG_FILE)
@@ -635,12 +635,18 @@ def api_config():
 # WEBSITE / PREVIEW
 # ══════════════════════════════════════════════════════════════════════════
 
-@app.route('/website')
-def website():
-    """Public-facing website — no login required."""
+@app.route('/')
+def home():
+    """Public homepage — the live website, no login required."""
     content = load_json(CONTENT_FILE)
     cfg = load_json(CONFIG_FILE)
     return render_template('website.html', content=content, cfg=cfg)
+
+
+@app.route('/website')
+def website():
+    """Alias for / — backward compatibility."""
+    return redirect(url_for('home'))
 
 
 @app.route('/logo.png')
@@ -655,13 +661,13 @@ def logo_png():
 @app.route('/preview')
 @login_required
 def preview():
-    return redirect(url_for('website'))
+    return redirect(url_for('home'))
 
 
 @app.route('/public')
 def public_site():
-    """Alias for /website — share this URL with customers."""
-    return redirect(url_for('website'))
+    """Alias for / — share this URL with customers."""
+    return redirect(url_for('home'))
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -684,6 +690,7 @@ def publish_netlify():
     try:
         # Render website HTML and strip the Flask admin bar
         html = render_template('website.html', content=load_json(CONTENT_FILE), cfg=cfg)
+        # Note: website is also live at aiventity-website.onrender.com/ directly
         html = _re.sub(r'<!-- Flask Admin Bar -->.*?</div>\n', '', html, flags=_re.DOTALL)
         html_bytes = html.encode('utf-8')
 

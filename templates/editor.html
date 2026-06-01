@@ -473,13 +473,13 @@ kbd {
       <button class="dv-btn on" id="dv-desktop" onclick="setDevice('desktop')">💻 Desktop</button>
       <button class="dv-btn"    id="dv-tablet"  onclick="setDevice('tablet')">🪟 Tablet</button>
       <button class="dv-btn"    id="dv-mobile"  onclick="setDevice('mobile')">📱 Mobile</button>
-      <span class="preview-url">{{ request.host_url }}website</span>
+      <span class="preview-url">{{ request.host_url }}</span>
       <button class="btn btn-ghost btn-sm" onclick="reloadPreview()" title="Vernieuwen">↺</button>
-      <a href="/website" target="_blank" class="btn btn-ghost btn-sm">↗ Open</a>
+      <a href="/" target="_blank" class="btn btn-ghost btn-sm">↗ Open</a>
     </div>
     <div class="preview-scroll">
       <div class="frame-wrap dv-desktop" id="frame-wrap">
-        <iframe id="prev-iframe" src="/website" title="Website preview"></iframe>
+        <iframe id="prev-iframe" src="/" title="Website preview"></iframe>
       </div>
     </div>
   </div>
@@ -548,7 +548,7 @@ function setDevice(dev) {
 // ── Reload preview iframe
 function reloadPreview() {
   const iframe = document.getElementById('prev-iframe');
-  iframe.src = '/website?' + Date.now();
+  iframe.src = '/?' + Date.now();
 }
 
 // ── Keyboard shortcut Ctrl/Cmd+S
