@@ -43,5 +43,10 @@
     "ts": "2026-06-01T16:45:43.217Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero"
+  },
+  {
+    "ts": "2026-06-01T16:45:48.960Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: creativity"
   }
 ]
