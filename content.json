@@ -2,7 +2,7 @@
   "hero": {
     "badge_en": "Agent Space — Now Live",
     "badge_nl": "Agent Space — Nu Live",
-    "h1_en": "Imagine.",
+    "h1_en": "Imagineee",
     "h1_nl": "Bedenk.",
     "h2_en": "Automate.",
     "h2_nl": "Automatiseer.",
@@ -17,7 +17,8 @@
     "cta_secondary_en": "See how it works",
     "cta_secondary_nl": "Hoe werkt het",
     "btn_en": "Apply Now",
-    "btn_nl": "Aanmelden"
+    "btn_nl": "Aanmelden",
+    "cta_href": ""
   },
   "creativity": {
     "label_en": "01 — Creativity",
