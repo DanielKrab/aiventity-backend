@@ -136,7 +136,7 @@ function evalJinja(expr,ctx) {
 function renderWebsite(content,cfg) {
   const sections={h:content.hero||{},cr:content.creativity||{},ig:content.integration||{},
                   ex:content.execution||{},ap:content.apply||{},ft:content.footer||{}};
-  const tmplPath=path.join(__dirname,"api","templates","website.html");
+  const tmplPath=path.join(__dirname,"templates","website.html");
   let html;
   try { html=fs.readFileSync(tmplPath,"utf-8"); } catch { return buildFallback(sections); }
   html=html.replace(/\{%.*?%\}/gs,"");

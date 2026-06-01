@@ -327,6 +327,11 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
       </button>
 
       <div class="sb-section">Beheer</div>
+      <button class="sb-item" onclick="nav('inbox')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Inbox
+        <span id="inbox-badge" class="badge-count" style="display:none">0</span>
+      </button>
       <button class="sb-item" onclick="nav('settings')">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         Website Instellingen
@@ -364,7 +369,8 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
         <span id="status-text">Verbonden</span>
       </div>
       <div class="tb-actions">
-        <button class="btn btn-ghost btn-sm" onclick="undoAction()" id="undo-btn" title="Ongedaan maken (Ctrl+Z)" disabled>↩ Ongedaan</button>
+        <button class="btn btn-ghost btn-sm" onclick="undoAction()" id="undo-btn" title="Ongedaan maken (Ctrl+Z)" disabled>↩</button>
+        <button class="btn btn-ghost btn-sm" onclick="redoAction()" id="redo-btn" title="Opnieuw (Ctrl+Y)" disabled>↪</button>
         <button class="btn btn-success btn-sm" onclick="publishSite(this)" id="pub-btn">🚀 Publiceer</button>
       </div>
     </div>
@@ -402,7 +408,7 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
           <div class="card-body" style="display:flex;flex-direction:column;gap:8px">
             <button class="btn btn-primary" style="justify-content:flex-start;gap:10px" onclick="nav('editor')">✏️ Content bewerken</button>
             <button class="btn btn-ghost" style="justify-content:flex-start;gap:10px" onclick="nav('media')">🖼 Media beheren</button>
-            <button class="btn btn-ghost" style="justify-content:flex-start;gap:10px" onclick="nav('seo')">🔍 SEO instellingen</button>
+            <button class="btn btn-ghost" style="justify-content:flex-start;gap:10px" onclick="nav('inbox')">📬 Inbox bekijken</button>
             <button class="btn btn-ghost" style="justify-content:flex-start;gap:10px" onclick="nav('theme')">🎨 Thema aanpassen</button>
             <button class="btn btn-success" style="justify-content:flex-start;gap:10px;margin-top:4px" onclick="publishSite(this)">🚀 Nu publiceren</button>
           </div>
@@ -427,21 +433,24 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
         <!-- Preview -->
         <div class="preview-panel">
           <div class="preview-toolbar">
-            <div class="preview-info">Preview → <a href="https://aiventitytool.netlify.app" target="_blank" style="color:var(--accent)">aiventitytool.netlify.app</a></div>
+            <div class="preview-info" id="preview-info">Preview — huidige opgeslagen inhoud</div>
             <div class="device-group">
               <button class="device-btn active" onclick="setDevice('100%',this)" title="Desktop">🖥</button>
               <button class="device-btn" onclick="setDevice('768px',this)" title="Tablet">📱</button>
               <button class="device-btn" onclick="setDevice('390px',this)" title="Mobiel">📲</button>
             </div>
             <button class="btn btn-ghost btn-sm" onclick="reloadPreview()" title="Herladen">↺</button>
+            <a href="https://aiventitytool.netlify.app" target="_blank" class="btn btn-ghost btn-sm">↗ Live</a>
           </div>
-          <div style="flex:1;display:flex;align-items:stretch;justify-content:center;overflow:hidden">
-            <iframe id="preview" class="preview-iframe" src="https://aiventitytool.netlify.app"></iframe>
+          <div style="flex:1;display:flex;align-items:stretch;justify-content:center;overflow:hidden;position:relative">
+            <div id="preview-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#0d1017;z-index:10;font-size:13px;color:var(--text3)"><span class="spinner" style="border-color:rgba(59,130,246,.25);border-top-color:var(--accent)"></span>&nbsp; Preview laden...</div>
+            <iframe id="preview" class="preview-iframe"></iframe>
           </div>
         </div>
       </div>
       <div class="save-bar">
         <button class="btn btn-primary" onclick="saveSection(this)" id="save-btn">💾 Opslaan</button>
+        <button class="btn btn-ghost btn-sm" onclick="showHistory()" title="Versiegeschiedenis">📚 Versies</button>
         <button class="btn btn-success" onclick="publishSite(this)">🚀 Publiceer op Netlify</button>
         <div class="auto-status">
           <div class="status-dot" id="editor-dot"></div>
@@ -496,6 +505,31 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
 
     <!-- ═══════════ THEME ═══════════ -->
     <div id="page-theme" class="page page-area">
+
+      <!-- LIVE PREVIEW WIDGET -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-header"><div class="card-title">👁 Live kleurpreview</div><div style="font-size:11px;color:var(--text3)">Verandert direct als je kleuren aanpast</div></div>
+        <div id="theme-preview-box" style="padding:28px;background:#050505;transition:background .2s">
+          <div style="margin-bottom:14px">
+            <span id="tp-badge" style="display:inline-block;padding:4px 14px;border-radius:99px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#007AFF">AGENT SPACE — NOW LIVE</span>
+          </div>
+          <div style="margin-bottom:10px">
+            <span id="tp-h1" style="font-size:30px;font-weight:800;color:#fff">Imagine.</span>
+            <span id="tp-h2" style="font-size:30px;font-weight:800;color:#007AFF;margin:0 8px">Automate.</span>
+            <span id="tp-h3" style="font-size:30px;font-weight:800;color:#fff">Execute.</span>
+          </div>
+          <p id="tp-sub" style="font-size:13px;color:rgba(255,255,255,0.55);margin-bottom:18px">From Creative Spark to Flawless Execution.</p>
+          <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap">
+            <button id="tp-btn1" style="padding:10px 22px;border-radius:8px;border:none;font-weight:700;font-size:12px;color:#fff;cursor:default;background:#007AFF">Start Agent Space →</button>
+            <button id="tp-btn2" style="padding:10px 22px;border-radius:8px;font-weight:700;font-size:12px;color:#fff;cursor:default;background:transparent;border:2px solid rgba(255,255,255,0.22)">Meer leren ↓</button>
+          </div>
+          <div id="tp-card" style="padding:16px 18px;border-radius:12px;background:#131720;border:1px solid #252d3d;display:inline-block">
+            <div id="tp-card-dot" style="width:8px;height:8px;border-radius:50%;background:#10b981;display:inline-block;margin-right:6px"></div>
+            <span id="tp-card-text" style="font-size:12px;font-weight:600;color:#fff">AI automatisering — actief</span>
+          </div>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-header"><div><div class="card-title">🎨 Kleuren</div><div class="card-subtitle">Pas de huisstijl aan</div></div></div>
         <div class="card-body">
@@ -632,6 +666,28 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
       </div>
     </div>
 
+    <!-- ═══════════ INBOX ═══════════ -->
+    <div id="page-inbox" class="page page-area">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">📬 Inbox</div><div class="card-subtitle">Aanmeldingen en vragen van de website</div></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span id="inbox-unread-label" style="font-size:11px;color:var(--text3)"></span>
+            <button class="btn btn-ghost btn-sm" onclick="loadInbox()">↺ Vernieuwen</button>
+          </div>
+        </div>
+        <div id="inbox-list" class="card-body" style="padding:0"></div>
+      </div>
+      <div class="card" style="margin-top:0">
+        <div class="card-header"><div class="card-title" style="font-size:12px">📧 E-mail notificaties</div></div>
+        <div class="card-body" style="font-size:12.5px;color:var(--text2);line-height:1.7">
+          Nieuwe berichten worden opgeslagen in de inbox. Voor automatische e-mailmeldingen naar
+          <strong>danielcloud@hotmail.nl</strong>, voeg een <code style="background:var(--bg);padding:1px 5px;border-radius:3px">RESEND_API_KEY</code> toe
+          in de Netlify omgevingsvariabelen (<a href="https://resend.com" target="_blank" style="color:var(--accent)">resend.com</a> — gratis).
+        </div>
+      </div>
+    </div>
+
   </div><!-- /main -->
 </div><!-- /app -->
 
@@ -659,11 +715,14 @@ let contentData = {};
 let mediaData = [];
 let seoData = {};
 let themeData = {};
+let inboxData = [];
 let currentSection = 'hero';
 let currentPage = 'dashboard';
 let undoStack = [];
+let redoStack = [];
 let autoSaveTimer = null;
 let modalConfirmCb = () => {};
+let previewLoaded = false;
 
 const SECTIONS = [
   {key:'hero',        label:'Hero'},
@@ -802,17 +861,23 @@ function toast(msg,type='info') {
 function showModal(title,body,confirmCb,confirmLabel='Bevestigen') {
   document.getElementById('modal-title').textContent=title;
   document.getElementById('modal-body').textContent=body;
-  document.getElementById('modal-confirm').textContent=confirmLabel;
+  const conf=document.getElementById('modal-confirm');
+  conf.textContent=confirmLabel;
+  conf.style.display='';
   modalConfirmCb=()=>{ closeModal(); confirmCb(); };
   document.getElementById('modal').style.display='flex';
 }
-function closeModal(){ document.getElementById('modal').style.display='none'; }
+function closeModal(){
+  document.getElementById('modal').style.display='none';
+  document.getElementById('modal-confirm').style.display='';
+}
 
 // ═══════════════════════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════════════════════
 const titles={dashboard:'Dashboard',editor:'Visuele Editor',media:'Media Bibliotheek',
-               seo:'SEO & Pagina\'s',theme:'Thema & Kleuren',settings:'Website Instellingen',activity:'Activiteitenlog'};
+               seo:'SEO & Pagina\'s',theme:'Thema & Kleuren',settings:'Website Instellingen',
+               activity:'Activiteitenlog',inbox:'Inbox'};
 
 function nav(page) {
   document.querySelectorAll('.page,.editor-page').forEach(p=>p.classList.remove('active'));
@@ -831,6 +896,7 @@ function nav(page) {
   if(page==='settings') loadSettings();
   if(page==='activity') loadActivity();
   if(page==='dashboard') loadDashboard();
+  if(page==='inbox') loadInbox();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -849,6 +915,7 @@ async function showApp() {
   document.getElementById('login-page').style.display='none';
   document.getElementById('app').style.display='block';
   loadDashboard();
+  updateInboxBadge();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -884,6 +951,7 @@ async function initEditor() {
   }
   buildSectionTabs();
   showSection(currentSection);
+  if(!previewLoaded) { previewLoaded=true; reloadPreview(); }
 }
 
 function buildSectionTabs() {
@@ -942,7 +1010,9 @@ function showSection(key) {
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function scheduleAutoSave() {
-  setStatus('saving','Bezig met opslaan...');
+  setStatus('saving','Bezig...');
+  redoStack=[];
+  document.getElementById('redo-btn').disabled=true;
   if(autoSaveTimer) clearTimeout(autoSaveTimer);
   autoSaveTimer=setTimeout(()=>saveSection(null,true),3000);
 }
@@ -951,17 +1021,19 @@ async function saveSection(btn, silent=false) {
   const fields=FIELDS[currentSection]?.content||[];
   const data={};
   fields.forEach(({f})=>{ const el=document.getElementById('f-'+f); if(el) data[f]=el.value; });
-  // Save to undo stack
+  // Save to undo stack (before overwriting)
   undoStack.push({section:currentSection, data:{...contentData[currentSection]}});
-  if(undoStack.length>30) undoStack.shift();
+  if(undoStack.length>50) undoStack.shift();
   document.getElementById('undo-btn').disabled=false;
   contentData[currentSection]={...(contentData[currentSection]||{}),...data};
   if(btn){ btn.disabled=true; btn.innerHTML='<span class="spinner"></span>'; }
   setStatus('saving','Opslaan...');
-  const r=await apiFetch('/content','POST',{[currentSection]:data});
+  const payload={[currentSection]:data};
+  if(!silent) payload._snapshot=true; // save version snapshot on manual save
+  const r=await apiFetch('/content','POST',payload);
   if(btn){ btn.disabled=false; btn.innerHTML='💾 Opslaan'; }
   if(r.ok){
-    setStatus('ok',silent?'Auto-opgeslagen':'Opgeslagen ✓');
+    setStatus('ok',silent?'Auto-opgeslagen ✓':'Opgeslagen ✓');
     if(!silent) toast('✅ Opgeslagen!','success');
     reloadPreview();
   } else {
@@ -972,11 +1044,25 @@ async function saveSection(btn, silent=false) {
 
 function undoAction() {
   if(!undoStack.length) return;
+  // Save current state to redo
+  redoStack.push({section:currentSection, data:{...contentData[currentSection]}});
+  document.getElementById('redo-btn').disabled=false;
   const {section,data}=undoStack.pop();
   if(!undoStack.length) document.getElementById('undo-btn').disabled=true;
   contentData[section]=data;
   if(section===currentSection) showSection(currentSection);
   toast('↩ Ongedaan gemaakt','info');
+}
+
+function redoAction() {
+  if(!redoStack.length) return;
+  undoStack.push({section:currentSection, data:{...contentData[currentSection]}});
+  document.getElementById('undo-btn').disabled=false;
+  const {section,data}=redoStack.pop();
+  if(!redoStack.length) document.getElementById('redo-btn').disabled=true;
+  contentData[section]=data;
+  if(section===currentSection) showSection(currentSection);
+  toast('↪ Opnieuw toegepast','info');
 }
 
 function setStatus(state,text) {
@@ -990,7 +1076,48 @@ function setDevice(w,btn) {
   document.querySelectorAll('.device-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
 }
-function reloadPreview(){ const f=document.getElementById('preview'); f.src=f.src; }
+
+async function reloadPreview() {
+  const loading=document.getElementById('preview-loading');
+  const iframe=document.getElementById('preview');
+  if(loading) loading.style.display='flex';
+  try {
+    const r=await fetch(API+'/preview',{headers:{'Authorization':'Bearer '+token}});
+    if(!r.ok) throw new Error(r.status);
+    const html=await r.text();
+    iframe.srcdoc=html;
+    iframe.onload=()=>{ if(loading) loading.style.display='none'; };
+  } catch(e) {
+    if(loading) loading.style.display='none';
+    iframe.srcdoc='<p style="color:red;font-family:sans-serif;padding:20px">Preview niet beschikbaar: '+e.message+'</p>';
+  }
+}
+
+async function showHistory() {
+  const data=await apiFetch('/history');
+  if(!Array.isArray(data)||!data.length){
+    toast('Nog geen versiegeschiedenis beschikbaar','info'); return;
+  }
+  const items=data.slice().reverse().map((h,ri)=>{
+    const idx=data.length-1-ri;
+    const dt=h.timestamp?new Date(h.timestamp).toLocaleString('nl-NL',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'';
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div><div style="font-size:13px;font-weight:500">${h.label||'Opgeslagen versie'}</div><div style="font-size:11px;color:var(--text3)">${dt}</div></div>
+      <button class="btn btn-ghost btn-sm" onclick="restoreVersion(${idx})">↩ Herstel</button>
+    </div>`;
+  }).join('');
+  document.getElementById('modal-title').textContent='📚 Versiegeschiedenis';
+  document.getElementById('modal-body').innerHTML=`<div style="max-height:320px;overflow-y:auto">${items}</div>`;
+  document.getElementById('modal-confirm').style.display='none';
+  document.getElementById('modal').style.display='flex';
+}
+
+async function restoreVersion(idx) {
+  closeModal();
+  const r=await apiFetch(`/restore/${idx}`,'POST');
+  if(r.ok){ toast('✅ Versie hersteld!','success'); contentData={}; await initEditor(); }
+  else toast('❌ '+(r.error||'Herstel mislukt'),'error');
+}
 
 // ═══════════════════════════════════════════════════════════
 // PUBLISH
@@ -1162,11 +1289,34 @@ async function loadTheme() {
     const el=document.getElementById('th-'+k); if(el) el.value=val;
     const hex=document.getElementById('th-'+k+'_hex'); if(hex) hex.value=val;
   });
+  updateThemePreview();
 }
 
 function syncColor(key,hex) {
   const picker=document.getElementById('th-'+key);
-  if(picker&&hex.match(/^#[0-9a-fA-F]{6}$/)) picker.value=hex;
+  if(picker&&/^#[0-9a-fA-F]{6}$/.test(hex)) { picker.value=hex; updateThemePreview(); }
+}
+
+function updateThemePreview() {
+  const primary=document.getElementById('th-primary_color')?.value||'#007AFF';
+  const accent=document.getElementById('th-accent_color')?.value||'#10b981';
+  const bg=document.getElementById('th-bg_color')?.value||'#050505';
+  const textC=document.getElementById('th-text_color')?.value||'#ffffff';
+  const box=document.getElementById('theme-preview-box');
+  if(!box) return;
+  box.style.background=bg;
+  ['tp-badge','tp-btn1'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.background=primary; });
+  ['tp-h1','tp-h3','tp-card-text'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.color=textC; });
+  const h2=document.getElementById('tp-h2'); if(h2) h2.style.color=accent;
+  const dot=document.getElementById('tp-card-dot'); if(dot) dot.style.background=accent;
+  const sub=document.getElementById('tp-sub'); if(sub) sub.style.color=hexWithAlpha(textC,.55);
+}
+
+function hexWithAlpha(hex,alpha) {
+  try {
+    const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+    return `rgba(${r},${g},${b},${alpha})`;
+  } catch { return hex; }
 }
 
 document.addEventListener('input',e=>{
@@ -1174,6 +1324,7 @@ document.addEventListener('input',e=>{
     const key=e.target.id.slice(3);
     const hex=document.getElementById('th-'+key+'_hex');
     if(hex) hex.value=e.target.value;
+    updateThemePreview();
   }
 });
 
@@ -1245,6 +1396,79 @@ async function loadActivity() {
 }
 
 // ═══════════════════════════════════════════════════════════
+// INBOX
+// ═══════════════════════════════════════════════════════════
+async function loadInbox() {
+  const el=document.getElementById('inbox-list');
+  el.innerHTML='<div style="padding:20px;color:var(--text3);font-size:12px">Laden...</div>';
+  inboxData=await apiFetch('/inbox');
+  if(!Array.isArray(inboxData)) inboxData=[];
+  renderInbox();
+  updateInboxBadge();
+}
+
+function renderInbox() {
+  const el=document.getElementById('inbox-list');
+  const unread=inboxData.filter(m=>!m.read).length;
+  const lbl=document.getElementById('inbox-unread-label');
+  if(lbl) lbl.textContent=unread>0?`${unread} ongelezen`:'Alles gelezen';
+  if(!inboxData.length){
+    el.innerHTML='<div class="empty-state"><div class="empty-icon">📭</div><p>Nog geen berichten ontvangen.<br>Berichten via het contactformulier op de website verschijnen hier.</p></div>';
+    return;
+  }
+  el.innerHTML=inboxData.map(m=>{
+    const dt=m.ts?new Date(m.ts).toLocaleString('nl-NL',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'';
+    const unreadStyle=m.read?'':'border-left:3px solid var(--accent);';
+    return `<div id="msg-${m.id}" style="padding:16px 20px;border-bottom:1px solid var(--border);${unreadStyle}">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            ${!m.read?'<span style="width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block"></span>':''}
+            <span style="font-size:13px;font-weight:600;color:var(--text)">${esc(m.name||'(geen naam)')}</span>
+            <span style="font-size:11px;color:var(--text3)">· ${esc(m.email)}</span>
+            ${m.phone?`<span style="font-size:11px;color:var(--text3)">· ${esc(m.phone)}</span>`:''}
+          </div>
+          <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px">${esc(m.subject||'')}</div>
+          <div style="font-size:12.5px;color:var(--text2);line-height:1.6;white-space:pre-wrap">${esc(m.message||'')}</div>
+          <div style="font-size:10.5px;color:var(--text3);margin-top:8px">${dt}</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0">
+          ${!m.read?`<button class="btn btn-ghost btn-sm" onclick="markRead('${m.id}')">✓ Gelezen</button>`:''}
+          <a href="mailto:${m.email}?subject=Re: ${encodeURIComponent(m.subject||'')}" class="btn btn-primary btn-sm">↩ Beantwoorden</a>
+          <button class="btn btn-danger btn-sm" onclick="deleteInboxMsg('${m.id}')">🗑</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function markRead(id) {
+  await apiFetch(`/inbox/${id}/read`,'POST');
+  const msg=inboxData.find(m=>m.id===id);
+  if(msg) msg.read=true;
+  renderInbox();
+  updateInboxBadge();
+}
+
+async function deleteInboxMsg(id) {
+  showModal('Bericht verwijderen','Weet je zeker dat je dit bericht wilt verwijderen?',async()=>{
+    const r=await apiFetch(`/inbox/${id}/delete`,'POST');
+    if(r.ok){ inboxData=inboxData.filter(m=>m.id!==id); renderInbox(); updateInboxBadge(); toast('🗑 Verwijderd','info'); }
+    else toast('❌ '+(r.error||'Mislukt'),'error');
+  },'Verwijderen');
+}
+
+async function updateInboxBadge() {
+  try {
+    const data=await apiFetch('/inbox');
+    if(!Array.isArray(data)) return;
+    const n=data.filter(m=>!m.read).length;
+    const badge=document.getElementById('inbox-badge');
+    if(badge){ badge.textContent=n; badge.style.display=n>0?'':'none'; }
+  } catch{}
+}
+
+// ═══════════════════════════════════════════════════════════
 // KEYBOARD SHORTCUTS
 // ═══════════════════════════════════════════════════════════
 document.addEventListener('keydown',e=>{
@@ -1255,7 +1479,8 @@ document.addEventListener('keydown',e=>{
     else if(currentPage==='seo'){ const b=document.querySelector('#page-seo .btn-primary'); if(b) saveSeo(b); }
     else if(currentPage==='theme'){ const b=document.querySelector('#page-theme .btn-primary'); if(b) saveTheme(b); }
   }
-  if((e.ctrlKey||e.metaKey)&&e.key==='z'){ e.preventDefault(); undoAction(); }
+  if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&e.key==='z'){ e.preventDefault(); undoAction(); }
+  if((e.ctrlKey||e.metaKey)&&(e.key==='y'||(e.shiftKey&&e.key==='z'))){ e.preventDefault(); redoAction(); }
   if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key==='P'){ e.preventDefault(); publishSite(document.getElementById('pub-btn')); }
 });
 

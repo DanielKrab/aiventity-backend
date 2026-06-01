@@ -508,7 +508,7 @@
     e.preventDefault();
     var email = e.target.querySelector('input[name=email]').value;
     try {
-      await fetch('/api/contact', {
+      await fetch('https://aiventity-admin.netlify.app/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ naam: email, email: email, onderwerp: 'Early Access Request', bericht: 'Early access request from ' + email })
