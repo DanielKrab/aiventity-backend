@@ -1,10 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Inhoud{% endblock %}
 {% block page_title %}Inhoud beheren{% endblock %}
-
 {% block content %}
 <p style="font-size:13px;color:#8a96b0;margin-bottom:24px">
-  Klik op een sectie om de inhoud te bewerken. Alle wijzigingen worden direct opgeslagen in content.json.
+  Klik op een sectie om de inhoud te bewerken. Sla op en klik dan op Publiceren in het dashboard.
 </p>
 
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
@@ -14,7 +13,7 @@
       <div class="card-body" style="padding:24px">
         <div style="font-size:28px;margin-bottom:12px">🏠</div>
         <div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:4px">Hero</div>
-        <div style="font-size:12px;color:#8a96b0">Hoofdtitel, subtitel, pills, statistieken</div>
+        <div style="font-size:12px;color:#8a96b0">Badge, headline, body, CTA knoppen</div>
         <div style="margin-top:14px;font-size:12px;color:#2563EB;font-weight:600">Bewerken →</div>
       </div>
     </div>
@@ -23,9 +22,9 @@
   <a href="{{ url_for('content_platform') }}" style="text-decoration:none">
     <div class="card" style="transition:all .15s;cursor:pointer" onmouseover="this.style.borderColor='#2563EB'" onmouseout="this.style.borderColor='#e5e9f0'">
       <div class="card-body" style="padding:24px">
-        <div style="font-size:28px;margin-bottom:12px">🧩</div>
-        <div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:4px">Platform</div>
-        <div style="font-size:12px;color:#8a96b0">{{ content.platform.cards|length }} feature cards</div>
+        <div style="font-size:28px;margin-bottom:12px">✦</div>
+        <div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:4px">Creativity</div>
+        <div style="font-size:12px;color:#8a96b0">Sectie 01 — 3 feature cards</div>
         <div style="margin-top:14px;font-size:12px;color:#2563EB;font-weight:600">Bewerken →</div>
       </div>
     </div>
@@ -34,9 +33,9 @@
   <a href="{{ url_for('content_services') }}" style="text-decoration:none">
     <div class="card" style="transition:all .15s;cursor:pointer" onmouseover="this.style.borderColor='#2563EB'" onmouseout="this.style.borderColor='#e5e9f0'">
       <div class="card-body" style="padding:24px">
-        <div style="font-size:28px;margin-bottom:12px">💼</div>
-        <div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:4px">Diensten</div>
-        <div style="font-size:12px;color:#8a96b0">{{ content.services.cards|length }} service cards</div>
+        <div style="font-size:28px;margin-bottom:12px">🔗</div>
+        <div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:4px">Integration</div>
+        <div style="font-size:12px;color:#8a96b0">Sectie 02 — MCP protocol tekst</div>
         <div style="margin-top:14px;font-size:12px;color:#2563EB;font-weight:600">Bewerken →</div>
       </div>
     </div>
@@ -45,31 +44,9 @@
   <a href="{{ url_for('content_agents') }}" style="text-decoration:none">
     <div class="card" style="transition:all .15s;cursor:pointer" onmouseover="this.style.borderColor='#2563EB'" onmouseout="this.style.borderColor='#e5e9f0'">
       <div class="card-body" style="padding:24px">
-        <div style="font-size:28px;margin-bottom:12px">🤖</div>
-        <div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:4px">Agents</div>
-        <div style="font-size:12px;color:#8a96b0">{{ content.agents.cards|length }} agent cards</div>
-        <div style="margin-top:14px;font-size:12px;color:#2563EB;font-weight:600">Bewerken →</div>
-      </div>
-    </div>
-  </a>
-
-  <a href="{{ url_for('content_consultancy') }}" style="text-decoration:none">
-    <div class="card" style="transition:all .15s;cursor:pointer" onmouseover="this.style.borderColor='#2563EB'" onmouseout="this.style.borderColor='#e5e9f0'">
-      <div class="card-body" style="padding:24px">
-        <div style="font-size:28px;margin-bottom:12px">🎯</div>
-        <div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:4px">Consultancy</div>
-        <div style="font-size:12px;color:#8a96b0">{{ content.consultancy.cards|length }} consultancy cards</div>
-        <div style="margin-top:14px;font-size:12px;color:#2563EB;font-weight:600">Bewerken →</div>
-      </div>
-    </div>
-  </a>
-
-  <a href="{{ url_for('content_nav') }}" style="text-decoration:none">
-    <div class="card" style="transition:all .15s;cursor:pointer" onmouseover="this.style.borderColor='#2563EB'" onmouseout="this.style.borderColor='#e5e9f0'">
-      <div class="card-body" style="padding:24px">
-        <div style="font-size:28px;margin-bottom:12px">🔗</div>
-        <div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:4px">Navigatie</div>
-        <div style="font-size:12px;color:#8a96b0">{{ content.nav.links|length }} menu-items</div>
+        <div style="font-size:28px;margin-bottom:12px">⚡</div>
+        <div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:4px">Execution + Apply + Footer</div>
+        <div style="font-size:12px;color:#8a96b0">Sectie 03, CTA aanmelden, footer</div>
         <div style="margin-top:14px;font-size:12px;color:#2563EB;font-weight:600">Bewerken →</div>
       </div>
     </div>
@@ -81,8 +58,8 @@
   <div class="card-body" style="display:flex;align-items:center;gap:16px;padding:20px 24px">
     <span style="font-size:22px">💡</span>
     <div>
-      <div style="font-size:13px;font-weight:600;color:#1a1a2e">Tip: Live preview</div>
-      <div style="font-size:12px;color:#8a96b0">Na het opslaan kun je de website live bekijken via <a href="{{ url_for('website') }}" target="_blank" style="color:#2563EB">Bekijk website</a>.</div>
+      <div style="font-size:13px;font-weight:600;color:#1a1a2e">Na het bewerken: Publiceren</div>
+      <div style="font-size:12px;color:#8a96b0">Sla de wijzigingen op, ga terug naar het <a href="{{ url_for('dashboard') }}" style="color:#2563EB">dashboard</a> en klik op <strong>Publiceren</strong> om de live site bij te werken.</div>
     </div>
   </div>
 </div>

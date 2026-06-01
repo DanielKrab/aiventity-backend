@@ -6,67 +6,69 @@
 <form method="POST" action="{{ url_for('content_hero') }}">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
-
-    <!-- LEFT: English -->
-    <div class="card">
-      <div class="card-header"><div class="card-title">🇬🇧 English</div></div>
-      <div class="card-body" style="display:flex;flex-direction:column;gap:16px">
-        <div class="form-group">
-          <label class="form-label">Badge</label>
-          <input type="text" name="badge_en" class="form-control" value="{{ h.get('badge_en','') }}" placeholder="The operating system for the Agentic Enterprise">
-        </div>
-        <div class="form-row cols-2">
-          <div class="form-group"><label class="form-label">Headline prefix</label><input type="text" name="headline_pre_en" class="form-control" value="{{ h.get('headline_pre_en','') }}" placeholder="The next step in"></div>
-          <div class="form-group"><label class="form-label">Headline accent (blue)</label><input type="text" name="headline_accent_en" class="form-control" value="{{ h.get('headline_accent_en','') }}" placeholder="automation"></div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Headline suffix</label>
-          <input type="text" name="headline_post_en" class="form-control" value="{{ h.get('headline_post_en','') }}" placeholder="and collaboration.">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Subtitle</label>
-          <textarea name="subtitle_en" class="form-control" rows="3">{{ h.get('subtitle_en','') }}</textarea>
-        </div>
-        <div class="form-row cols-2">
-          <div class="form-group"><label class="form-label">CTA Primary</label><input type="text" name="cta_primary_en" class="form-control" value="{{ h.get('cta_primary_en','') }}" placeholder="Request a Demo →"></div>
-          <div class="form-group"><label class="form-label">CTA Secondary</label><input type="text" name="cta_secondary_en" class="form-control" value="{{ h.get('cta_secondary_en','') }}" placeholder="Explore the Platform"></div>
-        </div>
-        <div class="form-row cols-2">
-          <div class="form-group"><label class="form-label">Agents badge title</label><input type="text" name="agents_title_en" class="form-control" value="{{ h.get('agents_title_en','') }}" placeholder="Multi-agent orchestration"></div>
-          <div class="form-group"><label class="form-label">Agents badge sub</label><input type="text" name="agents_sub_en" class="form-control" value="{{ h.get('agents_sub_en','') }}" placeholder="Ready to deploy..."></div>
-        </div>
+  <!-- Badge -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><div class="card-title">Badge (bovenbalk)</div></div>
+    <div class="card-body">
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Badge EN</label><input type="text" name="badge_en" class="form-control" value="{{ h.get('badge_en','') }}" placeholder="Agent Space — Now Live"></div>
+        <div class="form-group"><label class="form-label">Badge NL</label><input type="text" name="badge_nl" class="form-control" value="{{ h.get('badge_nl','') }}" placeholder="Agent Space — Nu Live"></div>
       </div>
     </div>
+  </div>
 
-    <!-- RIGHT: Dutch -->
-    <div class="card">
-      <div class="card-header"><div class="card-title">🇳🇱 Nederlands</div></div>
-      <div class="card-body" style="display:flex;flex-direction:column;gap:16px">
-        <div class="form-group">
-          <label class="form-label">Badge</label>
-          <input type="text" name="badge_nl" class="form-control" value="{{ h.get('badge_nl','') }}" placeholder="Het besturingssysteem voor de Agentic Enterprise">
-        </div>
-        <div class="form-row cols-2">
-          <div class="form-group"><label class="form-label">Headline prefix</label><input type="text" name="headline_pre_nl" class="form-control" value="{{ h.get('headline_pre_nl','') }}" placeholder="De volgende stap in"></div>
-          <div class="form-group"><label class="form-label">Headline accent (blauw)</label><input type="text" name="headline_accent_nl" class="form-control" value="{{ h.get('headline_accent_nl','') }}" placeholder="automatisering"></div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Headline suffix</label>
-          <input type="text" name="headline_post_nl" class="form-control" value="{{ h.get('headline_post_nl','') }}" placeholder="en samenwerking.">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Subtitel</label>
-          <textarea name="subtitle_nl" class="form-control" rows="3">{{ h.get('subtitle_nl','') }}</textarea>
-        </div>
-        <div class="form-row cols-2">
-          <div class="form-group"><label class="form-label">CTA Primair</label><input type="text" name="cta_primary_nl" class="form-control" value="{{ h.get('cta_primary_nl','') }}" placeholder="Demo aanvragen →"></div>
-          <div class="form-group"><label class="form-label">CTA Secundair</label><input type="text" name="cta_secondary_nl" class="form-control" value="{{ h.get('cta_secondary_nl','') }}" placeholder="Ontdek het platform"></div>
-        </div>
-        <div class="form-row cols-2">
-          <div class="form-group"><label class="form-label">Agents badge titel</label><input type="text" name="agents_title_nl" class="form-control" value="{{ h.get('agents_title_nl','') }}" placeholder="Multi-agent orkestratie"></div>
-          <div class="form-group"><label class="form-label">Agents badge sub</label><input type="text" name="agents_sub_nl" class="form-control" value="{{ h.get('agents_sub_nl','') }}" placeholder="Direct inzetbaar..."></div>
-        </div>
+  <!-- Headline (3 regels) -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><div class="card-title">Headline (3 losse regels)</div></div>
+    <div class="card-body">
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Regel 1 EN</label><input type="text" name="h1_en" class="form-control" value="{{ h.get('h1_en','') }}" placeholder="Imagine."></div>
+        <div class="form-group"><label class="form-label">Regel 1 NL</label><input type="text" name="h1_nl" class="form-control" value="{{ h.get('h1_nl','') }}" placeholder="Bedenk."></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Regel 2 EN (blauw)</label><input type="text" name="h2_en" class="form-control" value="{{ h.get('h2_en','') }}" placeholder="Automate."></div>
+        <div class="form-group"><label class="form-label">Regel 2 NL (blauw)</label><input type="text" name="h2_nl" class="form-control" value="{{ h.get('h2_nl','') }}" placeholder="Automatiseer."></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Regel 3 EN</label><input type="text" name="h3_en" class="form-control" value="{{ h.get('h3_en','') }}" placeholder="Execute."></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Regel 3 NL</label><input type="text" name="h3_nl" class="form-control" value="{{ h.get('h3_nl','') }}" placeholder="Voer uit."></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Subheadline -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><div class="card-title">Subheadline</div></div>
+    <div class="card-body">
+      <div class="form-row cols-2">
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subheadline EN</label><input type="text" name="subheadline_en" class="form-control" value="{{ h.get('subheadline_en','') }}" placeholder="From Creative Spark to Flawless Execution."></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subheadline NL</label><input type="text" name="subheadline_nl" class="form-control" value="{{ h.get('subheadline_nl','') }}" placeholder="Van creatief idee naar vlekkeloze uitvoering."></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Body text -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><div class="card-title">Body tekst</div></div>
+    <div class="card-body">
+      <div class="form-row cols-2">
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Body EN</label><textarea name="body_en" class="form-control" rows="4">{{ h.get('body_en','') }}</textarea></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Body NL</label><textarea name="body_nl" class="form-control" rows="4">{{ h.get('body_nl','') }}</textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA knoppen -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><div class="card-title">CTA knoppen</div></div>
+    <div class="card-body">
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Primaire knop EN</label><input type="text" name="cta_primary_en" class="form-control" value="{{ h.get('cta_primary_en','') }}" placeholder="Start Agent Space"></div>
+        <div class="form-group"><label class="form-label">Primaire knop NL</label><input type="text" name="cta_primary_nl" class="form-control" value="{{ h.get('cta_primary_nl','') }}" placeholder="Start Agent Space"></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Secundaire knop EN</label><input type="text" name="cta_secondary_en" class="form-control" value="{{ h.get('cta_secondary_en','') }}" placeholder="See how it works"></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Secundaire knop NL</label><input type="text" name="cta_secondary_nl" class="form-control" value="{{ h.get('cta_secondary_nl','') }}" placeholder="Hoe werkt het"></div>
       </div>
     </div>
   </div>

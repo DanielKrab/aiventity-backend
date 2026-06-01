@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% block title %}The Cognitive Foundation{% endblock %}
-{% block page_title %}The Cognitive Foundation (Architectuur){% endblock %}
-{% set ar = content.get('architecture', {}) %}
+{% block title %}Integration sectie{% endblock %}
+{% block page_title %}Integration — 02{% endblock %}
+{% set ig = content.get('integration', {}) %}
 {% block content %}
 <form method="POST" action="{{ url_for('content_services') }}">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -10,45 +10,40 @@
     <div class="card-header"><div class="card-title">Sectie koptekst</div></div>
     <div class="card-body">
       <div class="form-row cols-2">
-        <div class="form-group"><label class="form-label">Label EN</label><input type="text" name="label_en" class="form-control" value="{{ ar.get('label_en','') }}" placeholder="THE ARCHITECTURE"></div>
-        <div class="form-group"><label class="form-label">Label NL</label><input type="text" name="label_nl" class="form-control" value="{{ ar.get('label_nl','') }}" placeholder="DE ARCHITECTUUR"></div>
+        <div class="form-group"><label class="form-label">Label EN</label><input type="text" name="label_en" class="form-control" value="{{ ig.get('label_en','') }}" placeholder="02 — Integration"></div>
+        <div class="form-group"><label class="form-label">Label NL</label><input type="text" name="label_nl" class="form-control" value="{{ ig.get('label_nl','') }}" placeholder="02 — Integratie"></div>
       </div>
       <div class="form-row cols-2">
-        <div class="form-group"><label class="form-label">Titel EN</label><input type="text" name="title_en" class="form-control" value="{{ ar.get('title_en','') }}" placeholder="The Cognitive Foundation"></div>
-        <div class="form-group"><label class="form-label">Titel NL</label><input type="text" name="title_nl" class="form-control" value="{{ ar.get('title_nl','') }}" placeholder="Het cognitieve fundament"></div>
+        <div class="form-group"><label class="form-label">Titel EN</label><input type="text" name="title_en" class="form-control" value="{{ ig.get('title_en','') }}" placeholder="Connect Everything via MCP."></div>
+        <div class="form-group"><label class="form-label">Titel NL</label><input type="text" name="title_nl" class="form-control" value="{{ ig.get('title_nl','') }}" placeholder="Verbind Alles via MCP."></div>
       </div>
       <div class="form-row cols-2">
-        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subtitel EN</label><textarea name="subtitle_en" class="form-control" rows="2">{{ ar.get('subtitle_en','') }}</textarea></div>
-        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subtitel NL</label><textarea name="subtitle_nl" class="form-control" rows="2">{{ ar.get('subtitle_nl','') }}</textarea></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subtitel EN</label><textarea name="subtitle_en" class="form-control" rows="2">{{ ig.get('subtitle_en','') }}</textarea></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subtitel NL</label><textarea name="subtitle_nl" class="form-control" rows="2">{{ ig.get('subtitle_nl','') }}</textarea></div>
       </div>
     </div>
   </div>
 
-  {% for num in ['1','2','3'] %}
   <div class="card" style="margin-bottom:20px">
-    <div class="card-header"><div class="card-title">Card {{ num }}</div></div>
+    <div class="card-header"><div class="card-title">MCP Protocol highlight</div></div>
     <div class="card-body">
       <div class="form-row cols-2">
-        <div class="form-group"><label class="form-label">Titel EN</label><input type="text" name="c{{ num }}_title_en" class="form-control" value="{{ ar.get('c' ~ num ~ '_title_en','') }}"></div>
-        <div class="form-group"><label class="form-label">Titel NL</label><input type="text" name="c{{ num }}_title_nl" class="form-control" value="{{ ar.get('c' ~ num ~ '_title_nl','') }}"></div>
+        <div class="form-group"><label class="form-label">Titel EN</label><input type="text" name="mcep_title_en" class="form-control" value="{{ ig.get('mcep_title_en','') }}" placeholder="MCP Protocol"></div>
+        <div class="form-group"><label class="form-label">Titel NL</label><input type="text" name="mcep_title_nl" class="form-control" value="{{ ig.get('mcep_title_nl','') }}" placeholder="MCP Protocol"></div>
       </div>
       <div class="form-row cols-2">
-        <div class="form-group"><label class="form-label">Omschrijving EN</label><textarea name="c{{ num }}_desc_en" class="form-control" rows="3">{{ ar.get('c' ~ num ~ '_desc_en','') }}</textarea></div>
-        <div class="form-group"><label class="form-label">Omschrijving NL</label><textarea name="c{{ num }}_desc_nl" class="form-control" rows="3">{{ ar.get('c' ~ num ~ '_desc_nl','') }}</textarea></div>
-      </div>
-      <div class="form-row cols-2">
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">Checklist items EN (één per regel)</label>
-          <textarea name="c{{ num }}_items_en" class="form-control" rows="3">{{ ar.get('c' ~ num ~ '_items_en', []) | join('\n') }}</textarea>
-        </div>
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">Checklist items NL (één per regel)</label>
-          <textarea name="c{{ num }}_items_nl" class="form-control" rows="3">{{ ar.get('c' ~ num ~ '_items_nl', []) | join('\n') }}</textarea>
-        </div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Omschrijving EN</label><textarea name="mcep_text_en" class="form-control" rows="4">{{ ig.get('mcep_text_en','') }}</textarea></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Omschrijving NL</label><textarea name="mcep_text_nl" class="form-control" rows="4">{{ ig.get('mcep_text_nl','') }}</textarea></div>
       </div>
     </div>
   </div>
-  {% endfor %}
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><div class="card-title">Tool grid</div></div>
+    <div class="card-body">
+      <p style="font-size:13px;color:#8a96b0">De tool-namen in het grid (Monday.com, Pinterest, Slack, etc.) zijn vaste elementen in de website. Neem contact op om deze aan te passen.</p>
+    </div>
+  </div>
 
   <div style="position:sticky;bottom:0;background:#f0f2f5;padding:16px 0;margin-top:24px;display:flex;gap:12px;align-items:center">
     <button type="submit" class="btn btn-primary">Opslaan</button>

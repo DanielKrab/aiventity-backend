@@ -159,22 +159,20 @@ def content_hero():
         content['hero'] = {
             'badge_en':          f.get('badge_en', ''),
             'badge_nl':          f.get('badge_nl', ''),
-            'headline_pre_en':   f.get('headline_pre_en', ''),
-            'headline_pre_nl':   f.get('headline_pre_nl', ''),
-            'headline_accent_en':f.get('headline_accent_en', ''),
-            'headline_accent_nl':f.get('headline_accent_nl', ''),
-            'headline_post_en':  f.get('headline_post_en', ''),
-            'headline_post_nl':  f.get('headline_post_nl', ''),
-            'subtitle_en':       f.get('subtitle_en', ''),
-            'subtitle_nl':       f.get('subtitle_nl', ''),
+            'h1_en':             f.get('h1_en', ''),
+            'h1_nl':             f.get('h1_nl', ''),
+            'h2_en':             f.get('h2_en', ''),
+            'h2_nl':             f.get('h2_nl', ''),
+            'h3_en':             f.get('h3_en', ''),
+            'h3_nl':             f.get('h3_nl', ''),
+            'subheadline_en':    f.get('subheadline_en', ''),
+            'subheadline_nl':    f.get('subheadline_nl', ''),
+            'body_en':           f.get('body_en', ''),
+            'body_nl':           f.get('body_nl', ''),
             'cta_primary_en':    f.get('cta_primary_en', ''),
             'cta_primary_nl':    f.get('cta_primary_nl', ''),
             'cta_secondary_en':  f.get('cta_secondary_en', ''),
             'cta_secondary_nl':  f.get('cta_secondary_nl', ''),
-            'agents_title_en':   f.get('agents_title_en', ''),
-            'agents_title_nl':   f.get('agents_title_nl', ''),
-            'agents_sub_en':     f.get('agents_sub_en', ''),
-            'agents_sub_nl':     f.get('agents_sub_nl', ''),
         }
         save_content_with_history(content)
         flash('Hero sectie opgeslagen!', 'success')
@@ -191,28 +189,31 @@ def content_platform():
             flash('Ongeldig formuliertoken.', 'error')
             return redirect(url_for('content_platform'))
         f = request.form
-        content['knowledge_worker'] = {
+        content['creativity'] = {
             'label_en':    f.get('label_en', ''),
             'label_nl':    f.get('label_nl', ''),
             'title_en':    f.get('title_en', ''),
             'title_nl':    f.get('title_nl', ''),
             'subtitle_en': f.get('subtitle_en', ''),
             'subtitle_nl': f.get('subtitle_nl', ''),
+            'c1_icon':     f.get('c1_icon', '✦'),
             'c1_title_en': f.get('c1_title_en', ''),
             'c1_title_nl': f.get('c1_title_nl', ''),
-            'c1_desc_en':  f.get('c1_desc_en', ''),
-            'c1_desc_nl':  f.get('c1_desc_nl', ''),
+            'c1_text_en':  f.get('c1_text_en', ''),
+            'c1_text_nl':  f.get('c1_text_nl', ''),
+            'c2_icon':     f.get('c2_icon', '◈'),
             'c2_title_en': f.get('c2_title_en', ''),
             'c2_title_nl': f.get('c2_title_nl', ''),
-            'c2_desc_en':  f.get('c2_desc_en', ''),
-            'c2_desc_nl':  f.get('c2_desc_nl', ''),
+            'c2_text_en':  f.get('c2_text_en', ''),
+            'c2_text_nl':  f.get('c2_text_nl', ''),
+            'c3_icon':     f.get('c3_icon', '⟡'),
             'c3_title_en': f.get('c3_title_en', ''),
             'c3_title_nl': f.get('c3_title_nl', ''),
-            'c3_desc_en':  f.get('c3_desc_en', ''),
-            'c3_desc_nl':  f.get('c3_desc_nl', ''),
+            'c3_text_en':  f.get('c3_text_en', ''),
+            'c3_text_nl':  f.get('c3_text_nl', ''),
         }
         save_content_with_history(content)
-        flash('Knowledge Worker sectie opgeslagen!', 'success')
+        flash('Creativity sectie opgeslagen!', 'success')
         return redirect(url_for('content_platform'))
     return render_template('content/platform.html', content=content)
 
@@ -226,36 +227,20 @@ def content_services():
             flash('Ongeldig formuliertoken.', 'error')
             return redirect(url_for('content_services'))
         f = request.form
-        def parse_items(raw):
-            return [l.strip() for l in raw.splitlines() if l.strip()]
-        content['architecture'] = {
-            'label_en':    f.get('label_en', ''),
-            'label_nl':    f.get('label_nl', ''),
-            'title_en':    f.get('title_en', ''),
-            'title_nl':    f.get('title_nl', ''),
-            'subtitle_en': f.get('subtitle_en', ''),
-            'subtitle_nl': f.get('subtitle_nl', ''),
-            'c1_title_en': f.get('c1_title_en', ''),
-            'c1_title_nl': f.get('c1_title_nl', ''),
-            'c1_desc_en':  f.get('c1_desc_en', ''),
-            'c1_desc_nl':  f.get('c1_desc_nl', ''),
-            'c1_items_en': parse_items(f.get('c1_items_en', '')),
-            'c1_items_nl': parse_items(f.get('c1_items_nl', '')),
-            'c2_title_en': f.get('c2_title_en', ''),
-            'c2_title_nl': f.get('c2_title_nl', ''),
-            'c2_desc_en':  f.get('c2_desc_en', ''),
-            'c2_desc_nl':  f.get('c2_desc_nl', ''),
-            'c2_items_en': parse_items(f.get('c2_items_en', '')),
-            'c2_items_nl': parse_items(f.get('c2_items_nl', '')),
-            'c3_title_en': f.get('c3_title_en', ''),
-            'c3_title_nl': f.get('c3_title_nl', ''),
-            'c3_desc_en':  f.get('c3_desc_en', ''),
-            'c3_desc_nl':  f.get('c3_desc_nl', ''),
-            'c3_items_en': parse_items(f.get('c3_items_en', '')),
-            'c3_items_nl': parse_items(f.get('c3_items_nl', '')),
+        content['integration'] = {
+            'label_en':      f.get('label_en', ''),
+            'label_nl':      f.get('label_nl', ''),
+            'title_en':      f.get('title_en', ''),
+            'title_nl':      f.get('title_nl', ''),
+            'subtitle_en':   f.get('subtitle_en', ''),
+            'subtitle_nl':   f.get('subtitle_nl', ''),
+            'mcep_title_en': f.get('mcep_title_en', ''),
+            'mcep_title_nl': f.get('mcep_title_nl', ''),
+            'mcep_text_en':  f.get('mcep_text_en', ''),
+            'mcep_text_nl':  f.get('mcep_text_nl', ''),
         }
         save_content_with_history(content)
-        flash('Architectuur sectie opgeslagen!', 'success')
+        flash('Integration sectie opgeslagen!', 'success')
         return redirect(url_for('content_services'))
     return render_template('content/services.html', content=content)
 
@@ -269,33 +254,51 @@ def content_agents():
             flash('Ongeldig formuliertoken.', 'error')
             return redirect(url_for('content_agents'))
         f = request.form
-        content['contact'] = {
-            'cta_title_en':    f.get('cta_title_en', ''),
-            'cta_title_nl':    f.get('cta_title_nl', ''),
-            'cta_subtitle_en': f.get('cta_subtitle_en', ''),
-            'cta_subtitle_nl': f.get('cta_subtitle_nl', ''),
-            'f1_title_en':     f.get('f1_title_en', ''),
-            'f1_title_nl':     f.get('f1_title_nl', ''),
-            'f1_sub_en':       f.get('f1_sub_en', ''),
-            'f1_sub_nl':       f.get('f1_sub_nl', ''),
-            'f2_title_en':     f.get('f2_title_en', ''),
-            'f2_title_nl':     f.get('f2_title_nl', ''),
-            'f2_sub_en':       f.get('f2_sub_en', ''),
-            'f2_sub_nl':       f.get('f2_sub_nl', ''),
-            'form_title_en':   f.get('form_title_en', ''),
-            'form_title_nl':   f.get('form_title_nl', ''),
-            'form_sub_en':     f.get('form_sub_en', ''),
-            'form_sub_nl':     f.get('form_sub_nl', ''),
-            'btn_en':          f.get('btn_en', ''),
-            'btn_nl':          f.get('btn_nl', ''),
+        content['execution'] = {
+            'label_en':    f.get('ex_label_en', ''),
+            'label_nl':    f.get('ex_label_nl', ''),
+            'title_en':    f.get('ex_title_en', ''),
+            'title_nl':    f.get('ex_title_nl', ''),
+            'subtitle_en': f.get('ex_subtitle_en', ''),
+            'subtitle_nl': f.get('ex_subtitle_nl', ''),
+            'c1_title_en': f.get('c1_title_en', ''),
+            'c1_title_nl': f.get('c1_title_nl', ''),
+            'c1_text_en':  f.get('c1_text_en', ''),
+            'c1_text_nl':  f.get('c1_text_nl', ''),
+            'c2_title_en': f.get('c2_title_en', ''),
+            'c2_title_nl': f.get('c2_title_nl', ''),
+            'c2_text_en':  f.get('c2_text_en', ''),
+            'c2_text_nl':  f.get('c2_text_nl', ''),
+            'c3_title_en': f.get('c3_title_en', ''),
+            'c3_title_nl': f.get('c3_title_nl', ''),
+            'c3_text_en':  f.get('c3_text_en', ''),
+            'c3_text_nl':  f.get('c3_text_nl', ''),
+            'c4_title_en': f.get('c4_title_en', ''),
+            'c4_title_nl': f.get('c4_title_nl', ''),
+            'c4_text_en':  f.get('c4_text_en', ''),
+            'c4_text_nl':  f.get('c4_text_nl', ''),
+        }
+        content['apply'] = {
+            'label_en':              f.get('ap_label_en', ''),
+            'label_nl':              f.get('ap_label_nl', ''),
+            'headline_part1_en':     f.get('ap_headline_part1_en', ''),
+            'headline_part1_nl':     f.get('ap_headline_part1_nl', ''),
+            'headline_accent_en':    f.get('ap_headline_accent_en', ''),
+            'headline_accent_nl':    f.get('ap_headline_accent_nl', ''),
+            'body_en':               f.get('ap_body_en', ''),
+            'body_nl':               f.get('ap_body_nl', ''),
+            'btn_en':                f.get('ap_btn_en', ''),
+            'btn_nl':                f.get('ap_btn_nl', ''),
+            'note_en':               f.get('ap_note_en', ''),
+            'note_nl':               f.get('ap_note_nl', ''),
         }
         content['footer'] = {
-            'tagline_en':  f.get('footer_tagline_en', ''),
-            'tagline_nl':  f.get('footer_tagline_nl', ''),
-            'copyright':   f.get('footer_copyright', ''),
+            'tagline_en': f.get('footer_tagline_en', ''),
+            'tagline_nl': f.get('footer_tagline_nl', ''),
+            'copyright':  f.get('footer_copyright', ''),
         }
         save_content_with_history(content)
-        flash('Contact & Footer opgeslagen!', 'success')
+        flash('Execution, Apply & Footer opgeslagen!', 'success')
         return redirect(url_for('content_agents'))
     return render_template('content/agents.html', content=content)
 

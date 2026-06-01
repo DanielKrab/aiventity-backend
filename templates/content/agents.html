@@ -1,65 +1,76 @@
 {% extends "base.html" %}
-{% block title %}Contact & CTA{% endblock %}
-{% block page_title %}Contact & CTA sectie{% endblock %}
-{% set ct = content.get('contact', {}) %}
+{% block title %}Execution, Apply & Footer{% endblock %}
+{% block page_title %}Execution / Apply / Footer{% endblock %}
+{% set ex = content.get('execution', {}) %}
+{% set ap = content.get('apply', {}) %}
 {% set ft = content.get('footer', {}) %}
 {% block content %}
 <form method="POST" action="{{ url_for('content_agents') }}">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-  <!-- CTA block -->
+  <!-- Execution header -->
   <div class="card" style="margin-bottom:20px">
-    <div class="card-header"><div class="card-title">CTA tekst (links)</div></div>
+    <div class="card-header"><div class="card-title">Execution — 03 (koptekst)</div></div>
     <div class="card-body">
       <div class="form-row cols-2">
-        <div class="form-group"><label class="form-label">Titel EN</label><input type="text" name="cta_title_en" class="form-control" value="{{ ct.get('cta_title_en','') }}" placeholder="Start Building Your Agentic Enterprise"></div>
-        <div class="form-group"><label class="form-label">Titel NL</label><input type="text" name="cta_title_nl" class="form-control" value="{{ ct.get('cta_title_nl','') }}" placeholder="Start met het bouwen..."></div>
+        <div class="form-group"><label class="form-label">Label EN</label><input type="text" name="ex_label_en" class="form-control" value="{{ ex.get('label_en','') }}" placeholder="03 — Execution"></div>
+        <div class="form-group"><label class="form-label">Label NL</label><input type="text" name="ex_label_nl" class="form-control" value="{{ ex.get('label_nl','') }}" placeholder="03 — Uitvoering"></div>
       </div>
       <div class="form-row cols-2">
-        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subtitel EN</label><textarea name="cta_subtitle_en" class="form-control" rows="3">{{ ct.get('cta_subtitle_en','') }}</textarea></div>
-        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subtitel NL</label><textarea name="cta_subtitle_nl" class="form-control" rows="3">{{ ct.get('cta_subtitle_nl','') }}</textarea></div>
+        <div class="form-group"><label class="form-label">Titel EN</label><input type="text" name="ex_title_en" class="form-control" value="{{ ex.get('title_en','') }}" placeholder="Autonomous. Precise. Done."></div>
+        <div class="form-group"><label class="form-label">Titel NL</label><input type="text" name="ex_title_nl" class="form-control" value="{{ ex.get('title_nl','') }}" placeholder="Autonoom. Precies. Klaar."></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subtitel EN</label><textarea name="ex_subtitle_en" class="form-control" rows="2">{{ ex.get('subtitle_en','') }}</textarea></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subtitel NL</label><textarea name="ex_subtitle_nl" class="form-control" rows="2">{{ ex.get('subtitle_nl','') }}</textarea></div>
       </div>
     </div>
   </div>
 
-  <!-- Features -->
+  <!-- Execution cards -->
+  {% for num in ['1','2','3','4'] %}
   <div class="card" style="margin-bottom:20px">
-    <div class="card-header"><div class="card-title">Features (2 bullets)</div></div>
+    <div class="card-header"><div class="card-title">Execution card {{ num }}</div></div>
     <div class="card-body">
       <div class="form-row cols-2">
-        <div class="form-group"><label class="form-label">Feature 1 titel EN</label><input type="text" name="f1_title_en" class="form-control" value="{{ ct.get('f1_title_en','') }}" placeholder="Agentic workflows in 4 weeks"></div>
-        <div class="form-group"><label class="form-label">Feature 1 titel NL</label><input type="text" name="f1_title_nl" class="form-control" value="{{ ct.get('f1_title_nl','') }}" placeholder="Agentic workflows in 4 weken"></div>
+        <div class="form-group"><label class="form-label">Titel EN</label><input type="text" name="c{{ num }}_title_en" class="form-control" value="{{ ex.get('c' ~ num ~ '_title_en','') }}"></div>
+        <div class="form-group"><label class="form-label">Titel NL</label><input type="text" name="c{{ num }}_title_nl" class="form-control" value="{{ ex.get('c' ~ num ~ '_title_nl','') }}"></div>
       </div>
       <div class="form-row cols-2">
-        <div class="form-group"><label class="form-label">Feature 1 sub EN</label><input type="text" name="f1_sub_en" class="form-control" value="{{ ct.get('f1_sub_en','') }}" placeholder="Discovery, setup, and deployment."></div>
-        <div class="form-group"><label class="form-label">Feature 1 sub NL</label><input type="text" name="f1_sub_nl" class="form-control" value="{{ ct.get('f1_sub_nl','') }}" placeholder="Onderzoek, inrichting en uitrol."></div>
-      </div>
-      <div class="form-row cols-2">
-        <div class="form-group"><label class="form-label">Feature 2 titel EN</label><input type="text" name="f2_title_en" class="form-control" value="{{ ct.get('f2_title_en','') }}" placeholder="Your hybrid team awaits"></div>
-        <div class="form-group"><label class="form-label">Feature 2 titel NL</label><input type="text" name="f2_title_nl" class="form-control" value="{{ ct.get('f2_title_nl','') }}" placeholder="Jouw hybride team wacht"></div>
-      </div>
-      <div class="form-row cols-2">
-        <div class="form-group" style="margin-bottom:0"><label class="form-label">Feature 2 sub EN</label><input type="text" name="f2_sub_en" class="form-control" value="{{ ct.get('f2_sub_en','') }}" placeholder="Humans and digital colleagues together."></div>
-        <div class="form-group" style="margin-bottom:0"><label class="form-label">Feature 2 sub NL</label><input type="text" name="f2_sub_nl" class="form-control" value="{{ ct.get('f2_sub_nl','') }}" placeholder="Mensen en digitale collega's samen."></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Tekst EN</label><textarea name="c{{ num }}_text_en" class="form-control" rows="3">{{ ex.get('c' ~ num ~ '_text_en','') }}</textarea></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Tekst NL</label><textarea name="c{{ num }}_text_nl" class="form-control" rows="3">{{ ex.get('c' ~ num ~ '_text_nl','') }}</textarea></div>
       </div>
     </div>
   </div>
+  {% endfor %}
 
-  <!-- Contact form -->
+  <!-- Apply / CTA -->
   <div class="card" style="margin-bottom:20px">
-    <div class="card-header"><div class="card-title">Contactformulier (rechts)</div></div>
+    <div class="card-header"><div class="card-title">Apply / CTA sectie</div></div>
     <div class="card-body">
       <div class="form-row cols-2">
-        <div class="form-group"><label class="form-label">Formulier titel EN</label><input type="text" name="form_title_en" class="form-control" value="{{ ct.get('form_title_en','') }}" placeholder="Get in touch"></div>
-        <div class="form-group"><label class="form-label">Formulier titel NL</label><input type="text" name="form_title_nl" class="form-control" value="{{ ct.get('form_title_nl','') }}" placeholder="Neem contact op"></div>
+        <div class="form-group"><label class="form-label">Label EN</label><input type="text" name="ap_label_en" class="form-control" value="{{ ap.get('label_en','') }}" placeholder="Early Access"></div>
+        <div class="form-group"><label class="form-label">Label NL</label><input type="text" name="ap_label_nl" class="form-control" value="{{ ap.get('label_nl','') }}" placeholder="Vroeg Toegang"></div>
       </div>
       <div class="form-row cols-2">
-        <div class="form-group"><label class="form-label">Subtitel EN</label><textarea name="form_sub_en" class="form-control" rows="2">{{ ct.get('form_sub_en','') }}</textarea></div>
-        <div class="form-group"><label class="form-label">Subtitel NL</label><textarea name="form_sub_nl" class="form-control" rows="2">{{ ct.get('form_sub_nl','') }}</textarea></div>
+        <div class="form-group"><label class="form-label">Headline regel 1 EN</label><input type="text" name="ap_headline_part1_en" class="form-control" value="{{ ap.get('headline_part1_en','') }}" placeholder="Ready to run at the"></div>
+        <div class="form-group"><label class="form-label">Headline regel 1 NL</label><input type="text" name="ap_headline_part1_nl" class="form-control" value="{{ ap.get('headline_part1_nl','') }}" placeholder="Klaar om te draaien op de"></div>
       </div>
       <div class="form-row cols-2">
-        <div class="form-group" style="margin-bottom:0"><label class="form-label">Knop label EN</label><input type="text" name="btn_en" class="form-control" value="{{ ct.get('btn_en','') }}" placeholder="Request Demo →"></div>
-        <div class="form-group" style="margin-bottom:0"><label class="form-label">Knop label NL</label><input type="text" name="btn_nl" class="form-control" value="{{ ct.get('btn_nl','') }}" placeholder="Contact opnemen →"></div>
+        <div class="form-group"><label class="form-label">Headline accent (blauw) EN</label><input type="text" name="ap_headline_accent_en" class="form-control" value="{{ ap.get('headline_accent_en','') }}" placeholder="speed of thought?"></div>
+        <div class="form-group"><label class="form-label">Headline accent (blauw) NL</label><input type="text" name="ap_headline_accent_nl" class="form-control" value="{{ ap.get('headline_accent_nl','') }}" placeholder="snelheid van gedachte?"></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Body EN</label><textarea name="ap_body_en" class="form-control" rows="3">{{ ap.get('body_en','') }}</textarea></div>
+        <div class="form-group"><label class="form-label">Body NL</label><textarea name="ap_body_nl" class="form-control" rows="3">{{ ap.get('body_nl','') }}</textarea></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Knop EN</label><input type="text" name="ap_btn_en" class="form-control" value="{{ ap.get('btn_en','') }}" placeholder="Apply Now"></div>
+        <div class="form-group"><label class="form-label">Knop NL</label><input type="text" name="ap_btn_nl" class="form-control" value="{{ ap.get('btn_nl','') }}" placeholder="Aanmelden"></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Noot EN</label><input type="text" name="ap_note_en" class="form-control" value="{{ ap.get('note_en','') }}" placeholder="No credit card required"></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Noot NL</label><input type="text" name="ap_note_nl" class="form-control" value="{{ ap.get('note_nl','') }}" placeholder="Geen creditcard vereist"></div>
       </div>
     </div>
   </div>
@@ -69,8 +80,8 @@
     <div class="card-header"><div class="card-title">Footer</div></div>
     <div class="card-body">
       <div class="form-row cols-2">
-        <div class="form-group"><label class="form-label">Tagline EN</label><textarea name="footer_tagline_en" class="form-control" rows="2">{{ ft.get('tagline_en','') }}</textarea></div>
-        <div class="form-group"><label class="form-label">Tagline NL</label><textarea name="footer_tagline_nl" class="form-control" rows="2">{{ ft.get('tagline_nl','') }}</textarea></div>
+        <div class="form-group"><label class="form-label">Tagline EN</label><input type="text" name="footer_tagline_en" class="form-control" value="{{ ft.get('tagline_en','') }}" placeholder="Imagine. Automate. Execute."></div>
+        <div class="form-group"><label class="form-label">Tagline NL</label><input type="text" name="footer_tagline_nl" class="form-control" value="{{ ft.get('tagline_nl','') }}" placeholder="Bedenk. Automatiseer. Voer uit."></div>
       </div>
       <div class="form-group" style="margin-bottom:0">
         <label class="form-label">Copyright</label>

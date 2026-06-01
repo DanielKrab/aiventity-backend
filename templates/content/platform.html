@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% block title %}The New Knowledge Worker{% endblock %}
-{% block page_title %}The New Knowledge Worker{% endblock %}
-{% set kw = content.get('knowledge_worker', {}) %}
+{% block title %}Creativity sectie{% endblock %}
+{% block page_title %}Creativity — 01{% endblock %}
+{% set cr = content.get('creativity', {}) %}
 {% block content %}
 <form method="POST" action="{{ url_for('content_platform') }}">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -10,16 +10,16 @@
     <div class="card-header"><div class="card-title">Sectie koptekst</div></div>
     <div class="card-body">
       <div class="form-row cols-2">
-        <div class="form-group"><label class="form-label">Label EN</label><input type="text" name="label_en" class="form-control" value="{{ kw.get('label_en','') }}" placeholder="SOCIOTECHNICAL IMPACT"></div>
-        <div class="form-group"><label class="form-label">Label NL</label><input type="text" name="label_nl" class="form-control" value="{{ kw.get('label_nl','') }}" placeholder="SOCIOTECHNISCHE IMPACT"></div>
+        <div class="form-group"><label class="form-label">Label EN</label><input type="text" name="label_en" class="form-control" value="{{ cr.get('label_en','') }}" placeholder="01 — Creativity"></div>
+        <div class="form-group"><label class="form-label">Label NL</label><input type="text" name="label_nl" class="form-control" value="{{ cr.get('label_nl','') }}" placeholder="01 — Creativiteit"></div>
       </div>
       <div class="form-row cols-2">
-        <div class="form-group"><label class="form-label">Titel EN</label><input type="text" name="title_en" class="form-control" value="{{ kw.get('title_en','') }}" placeholder="The New Knowledge Worker"></div>
-        <div class="form-group"><label class="form-label">Titel NL</label><input type="text" name="title_nl" class="form-control" value="{{ kw.get('title_nl','') }}" placeholder="De nieuwe kenniswerker"></div>
+        <div class="form-group"><label class="form-label">Titel EN</label><input type="text" name="title_en" class="form-control" value="{{ cr.get('title_en','') }}" placeholder="Your Vision, Structured."></div>
+        <div class="form-group"><label class="form-label">Titel NL</label><input type="text" name="title_nl" class="form-control" value="{{ cr.get('title_nl','') }}" placeholder="Jouw Visie, Gestructureerd."></div>
       </div>
       <div class="form-row cols-2">
-        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subtitel EN</label><textarea name="subtitle_en" class="form-control" rows="2">{{ kw.get('subtitle_en','') }}</textarea></div>
-        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subtitel NL</label><textarea name="subtitle_nl" class="form-control" rows="2">{{ kw.get('subtitle_nl','') }}</textarea></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subtitel EN</label><textarea name="subtitle_en" class="form-control" rows="2">{{ cr.get('subtitle_en','') }}</textarea></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subtitel NL</label><textarea name="subtitle_nl" class="form-control" rows="2">{{ cr.get('subtitle_nl','') }}</textarea></div>
       </div>
     </div>
   </div>
@@ -28,13 +28,17 @@
   <div class="card" style="margin-bottom:20px">
     <div class="card-header"><div class="card-title">Card {{ num }}</div></div>
     <div class="card-body">
-      <div class="form-row cols-2">
-        <div class="form-group"><label class="form-label">Titel EN</label><input type="text" name="c{{ num }}_title_en" class="form-control" value="{{ kw.get('c' ~ num ~ '_title_en','') }}"></div>
-        <div class="form-group"><label class="form-label">Titel NL</label><input type="text" name="c{{ num }}_title_nl" class="form-control" value="{{ kw.get('c' ~ num ~ '_title_nl','') }}"></div>
+      <div class="form-group">
+        <label class="form-label">Icoon (emoji of symbool)</label>
+        <input type="text" name="c{{ num }}_icon" class="form-control" value="{{ cr.get('c' ~ num ~ '_icon', '') }}" placeholder="✦" style="max-width:120px;">
       </div>
       <div class="form-row cols-2">
-        <div class="form-group" style="margin-bottom:0"><label class="form-label">Omschrijving EN</label><textarea name="c{{ num }}_desc_en" class="form-control" rows="3">{{ kw.get('c' ~ num ~ '_desc_en','') }}</textarea></div>
-        <div class="form-group" style="margin-bottom:0"><label class="form-label">Omschrijving NL</label><textarea name="c{{ num }}_desc_nl" class="form-control" rows="3">{{ kw.get('c' ~ num ~ '_desc_nl','') }}</textarea></div>
+        <div class="form-group"><label class="form-label">Titel EN</label><input type="text" name="c{{ num }}_title_en" class="form-control" value="{{ cr.get('c' ~ num ~ '_title_en','') }}"></div>
+        <div class="form-group"><label class="form-label">Titel NL</label><input type="text" name="c{{ num }}_title_nl" class="form-control" value="{{ cr.get('c' ~ num ~ '_title_nl','') }}"></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Tekst EN</label><textarea name="c{{ num }}_text_en" class="form-control" rows="3">{{ cr.get('c' ~ num ~ '_text_en','') }}</textarea></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Tekst NL</label><textarea name="c{{ num }}_text_nl" class="form-control" rows="3">{{ cr.get('c' ~ num ~ '_text_nl','') }}</textarea></div>
       </div>
     </div>
   </div>
