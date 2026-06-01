@@ -1,0 +1,12 @@
+[
+  {
+    "id": "mpves2ojp3vh",
+    "name": "Test User",
+    "email": "test@example.com",
+    "phone": "",
+    "subject": "Test vraag",
+    "message": "Dit is een testbericht",
+    "ts": "2026-06-01T16:14:04.435Z",
+    "read": false
+  }
+]
