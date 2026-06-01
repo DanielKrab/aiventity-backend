@@ -19,5 +19,12 @@
     "type": "image/png",
     "size": 50658,
     "uploaded": "2026-06-01T19:53:36.588Z"
+  },
+  {
+    "name": "monday-1.svg",
+    "url": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/monday-1.svg",
+    "type": "image/svg+xml",
+    "size": 812,
+    "uploaded": "2026-06-01T19:59:46.995Z"
   }
 ]
