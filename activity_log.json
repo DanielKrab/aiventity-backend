@@ -113,5 +113,10 @@
     "ts": "2026-06-01T19:53:37.460Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: Google_Drive_icon__2020_.svg.png"
+  },
+  {
+    "ts": "2026-06-01T19:53:43.559Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: integration"
   }
 ]
