@@ -104,6 +104,46 @@
     </div>
   </div>
 
+  <!-- ── Netlify ── -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">
+      <div>
+        <div class="card-title">🚀 Netlify Integratie</div>
+        <div class="card-subtitle">Verbinding met Netlify voor publiceren</div>
+      </div>
+      <span class="badge badge-green">Publiceren</span>
+    </div>
+    <div class="card-body">
+      <div class="form-row cols-2">
+        <div class="form-group">
+          <label class="form-label">Netlify Personal Access Token</label>
+          <input type="password" name="netlify_token" class="form-control"
+                 value="{{ cfg.get('netlify_token','') }}"
+                 placeholder="nfp_xxxxxxxxxxxxxxxx"
+                 autocomplete="new-password">
+          <div class="form-hint">
+            Maak aan via
+            <a href="https://app.netlify.com/user/applications#personal-access-tokens" target="_blank" style="color:#6c8ebf">
+              Netlify → User Settings → Applications
+            </a>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Netlify Site ID</label>
+          <input type="text" name="netlify_site_id" class="form-control"
+                 value="{{ cfg.get('netlify_site_id','') }}"
+                 placeholder="5559f234-9246-4edf-a2c5-778983c63285">
+          <div class="form-hint">Site ID van de publieke Netlify site (aiventitytool.netlify.app)</div>
+        </div>
+      </div>
+      {% if cfg.get('last_published') %}
+      <div class="form-hint" style="color:#2e7d32">
+        ✅ Laatste publicatie: {{ cfg.get('last_published') }}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
   <!-- ── Analytics ── -->
   <div class="card" style="margin-bottom:20px">
     <div class="card-header">

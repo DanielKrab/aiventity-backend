@@ -879,6 +879,13 @@ def site_settings():
         cfg['google_analytics_id'] = f.get('google_analytics_id', '').strip()
         cfg['contact_email'] = f.get('contact_email', '').strip()
         cfg['favicon_url'] = f.get('favicon_url', '').strip()
+        # Netlify integration — only overwrite if a value was supplied
+        new_token = f.get('netlify_token', '').strip()
+        if new_token:
+            cfg['netlify_token'] = new_token
+        new_site_id = f.get('netlify_site_id', '').strip()
+        if new_site_id:
+            cfg['netlify_site_id'] = new_site_id
         save_json(CONFIG_FILE, cfg)
         flash('Website instellingen opgeslagen!', 'success')
         return redirect(url_for('site_settings'))
