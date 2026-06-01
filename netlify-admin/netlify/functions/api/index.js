@@ -48,15 +48,15 @@ function checkPw(pw) {
 // ══════════════════════════════════════════════════════════════════════════
 // HTTP helper
 // ══════════════════════════════════════════════════════════════════════════
-function httpRequest(url,opts={},body=null) {
+function httpRequest(url,opts={},body=null,binary=false) {
   return new Promise((res,rej)=>{
     const u=new URL(url);
     const o={hostname:u.hostname,path:u.pathname+u.search,method:opts.method||"GET",headers:opts.headers||{}};
     const req=https.request(o,r=>{
       const c=[]; r.on("data",x=>c.push(x)); r.on("end",()=>{
-        const t=Buffer.concat(c).toString("utf-8");
-        if(r.statusCode>=400) rej(new Error(`HTTP ${r.statusCode}: ${t.slice(0,300)}`));
-        else res(t);
+        const buf=Buffer.concat(c);
+        if(r.statusCode>=400) rej(new Error(`HTTP ${r.statusCode}: ${buf.toString("utf-8").slice(0,300)}`));
+        else res(binary?buf:buf.toString("utf-8"));
       });
     });
     req.on("error",rej);
@@ -123,8 +123,10 @@ function unauth()     { return resp(401,{error:"Niet ingelogd"}); }
 function bad(m="Ongeldig verzoek") { return resp(400,{error:m}); }
 
 // ══════════════════════════════════════════════════════════════════════════
-// Publish
+// Render / Publish
 // ══════════════════════════════════════════════════════════════════════════
+const LOGO_URL=`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/static/logo.png`;
+
 function evalJinja(expr,ctx) {
   if(expr.includes("~")) return expr.split("~").map(p=>evalJinja(p.trim(),ctx)).join("");
   const m=expr.match(/^(\w+)\.get\(['"]([^'"]+)['"]\s*(?:,\s*['"]([^'"]*)['"]\s*)?\)$/);
@@ -133,14 +135,55 @@ function evalJinja(expr,ctx) {
   if(/^\w+$/.test(expr)&&expr in ctx) return String(ctx[expr]||"");
   return "";
 }
-function renderWebsite(content,cfg) {
+
+function buildThemeCSS(theme={}) {
+  const p=theme.primary_color||"#007AFF";
+  const a=theme.accent_color||"#10b981";
+  const bg=theme.bg_color||"#050505";
+  const tc=theme.text_color||"#ffffff";
+  const hf=theme.heading_font||"Space Grotesk";
+  const bf=theme.body_font||"Inter";
+  return `
+:root{--p:${p};--a:${a};--bg:${bg};--tc:${tc};}
+body{background-color:var(--bg)!important;color:var(--tc)!important;font-family:'${bf}',sans-serif!important;}
+h1,h2,h3,h4,h5,.font-heading,[class*="font-heading"]{font-family:'${hf}',sans-serif!important;}
+.btn-primary{background:var(--p)!important;border-color:var(--p)!important;}
+.btn-primary:hover{filter:brightness(1.15)!important;}
+.text-ai-blue,.text-ai-blue *{color:var(--p)!important;}
+h1 span:nth-child(2){color:var(--p)!important;}
+.gradient-text{background:linear-gradient(135deg,var(--tc) 30%,var(--p) 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;}
+.glass-blue{border-color:color-mix(in srgb,var(--p) 30%,transparent)!important;}
+.lbtn-on{background:var(--p)!important;}
+.ping-dot{background:var(--a)!important;}
+.tag-ok{color:var(--a)!important;}
+.feature-card:hover{border-color:color-mix(in srgb,var(--p) 40%,transparent)!important;box-shadow:0 20px 60px color-mix(in srgb,var(--p) 12%,transparent)!important;}
+`.trim();
+}
+
+function renderWebsite(content,cfg={},themeOverride=null) {
   const sections={h:content.hero||{},cr:content.creativity||{},ig:content.integration||{},
                   ex:content.execution||{},ap:content.apply||{},ft:content.footer||{}};
   const tmplPath=path.join(__dirname,"templates","website.html");
   let html;
   try { html=fs.readFileSync(tmplPath,"utf-8"); } catch { return buildFallback(sections); }
+  // Strip Jinja control flow, evaluate expressions
   html=html.replace(/\{%.*?%\}/gs,"");
   html=html.replace(/\{\{\s*(.+?)\s*\}\}/g,(_,e)=>{ try{return evalJinja(e.trim(),sections);}catch{return "";} });
+  // Fix logo URL — replace relative /logo.png with absolute CDN URL
+  html=html.replace(/src="\/logo\.png"/g,`src="${LOGO_URL}"`);
+  // Inject theme CSS
+  const theme=themeOverride||(cfg&&cfg.theme)||{};
+  if(Object.keys(theme).length>0) {
+    const css=buildThemeCSS(theme);
+    html=html.replace("</head>",`<style id="cms-theme">${css}</style></head>`);
+    // Also inject Google Fonts for custom fonts if needed
+    const hf=(theme.heading_font||"").replace(/\s/g,"+");
+    const bf=(theme.body_font||"").replace(/\s/g,"+");
+    if(hf||bf) {
+      const fonts=[hf,bf].filter(Boolean).map(f=>`family=${f}:wght@400;500;600;700`).join("&");
+      html=html.replace("</head>",`<link href="https://fonts.googleapis.com/css2?${fonts}&display=swap" rel="stylesheet"></head>`);
+    }
+  }
   return html;
 }
 function buildFallback(s) {
@@ -156,14 +199,28 @@ async function doPublish(body={}) {
   const html=renderWebsite(content,cfg);
   const htmlBuf=Buffer.from(html,"utf-8");
   const htmlSha1=crypto.createHash("sha1").update(htmlBuf).digest("hex");
-  const hdrsBuf=Buffer.from("/*\n  Content-Type: text/html; charset=utf-8\n  Cache-Control: public, max-age=0, must-revalidate\n");
+  const hdrsBuf=Buffer.from("/*\n  Content-Type: text/html; charset=utf-8\n  Cache-Control: public, max-age=0, must-revalidate\n  X-Frame-Options: SAMEORIGIN\n");
   const hdrsSha1=crypto.createHash("sha1").update(hdrsBuf).digest("hex");
-  const manifest=JSON.stringify({files:{"/index.html":htmlSha1,"/website.html":htmlSha1,"/_headers":hdrsSha1}});
+
+  // Fetch logo to include in deploy
+  let logoBuf=null; let logoSha1=null;
+  try {
+    logoBuf=await httpRequest(LOGO_URL,{headers:{"User-Agent":"AiventityCMS/2.0"}},null,true);
+    logoSha1=crypto.createHash("sha1").update(logoBuf).digest("hex");
+  } catch{}
+
+  const files={"/index.html":htmlSha1,"/_headers":hdrsSha1};
+  if(logoSha1) files["/logo.png"]=logoSha1;
+  const manifest=JSON.stringify({files});
   const nlH={Authorization:`Bearer ${token}`,"Content-Type":"application/json"};
   const dep=JSON.parse(await httpRequest(`https://api.netlify.com/api/v1/sites/${siteId}/deploys`,{method:"POST",headers:nlH},manifest));
-  const did=dep.id; const req=dep.required||[];
-  const fm={[htmlSha1]:{n:"index.html",b:htmlBuf,ct:"text/html; charset=utf-8"},[hdrsSha1]:{n:"_headers",b:hdrsBuf,ct:"text/plain"}};
-  for(const sha of req){ if(fm[sha]){ const {n,b,ct}=fm[sha]; await httpRequest(`https://api.netlify.com/api/v1/deploys/${did}/files/${n}`,{method:"PUT",headers:{Authorization:`Bearer ${token}`,"Content-Type":ct}},b); } }
+  const did=dep.id; const required=dep.required||[];
+  const fm={
+    [htmlSha1]:{n:"index.html",b:htmlBuf,ct:"text/html; charset=utf-8"},
+    [hdrsSha1]:{n:"_headers",b:hdrsBuf,ct:"text/plain"},
+  };
+  if(logoSha1&&logoBuf) fm[logoSha1]={n:"logo.png",b:logoBuf,ct:"image/png"};
+  for(const sha of required){ if(fm[sha]){ const {n,b,ct}=fm[sha]; await httpRequest(`https://api.netlify.com/api/v1/deploys/${did}/files/${n}`,{method:"PUT",headers:{Authorization:`Bearer ${token}`,"Content-Type":ct}},b); } }
   cfg.last_published=new Date().toLocaleString("nl-NL",{timeZone:"Europe/Amsterdam"});
   await ghPut("config.json",cfg,cfgSha,"CMS: publish timestamp");
   await logActivity("publish","Website gepubliceerd op Netlify");
@@ -222,11 +279,21 @@ exports.handler = async (event) => {
   let body={}; try{body=JSON.parse(event.body||"{}");}catch{}
 
   // ── Preview (returns HTML) ────────────────────────────────────────────────
-  if(p==="/api/preview"&&method==="GET") {
-    const {data:content}=await ghGet("content.json");
-    const {data:cfg}=await ghGet("config.json");
-    const html=renderWebsite(content,cfg);
-    return {statusCode:200,headers:{...CORS,"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store"},body:html};
+  if(p==="/api/preview") {
+    if(method==="GET") {
+      // Full preview: load saved content+theme from GitHub
+      const {data:content}=await ghGet("content.json");
+      const {data:cfg}=await ghGet("config.json");
+      const html=renderWebsite(content,cfg);
+      return {statusCode:200,headers:{...CORS,"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store"},body:html};
+    }
+    if(method==="POST") {
+      // Live preview: render with provided data (no GitHub writes — fast!)
+      const content=body.content||{};
+      const themeOverride=body.theme||null;
+      const html=renderWebsite(content,{},themeOverride);
+      return {statusCode:200,headers:{...CORS,"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store"},body:html};
+    }
   }
 
   // ── Inbox ─────────────────────────────────────────────────────────────────
@@ -269,10 +336,9 @@ exports.handler = async (event) => {
     if(method==="GET"){ const {data:cfg}=await ghGet("config.json"); delete cfg.admin_password_hash; delete cfg.secret_key; return resp(200,cfg); }
     if(method==="POST"){
       const {data:cfg,sha}=await ghGet("config.json");
-      const ok=["site_name","site_tagline","seo_meta_title","seo_meta_description","og_image_url","canonical_url",
-        "twitter_url","linkedin_url","instagram_url","github_url","google_analytics_id","contact_email",
-        "favicon_url","netlify_token","netlify_site_id","cookie_banner","maintenance_mode","company_name",
-        "company_address","company_phone","kvk_number","vat_number"];
+      const ok=["site_name","site_tagline","twitter_url","linkedin_url","instagram_url","github_url",
+        "google_analytics_id","contact_email","favicon_url","netlify_token","netlify_site_id",
+        "company_name","company_address","company_phone","kvk_number","vat_number"];
       for(const k of ok) if(body[k]!==undefined&&body[k]!=="") cfg[k]=body[k];
       await ghPut("config.json",cfg,sha,"CMS: save config");
       await logActivity("settings_save","Website instellingen opgeslagen");
@@ -288,18 +354,6 @@ exports.handler = async (event) => {
       cfg.theme={...(cfg.theme||{}),...body};
       await ghPut("config.json",cfg,sha,"CMS: save theme");
       await logActivity("theme_save","Thema-instellingen opgeslagen");
-      return resp(200,{ok:true});
-    }
-  }
-
-  // ── SEO (per page) ───────────────────────────────────────────────────────
-  if(p==="/api/seo") {
-    if(method==="GET"){ const {data}=await ghGet("seo.json"); return resp(200,data||{}); }
-    if(method==="POST"){
-      const {data:seo,sha}=await ghGet("seo.json");
-      const merged={...(seo||{}),...body};
-      await ghPut("seo.json",merged,sha,"CMS: save SEO");
-      await logActivity("seo_save","SEO-instellingen opgeslagen");
       return resp(200,{ok:true});
     }
   }

@@ -265,10 +265,6 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
 .empty-state{text-align:center;padding:48px 20px;color:var(--text3)}
 .empty-state .empty-icon{font-size:40px;margin-bottom:12px;opacity:.4}
 .empty-state p{font-size:13px;line-height:1.6}
-.seo-preview{max-width:540px;border:1px solid var(--border);border-radius:var(--r-sm);padding:16px;background:var(--surface2);margin-top:16px}
-.seo-url{font-size:12px;color:#3c8526;font-family:arial,sans-serif}
-.seo-title{font-size:18px;color:#1a0dab;font-weight:400;margin:3px 0;font-family:arial,sans-serif}
-.seo-desc{font-size:13px;color:#545454;font-family:arial,sans-serif;line-height:1.5}
 </style>
 </head>
 <body>
@@ -314,10 +310,6 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
       <button class="sb-item" onclick="nav('media')">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         Media Bibliotheek
-      </button>
-      <button class="sb-item" onclick="nav('seo')">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        SEO &amp; Pagina's
       </button>
 
       <div class="sb-section">Stijl</div>
@@ -476,33 +468,6 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
       </div>
     </div>
 
-    <!-- ═══════════ SEO ═══════════ -->
-    <div id="page-seo" class="page page-area">
-      <div class="card">
-        <div class="card-header">
-          <div><div class="card-title">🔍 SEO &amp; Meta instellingen</div><div class="card-subtitle">Per pagina en globaal</div></div>
-          <span class="badge badge-blue">Per sectie</span>
-        </div>
-        <div class="card-body">
-          <div class="tabs" id="seo-page-tabs"></div>
-          <div id="seo-fields"></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="card-title">🔍 Google Preview</div></div>
-        <div class="card-body">
-          <div class="seo-preview">
-            <div class="seo-url" id="prev-url">https://aiventity.com</div>
-            <div class="seo-title" id="prev-title">Aiventity — Intelligent Agent Space</div>
-            <div class="seo-desc" id="prev-desc">Aiventity is the intelligent Agent Space.</div>
-          </div>
-        </div>
-      </div>
-      <div class="save-bar" style="position:sticky;bottom:0;margin:0 -28px;padding:12px 28px">
-        <button class="btn btn-primary" onclick="saveSeo(this)">💾 SEO opslaan</button>
-      </div>
-    </div>
-
     <!-- ═══════════ THEME ═══════════ -->
     <div id="page-theme" class="page page-area">
 
@@ -609,19 +574,6 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
       </div>
 
       <div class="card">
-        <div class="card-header"><div><div class="card-title">SEO standaard</div><div class="card-subtitle">Globale meta-instellingen</div></div><span class="badge badge-blue">Globaal</span></div>
-        <div class="card-body">
-          <div class="form-group"><label class="form-label">Meta titel <span>(max 60 tekens)</span></label><input type="text" class="form-control" id="cfg-seo_meta_title" placeholder="Aiventity — Intelligent Agent Space" maxlength="80"></div>
-          <div class="form-group"><label class="form-label">Meta beschrijving <span>(max 160 tekens)</span></label><textarea class="form-control" id="cfg-seo_meta_description" rows="3" maxlength="200"></textarea></div>
-          <div class="form-row cols-2">
-            <div class="form-group"><label class="form-label">OG Afbeelding URL</label><input type="url" class="form-control" id="cfg-og_image_url" placeholder="https://..."></div>
-            <div class="form-group"><label class="form-label">Canonical URL</label><input type="url" class="form-control" id="cfg-canonical_url" placeholder="https://aiventity.com"></div>
-          </div>
-          <div class="form-group"><label class="form-label">Favicon URL</label><input type="url" class="form-control" id="cfg-favicon_url" placeholder="https://...favicon.ico"></div>
-        </div>
-      </div>
-
-      <div class="card">
         <div class="card-header"><div class="card-title">Social Media</div></div>
         <div class="card-body">
           <div class="form-row cols-2">
@@ -713,7 +665,6 @@ const API = '/api';
 let token = localStorage.getItem('cms_token') || '';
 let contentData = {};
 let mediaData = [];
-let seoData = {};
 let themeData = {};
 let inboxData = [];
 let currentSection = 'hero';
@@ -876,7 +827,7 @@ function closeModal(){
 // NAVIGATION
 // ═══════════════════════════════════════════════════════════
 const titles={dashboard:'Dashboard',editor:'Visuele Editor',media:'Media Bibliotheek',
-               seo:'SEO & Pagina\'s',theme:'Thema & Kleuren',settings:'Website Instellingen',
+               theme:'Thema & Kleuren',settings:'Website Instellingen',
                activity:'Activiteitenlog',inbox:'Inbox'};
 
 function nav(page) {
@@ -891,7 +842,6 @@ function nav(page) {
   currentPage=page;
   if(page==='editor') initEditor();
   if(page==='media') loadMedia();
-  if(page==='seo') loadSeo();
   if(page==='theme') loadTheme();
   if(page==='settings') loadSettings();
   if(page==='activity') loadActivity();
@@ -928,7 +878,7 @@ async function loadDashboard() {
   const acts=await apiFetch('/activity');
   const el=document.getElementById('dash-activity');
   if(!Array.isArray(acts)||acts.length===0){ el.innerHTML='<div style="padding:16px;color:var(--text3);font-size:12px">Geen activiteit</div>'; return; }
-  const icons={publish:'🚀',content_save:'✏️',settings_save:'⚙️',theme_save:'🎨',media_upload:'📁',media_delete:'🗑',seo_save:'🔍',restore:'↩'};
+  const icons={publish:'🚀',content_save:'✏️',settings_save:'⚙️',theme_save:'🎨',media_upload:'📁',media_delete:'🗑',restore:'↩'};
   el.innerHTML=acts.slice(0,6).map(a=>`
     <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border)">
       <span style="font-size:16px">${icons[a.action]||'•'}</span>
@@ -1009,12 +959,41 @@ function showSection(key) {
 
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+let livePreviewTimer=null;
+
 function scheduleAutoSave() {
-  setStatus('saving','Bezig...');
+  setStatus('saving','Niet opgeslagen...');
   redoStack=[];
   document.getElementById('redo-btn').disabled=true;
+  // Instant live preview — collect current field values and POST to /api/preview
+  if(livePreviewTimer) clearTimeout(livePreviewTimer);
+  livePreviewTimer=setTimeout(()=>{
+    const fields=FIELDS[currentSection]?.content||[];
+    const sectionData={};
+    fields.forEach(({f})=>{ const el=document.getElementById('f-'+f); if(el) sectionData[f]=el.value; });
+    const previewContent={...contentData,[currentSection]:{...(contentData[currentSection]||{}),...sectionData}};
+    postLivePreview(previewContent,themeData);
+  },400);
+  // Auto-save to GitHub after 4s of no typing
   if(autoSaveTimer) clearTimeout(autoSaveTimer);
-  autoSaveTimer=setTimeout(()=>saveSection(null,true),3000);
+  autoSaveTimer=setTimeout(()=>saveSection(null,true),4000);
+}
+
+async function postLivePreview(content,theme) {
+  const loading=document.getElementById('preview-loading');
+  const iframe=document.getElementById('preview');
+  if(!iframe) return;
+  try {
+    const r=await fetch(API+'/preview',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({content,theme})
+    });
+    if(!r.ok) return;
+    const html=await r.text();
+    iframe.srcdoc=html;
+    iframe.onload=()=>{ if(loading) loading.style.display='none'; };
+  } catch{}
 }
 
 async function saveSection(btn, silent=false) {
@@ -1204,79 +1183,6 @@ function fileToBase64(file) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// SEO
-// ═══════════════════════════════════════════════════════════
-const SEO_PAGES=['global','hero','creativity','integration','execution','apply','footer'];
-const SEO_PAGE_LABELS={global:'Globaal',hero:'Hero',creativity:'Creativity',integration:'Integration',execution:'Execution',apply:'Apply',footer:'Footer'};
-
-async function loadSeo() {
-  seoData=await apiFetch('/seo');
-  if(typeof seoData!=='object'||Array.isArray(seoData)) seoData={};
-  buildSeoTabs();
-  showSeoPage('global');
-}
-
-function buildSeoTabs() {
-  const bar=document.getElementById('seo-page-tabs');
-  bar.innerHTML=SEO_PAGES.map(p=>`<button class="tab-btn${p==='global'?' active':''}" onclick="showSeoPage('${p}')">${SEO_PAGE_LABELS[p]}</button>`).join('');
-}
-
-function showSeoPage(page) {
-  document.querySelectorAll('#seo-page-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('#seo-page-tabs .tab-btn').forEach(b=>{if(b.textContent===SEO_PAGE_LABELS[page])b.classList.add('active');});
-  const d=seoData[page]||{};
-  document.getElementById('seo-fields').innerHTML=`
-    <input type="hidden" id="seo-current-page" value="${page}">
-    <div class="form-group"><label class="form-label">Meta Titel <span>(max 60 tekens)</span></label>
-      <input type="text" class="form-control" id="seo-title" value="${esc(d.meta_title||'')}" maxlength="80" oninput="updateSeoPreview()">
-    </div>
-    <div class="form-group"><label class="form-label">Meta Beschrijving <span>(max 160 tekens)</span></label>
-      <textarea class="form-control" id="seo-desc" rows="3" maxlength="200" oninput="updateSeoPreview()">${esc(d.meta_description||'')}</textarea>
-    </div>
-    <div class="form-row cols-2">
-      <div class="form-group"><label class="form-label">OG Titel</label><input type="text" class="form-control" id="seo-og-title" value="${esc(d.og_title||'')}"></div>
-      <div class="form-group"><label class="form-label">OG Afbeelding URL</label><input type="url" class="form-control" id="seo-og-img" value="${esc(d.og_image||'')}"></div>
-    </div>
-    <div class="form-row cols-2">
-      <div class="form-group"><label class="form-label">Canonical URL</label><input type="url" class="form-control" id="seo-canonical" value="${esc(d.canonical||'')}"></div>
-      <div class="form-group"><label class="form-label">Robots</label>
-        <select class="form-control" id="seo-robots">
-          <option value="index,follow" ${d.robots==='index,follow'?'selected':''}>Index, Follow</option>
-          <option value="noindex,follow" ${d.robots==='noindex,follow'?'selected':''}>Noindex, Follow</option>
-          <option value="noindex,nofollow" ${d.robots==='noindex,nofollow'?'selected':''}>Noindex, Nofollow</option>
-        </select>
-      </div>
-    </div>`;
-  updateSeoPreview();
-}
-
-function updateSeoPreview() {
-  const t=document.getElementById('seo-title')?.value||'Aiventity';
-  const d=document.getElementById('seo-desc')?.value||'';
-  const c=document.getElementById('seo-canonical')?.value||'https://aiventity.com';
-  document.getElementById('prev-title').textContent=t;
-  document.getElementById('prev-desc').textContent=d;
-  document.getElementById('prev-url').textContent=c;
-}
-
-async function saveSeo(btn) {
-  const page=document.getElementById('seo-current-page')?.value||'global';
-  const data={[page]:{
-    meta_title:document.getElementById('seo-title')?.value||'',
-    meta_description:document.getElementById('seo-desc')?.value||'',
-    og_title:document.getElementById('seo-og-title')?.value||'',
-    og_image:document.getElementById('seo-og-img')?.value||'',
-    canonical:document.getElementById('seo-canonical')?.value||'',
-    robots:document.getElementById('seo-robots')?.value||'index,follow',
-  }};
-  const orig=btn.innerHTML; btn.innerHTML='<span class="spinner"></span>'; btn.disabled=true;
-  const r=await apiFetch('/seo','POST',data);
-  btn.innerHTML=orig; btn.disabled=false;
-  if(r.ok){ seoData={...seoData,...data}; toast('✅ SEO opgeslagen!','success'); }
-  else toast('❌ '+(r.error||'Mislukt'),'error');
-}
-
-// ═══════════════════════════════════════════════════════════
 // THEME
 // ═══════════════════════════════════════════════════════════
 async function loadTheme() {
@@ -1328,14 +1234,19 @@ document.addEventListener('input',e=>{
   }
 });
 
-async function saveTheme(btn) {
+function getThemeFromForm() {
   const keys=['primary_color','accent_color','bg_color','text_color','heading_font','body_font','base_font_size','section_spacing','card_radius','button_radius'];
   const data={};
   keys.forEach(k=>{ const el=document.getElementById('th-'+k); if(el) data[k]=el.value; });
+  return data;
+}
+
+async function saveTheme(btn) {
+  const data=getThemeFromForm();
   const orig=btn.innerHTML; btn.innerHTML='<span class="spinner"></span>'; btn.disabled=true;
   const r=await apiFetch('/theme','POST',data);
   btn.innerHTML=orig; btn.disabled=false;
-  if(r.ok){ themeData=data; toast('✅ Thema opgeslagen!','success'); }
+  if(r.ok){ themeData=data; toast('✅ Thema opgeslagen! Publiceer de website om de kleuren live te zien.','success'); }
   else toast('❌ '+(r.error||'Mislukt'),'error');
 }
 
@@ -1346,7 +1257,6 @@ async function loadSettings() {
   const cfg=await apiFetch('/config');
   if(typeof cfg!=='object') return;
   const keys=['site_name','site_tagline','company_name','contact_email','kvk_number','vat_number',
-    'seo_meta_title','seo_meta_description','og_image_url','canonical_url','favicon_url',
     'twitter_url','linkedin_url','instagram_url','github_url','google_analytics_id',
     'netlify_token','netlify_site_id'];
   keys.forEach(k=>{ const el=document.getElementById('cfg-'+k); if(el&&cfg[k]!=null) el.value=cfg[k]; });
@@ -1354,7 +1264,6 @@ async function loadSettings() {
 
 async function saveSettings(btn) {
   const keys=['site_name','site_tagline','company_name','contact_email','kvk_number','vat_number',
-    'seo_meta_title','seo_meta_description','og_image_url','canonical_url','favicon_url',
     'twitter_url','linkedin_url','instagram_url','github_url','google_analytics_id',
     'netlify_token','netlify_site_id'];
   const data={};
@@ -1369,7 +1278,7 @@ async function saveSettings(btn) {
 // ═══════════════════════════════════════════════════════════
 // ACTIVITY LOG
 // ═══════════════════════════════════════════════════════════
-const actIcons={publish:'🚀',content_save:'✏️',settings_save:'⚙️',theme_save:'🎨',seo_save:'🔍',
+const actIcons={publish:'🚀',content_save:'✏️',settings_save:'⚙️',theme_save:'🎨',
                 media_upload:'📁',media_delete:'🗑',restore:'↩'};
 const actColors={publish:'var(--green)',content_save:'var(--accent)',settings_save:'var(--text2)',
                  theme_save:'var(--purple)',media_upload:'var(--yellow)',media_delete:'var(--red)',restore:'var(--yellow)'};
@@ -1476,7 +1385,6 @@ document.addEventListener('keydown',e=>{
     e.preventDefault();
     if(currentPage==='editor'){ const b=document.getElementById('save-btn'); saveSection(b); }
     else if(currentPage==='settings'){ const b=document.querySelector('#page-settings .btn-primary'); if(b) saveSettings(b); }
-    else if(currentPage==='seo'){ const b=document.querySelector('#page-seo .btn-primary'); if(b) saveSeo(b); }
     else if(currentPage==='theme'){ const b=document.querySelector('#page-theme .btn-primary'); if(b) saveTheme(b); }
   }
   if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&e.key==='z'){ e.preventDefault(); undoAction(); }
