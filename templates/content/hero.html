@@ -1,173 +1,80 @@
 {% extends "base.html" %}
 {% block title %}Hero bewerken{% endblock %}
 {% block page_title %}Hero sectie{% endblock %}
-
+{% set h = content.get('hero', {}) %}
 {% block content %}
 <form method="POST" action="{{ url_for('content_hero') }}">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-  <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
 
-    <!-- Left column -->
-    <div style="display:flex;flex-direction:column;gap:20px">
-
-      <!-- Main text -->
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Hoofdtekst</div>
-            <div class="card-subtitle">De grote koptekst bovenaan de pagina</div>
-          </div>
+    <!-- LEFT: English -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">🇬🇧 English</div></div>
+      <div class="card-body" style="display:flex;flex-direction:column;gap:16px">
+        <div class="form-group">
+          <label class="form-label">Badge</label>
+          <input type="text" name="badge_en" class="form-control" value="{{ h.get('badge_en','') }}" placeholder="The operating system for the Agentic Enterprise">
         </div>
-        <div class="card-body">
-          <div class="form-group">
-            <label class="form-label">Titel (eerste regel)</label>
-            <input type="text" name="title" class="form-control"
-                   value="{{ content.hero.title }}" placeholder="Uw AI Workforce.">
-            <div class="form-hint">De eerste regel van de hero koptekst</div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Titel accent (tweede regel, blauw)</label>
-            <input type="text" name="title_accent" class="form-control"
-                   value="{{ content.hero.title_accent }}" placeholder="Altijd aan.">
-            <div class="form-hint">Wordt weergegeven in blauw onder de eerste regel</div>
-          </div>
-          <div class="form-group" style="margin-bottom:0">
-            <label class="form-label">Subtitel</label>
-            <textarea name="subtitle" class="form-control" rows="3"
-                      placeholder="Beschrijving...">{{ content.hero.subtitle }}</textarea>
-          </div>
+        <div class="form-row cols-2">
+          <div class="form-group"><label class="form-label">Headline prefix</label><input type="text" name="headline_pre_en" class="form-control" value="{{ h.get('headline_pre_en','') }}" placeholder="The next step in"></div>
+          <div class="form-group"><label class="form-label">Headline accent (blue)</label><input type="text" name="headline_accent_en" class="form-control" value="{{ h.get('headline_accent_en','') }}" placeholder="automation"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Headline suffix</label>
+          <input type="text" name="headline_post_en" class="form-control" value="{{ h.get('headline_post_en','') }}" placeholder="and collaboration.">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subtitle</label>
+          <textarea name="subtitle_en" class="form-control" rows="3">{{ h.get('subtitle_en','') }}</textarea>
+        </div>
+        <div class="form-row cols-2">
+          <div class="form-group"><label class="form-label">CTA Primary</label><input type="text" name="cta_primary_en" class="form-control" value="{{ h.get('cta_primary_en','') }}" placeholder="Request a Demo →"></div>
+          <div class="form-group"><label class="form-label">CTA Secondary</label><input type="text" name="cta_secondary_en" class="form-control" value="{{ h.get('cta_secondary_en','') }}" placeholder="Explore the Platform"></div>
+        </div>
+        <div class="form-row cols-2">
+          <div class="form-group"><label class="form-label">Agents badge title</label><input type="text" name="agents_title_en" class="form-control" value="{{ h.get('agents_title_en','') }}" placeholder="Multi-agent orchestration"></div>
+          <div class="form-group"><label class="form-label">Agents badge sub</label><input type="text" name="agents_sub_en" class="form-control" value="{{ h.get('agents_sub_en','') }}" placeholder="Ready to deploy..."></div>
         </div>
       </div>
-
-      <!-- CTA buttons -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Knoppen</div>
-        </div>
-        <div class="card-body">
-          <div class="form-row cols-2">
-            <div class="form-group" style="margin-bottom:0">
-              <label class="form-label">Primaire knop</label>
-              <input type="text" name="cta_primary" class="form-control"
-                     value="{{ content.hero.cta_primary }}" placeholder="Boek een intro →">
-            </div>
-            <div class="form-group" style="margin-bottom:0">
-              <label class="form-label">Secundaire knop</label>
-              <input type="text" name="cta_secondary" class="form-control"
-                     value="{{ content.hero.cta_secondary }}" placeholder="Hoe het werkt">
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stats -->
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Statistieken</div>
-            <div class="card-subtitle">De drie nummers onderaan de hero</div>
-          </div>
-          <button type="button" class="add-btn" onclick="addStat()">+ Voeg stat toe</button>
-        </div>
-        <div class="card-body">
-          <div id="stats-container">
-            {% for stat in content.hero.stats %}
-            <div class="array-item">
-              <div class="item-fields">
-                <div class="form-row cols-2">
-                  <div>
-                    <label class="form-label">Nummer</label>
-                    <input type="text" name="stat_num[]" class="form-control"
-                           value="{{ stat.num }}" placeholder="30%+">
-                  </div>
-                  <div>
-                    <label class="form-label">Label</label>
-                    <input type="text" name="stat_label[]" class="form-control"
-                           value="{{ stat.label }}" placeholder="Tijdsbesparing">
-                  </div>
-                </div>
-              </div>
-              <button type="button" class="remove-btn" onclick="this.closest('.array-item').remove()">×</button>
-            </div>
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-
     </div>
 
-    <!-- Right column -->
-    <div style="display:flex;flex-direction:column;gap:20px">
-
-      <!-- Pills -->
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Pills</div>
-            <div class="card-subtitle">Kleine labels bovenaan de hero</div>
-          </div>
-          <button type="button" class="add-btn" onclick="addPill()">+ Voeg toe</button>
+    <!-- RIGHT: Dutch -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">🇳🇱 Nederlands</div></div>
+      <div class="card-body" style="display:flex;flex-direction:column;gap:16px">
+        <div class="form-group">
+          <label class="form-label">Badge</label>
+          <input type="text" name="badge_nl" class="form-control" value="{{ h.get('badge_nl','') }}" placeholder="Het besturingssysteem voor de Agentic Enterprise">
         </div>
-        <div class="card-body">
-          <div id="pills-container">
-            {% for pill in content.hero.pills %}
-            <div class="array-item" style="padding:8px 12px">
-              <div class="item-fields">
-                <input type="text" name="pills[]" class="form-control"
-                       value="{{ pill }}" placeholder="Agentic AI">
-              </div>
-              <button type="button" class="remove-btn" onclick="this.closest('.array-item').remove()">×</button>
-            </div>
-            {% endfor %}
-          </div>
+        <div class="form-row cols-2">
+          <div class="form-group"><label class="form-label">Headline prefix</label><input type="text" name="headline_pre_nl" class="form-control" value="{{ h.get('headline_pre_nl','') }}" placeholder="De volgende stap in"></div>
+          <div class="form-group"><label class="form-label">Headline accent (blauw)</label><input type="text" name="headline_accent_nl" class="form-control" value="{{ h.get('headline_accent_nl','') }}" placeholder="automatisering"></div>
         </div>
-      </div>
-
-      <!-- Preview info -->
-      <div class="card" style="background:#eff6ff;border-color:#bfdbfe">
-        <div class="card-body" style="padding:18px">
-          <div style="font-size:12px;font-weight:700;color:#1e40af;margin-bottom:8px">Preview</div>
-          <div style="font-size:12px;color:#3b82f6;line-height:1.6">
-            Na opslaan kun je de live website bekijken via de knop rechtsboven.
-          </div>
-          <a href="{{ url_for('website') }}" target="_blank" class="btn btn-primary btn-sm" style="margin-top:12px;display:inline-flex">
-            ↗ Live preview
-          </a>
+        <div class="form-group">
+          <label class="form-label">Headline suffix</label>
+          <input type="text" name="headline_post_nl" class="form-control" value="{{ h.get('headline_post_nl','') }}" placeholder="en samenwerking.">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subtitel</label>
+          <textarea name="subtitle_nl" class="form-control" rows="3">{{ h.get('subtitle_nl','') }}</textarea>
+        </div>
+        <div class="form-row cols-2">
+          <div class="form-group"><label class="form-label">CTA Primair</label><input type="text" name="cta_primary_nl" class="form-control" value="{{ h.get('cta_primary_nl','') }}" placeholder="Demo aanvragen →"></div>
+          <div class="form-group"><label class="form-label">CTA Secundair</label><input type="text" name="cta_secondary_nl" class="form-control" value="{{ h.get('cta_secondary_nl','') }}" placeholder="Ontdek het platform"></div>
+        </div>
+        <div class="form-row cols-2">
+          <div class="form-group"><label class="form-label">Agents badge titel</label><input type="text" name="agents_title_nl" class="form-control" value="{{ h.get('agents_title_nl','') }}" placeholder="Multi-agent orkestratie"></div>
+          <div class="form-group"><label class="form-label">Agents badge sub</label><input type="text" name="agents_sub_nl" class="form-control" value="{{ h.get('agents_sub_nl','') }}" placeholder="Direct inzetbaar..."></div>
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- Save bar -->
   <div style="position:sticky;bottom:0;background:#f0f2f5;padding:16px 0;margin-top:24px;display:flex;gap:12px;align-items:center">
     <button type="submit" class="btn btn-primary">Opslaan</button>
     <a href="{{ url_for('content_index') }}" class="btn btn-ghost">Annuleren</a>
-    <span style="font-size:12px;color:#8a96b0;margin-left:auto">Wijzigingen worden direct opgeslagen in content.json</span>
+    <a href="https://aiventitytool.netlify.app" target="_blank" class="btn btn-ghost btn-sm" style="margin-left:auto">↗ Bekijk live</a>
   </div>
 </form>
-{% endblock %}
-
-{% block scripts %}
-<script>
-function addPill() {
-  var container = document.getElementById('pills-container');
-  var div = document.createElement('div');
-  div.className = 'array-item';
-  div.style.padding = '8px 12px';
-  div.innerHTML = '<div class="item-fields"><input type="text" name="pills[]" class="form-control" placeholder="Nieuw label"></div><button type="button" class="remove-btn" onclick="this.closest(\'.array-item\').remove()">×</button>';
-  container.appendChild(div);
-  div.querySelector('input').focus();
-}
-
-function addStat() {
-  var container = document.getElementById('stats-container');
-  var div = document.createElement('div');
-  div.className = 'array-item';
-  div.innerHTML = '<div class="item-fields"><div class="form-row cols-2"><div><label class="form-label">Nummer</label><input type="text" name="stat_num[]" class="form-control" placeholder="0%"></div><div><label class="form-label">Label</label><input type="text" name="stat_label[]" class="form-control" placeholder="Label"></div></div></div><button type="button" class="remove-btn" onclick="this.closest(\'.array-item\').remove()">×</button>';
-  container.appendChild(div);
-  div.querySelector('input').focus();
-}
-</script>
 {% endblock %}

@@ -1,176 +1,59 @@
 {% extends "base.html" %}
-{% block title %}Diensten bewerken{% endblock %}
-{% block page_title %}Diensten sectie{% endblock %}
-
+{% block title %}The Cognitive Foundation{% endblock %}
+{% block page_title %}The Cognitive Foundation (Architectuur){% endblock %}
+{% set ar = content.get('architecture', {}) %}
 {% block content %}
 <form method="POST" action="{{ url_for('content_services') }}">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-  <!-- Section header -->
   <div class="card" style="margin-bottom:20px">
-    <div class="card-header">
-      <div class="card-title">Sectie koptekst</div>
-    </div>
+    <div class="card-header"><div class="card-title">Sectie koptekst</div></div>
     <div class="card-body">
       <div class="form-row cols-2">
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">Sectie label</label>
-          <input type="text" name="section_label" class="form-control"
-                 value="{{ content.services.section_label }}" placeholder="Onze Diensten">
-        </div>
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">Sectie titel</label>
-          <input type="text" name="title" class="form-control"
-                 value="{{ content.services.title }}" placeholder="Drie pijlers.">
-        </div>
+        <div class="form-group"><label class="form-label">Label EN</label><input type="text" name="label_en" class="form-control" value="{{ ar.get('label_en','') }}" placeholder="THE ARCHITECTURE"></div>
+        <div class="form-group"><label class="form-label">Label NL</label><input type="text" name="label_nl" class="form-control" value="{{ ar.get('label_nl','') }}" placeholder="DE ARCHITECTUUR"></div>
       </div>
-      <div class="form-group" style="margin-top:16px;margin-bottom:0">
-        <label class="form-label">Subtitel</label>
-        <textarea name="subtitle" class="form-control" rows="2">{{ content.services.subtitle }}</textarea>
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Titel EN</label><input type="text" name="title_en" class="form-control" value="{{ ar.get('title_en','') }}" placeholder="The Cognitive Foundation"></div>
+        <div class="form-group"><label class="form-label">Titel NL</label><input type="text" name="title_nl" class="form-control" value="{{ ar.get('title_nl','') }}" placeholder="Het cognitieve fundament"></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subtitel EN</label><textarea name="subtitle_en" class="form-control" rows="2">{{ ar.get('subtitle_en','') }}</textarea></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subtitel NL</label><textarea name="subtitle_nl" class="form-control" rows="2">{{ ar.get('subtitle_nl','') }}</textarea></div>
       </div>
     </div>
   </div>
 
-  <!-- Service cards -->
-  <div class="card">
-    <div class="card-header">
-      <div>
-        <div class="card-title">Service cards</div>
-        <div class="card-subtitle">De drie diensten kaarten</div>
-      </div>
-      <button type="button" class="add-btn" onclick="addCard()">+ Voeg card toe</button>
-    </div>
+  {% for num in ['1','2','3'] %}
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><div class="card-title">Card {{ num }}</div></div>
     <div class="card-body">
-      <div id="cards-container">
-        {% for card in content.services.cards %}
-        <div class="nested-card" style="margin-bottom:16px">
-          <div class="nested-card-header">
-            Card {{ loop.index }}: {{ card.title }}
-            <button type="button" class="remove-btn" style="width:auto;padding:2px 10px;font-size:12px;border-radius:5px"
-                    onclick="this.closest('.nested-card').remove()">Verwijderen</button>
-          </div>
-          <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
-            <div class="form-row cols-3">
-              <div class="form-group" style="margin-bottom:0">
-                <label class="form-label">Nummer</label>
-                <input type="text" name="card_num[]" class="form-control"
-                       value="{{ card.num }}" placeholder="01">
-              </div>
-              <div class="form-group" style="margin-bottom:0">
-                <label class="form-label">Badge label</label>
-                <input type="text" name="badge_label[]" class="form-control"
-                       value="{{ card.badge_label }}" placeholder="Platform">
-              </div>
-              <div class="form-group" style="margin-bottom:0">
-                <label class="form-label">Badge kleur</label>
-                <select name="badge_color[]" class="form-control">
-                  <option value="purple" {% if card.badge_color == 'purple' %}selected{% endif %}>Paars (Platform)</option>
-                  <option value="teal" {% if card.badge_color == 'teal' %}selected{% endif %}>Teal (Agents)</option>
-                  <option value="yellow" {% if card.badge_color == 'yellow' %}selected{% endif %}>Geel (Consultancy)</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group" style="margin-bottom:0">
-              <label class="form-label">Titel</label>
-              <input type="text" name="card_title[]" class="form-control"
-                     value="{{ card.title }}" placeholder="Card titel">
-            </div>
-            <div class="form-group" style="margin-bottom:0">
-              <label class="form-label">Beschrijving</label>
-              <textarea name="card_desc[]" class="form-control" rows="2">{{ card.desc }}</textarea>
-            </div>
-            <div class="form-group" style="margin-bottom:0">
-              <label class="form-label">Bulletpunten</label>
-              <div class="items-list" id="items-{{ loop.index0 }}">
-                {% for item in card['items'] %}
-                <div class="array-item" style="padding:8px 12px;margin-bottom:6px">
-                  <div class="item-fields">
-                    <input type="text" name="card_items_{{ loop.index0 }}[]" class="form-control"
-                           value="{{ item }}" placeholder="Bullet punt">
-                  </div>
-                  <button type="button" class="remove-btn" onclick="this.closest('.array-item').remove()">×</button>
-                </div>
-                {% endfor %}
-              </div>
-              <button type="button" class="add-btn" onclick="addItem({{ loop.index0 }}, this)">+ Punt toevoegen</button>
-            </div>
-          </div>
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Titel EN</label><input type="text" name="c{{ num }}_title_en" class="form-control" value="{{ ar.get('c' ~ num ~ '_title_en','') }}"></div>
+        <div class="form-group"><label class="form-label">Titel NL</label><input type="text" name="c{{ num }}_title_nl" class="form-control" value="{{ ar.get('c' ~ num ~ '_title_nl','') }}"></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Omschrijving EN</label><textarea name="c{{ num }}_desc_en" class="form-control" rows="3">{{ ar.get('c' ~ num ~ '_desc_en','') }}</textarea></div>
+        <div class="form-group"><label class="form-label">Omschrijving NL</label><textarea name="c{{ num }}_desc_nl" class="form-control" rows="3">{{ ar.get('c' ~ num ~ '_desc_nl','') }}</textarea></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Checklist items EN (één per regel)</label>
+          <textarea name="c{{ num }}_items_en" class="form-control" rows="3">{{ ar.get('c' ~ num ~ '_items_en', []) | join('\n') }}</textarea>
         </div>
-        {% endfor %}
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Checklist items NL (één per regel)</label>
+          <textarea name="c{{ num }}_items_nl" class="form-control" rows="3">{{ ar.get('c' ~ num ~ '_items_nl', []) | join('\n') }}</textarea>
+        </div>
       </div>
     </div>
   </div>
+  {% endfor %}
 
-  <!-- Save bar -->
   <div style="position:sticky;bottom:0;background:#f0f2f5;padding:16px 0;margin-top:24px;display:flex;gap:12px;align-items:center">
     <button type="submit" class="btn btn-primary">Opslaan</button>
     <a href="{{ url_for('content_index') }}" class="btn btn-ghost">Annuleren</a>
-    <a href="{{ url_for('website') }}" target="_blank" class="btn btn-ghost btn-sm" style="margin-left:auto">↗ Live preview</a>
+    <a href="https://aiventitytool.netlify.app" target="_blank" class="btn btn-ghost btn-sm" style="margin-left:auto">↗ Bekijk live</a>
   </div>
 </form>
-{% endblock %}
-
-{% block scripts %}
-<script>
-var cardCount = {{ content.services.cards|length }};
-
-function addItem(cardIdx, btn) {
-  var list = document.getElementById('items-' + cardIdx);
-  var div = document.createElement('div');
-  div.className = 'array-item';
-  div.style.cssText = 'padding:8px 12px;margin-bottom:6px';
-  div.innerHTML = '<div class="item-fields"><input type="text" name="card_items_' + cardIdx + '[]" class="form-control" placeholder="Bullet punt"></div><button type="button" class="remove-btn" onclick="this.closest(\'.array-item\').remove()">×</button>';
-  list.appendChild(div);
-  div.querySelector('input').focus();
-}
-
-function addCard() {
-  var idx = cardCount;
-  cardCount++;
-  var container = document.getElementById('cards-container');
-  var div = document.createElement('div');
-  div.className = 'nested-card';
-  div.style.marginBottom = '16px';
-  div.innerHTML = `
-    <div class="nested-card-header">
-      Card ${cardCount}
-      <button type="button" class="remove-btn" style="width:auto;padding:2px 10px;font-size:12px;border-radius:5px"
-              onclick="this.closest('.nested-card').remove()">Verwijderen</button>
-    </div>
-    <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
-      <div class="form-row cols-3">
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">Nummer</label>
-          <input type="text" name="card_num[]" class="form-control" placeholder="04">
-        </div>
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">Badge label</label>
-          <input type="text" name="badge_label[]" class="form-control" placeholder="Badge">
-        </div>
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">Badge kleur</label>
-          <select name="badge_color[]" class="form-control">
-            <option value="purple">Paars</option>
-            <option value="teal">Teal</option>
-            <option value="yellow">Geel</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group" style="margin-bottom:0">
-        <label class="form-label">Titel</label>
-        <input type="text" name="card_title[]" class="form-control" placeholder="Card titel">
-      </div>
-      <div class="form-group" style="margin-bottom:0">
-        <label class="form-label">Beschrijving</label>
-        <textarea name="card_desc[]" class="form-control" rows="2" placeholder="Beschrijving..."></textarea>
-      </div>
-      <div class="form-group" style="margin-bottom:0">
-        <label class="form-label">Bulletpunten</label>
-        <div class="items-list" id="items-${idx}"></div>
-        <button type="button" class="add-btn" onclick="addItem(${idx}, this)">+ Punt toevoegen</button>
-      </div>
-    </div>`;
-  container.appendChild(div);
-}
-</script>
 {% endblock %}

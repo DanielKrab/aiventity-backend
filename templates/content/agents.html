@@ -1,151 +1,88 @@
 {% extends "base.html" %}
-{% block title %}Agents bewerken{% endblock %}
-{% block page_title %}Agents sectie{% endblock %}
-
+{% block title %}Contact & CTA{% endblock %}
+{% block page_title %}Contact & CTA sectie{% endblock %}
+{% set ct = content.get('contact', {}) %}
+{% set ft = content.get('footer', {}) %}
 {% block content %}
 <form method="POST" action="{{ url_for('content_agents') }}">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-  <!-- Section header -->
+  <!-- CTA block -->
   <div class="card" style="margin-bottom:20px">
-    <div class="card-header">
-      <div class="card-title">Sectie koptekst</div>
-    </div>
+    <div class="card-header"><div class="card-title">CTA tekst (links)</div></div>
     <div class="card-body">
       <div class="form-row cols-2">
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">Sectie label</label>
-          <input type="text" name="section_label" class="form-control"
-                 value="{{ content.agents.section_label }}" placeholder="De Workforce">
-        </div>
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">Sectie titel</label>
-          <input type="text" name="title" class="form-control"
-                 value="{{ content.agents.title }}" placeholder="Drie AI-collega's. Één team.">
-        </div>
+        <div class="form-group"><label class="form-label">Titel EN</label><input type="text" name="cta_title_en" class="form-control" value="{{ ct.get('cta_title_en','') }}" placeholder="Start Building Your Agentic Enterprise"></div>
+        <div class="form-group"><label class="form-label">Titel NL</label><input type="text" name="cta_title_nl" class="form-control" value="{{ ct.get('cta_title_nl','') }}" placeholder="Start met het bouwen..."></div>
       </div>
-      <div class="form-group" style="margin-top:16px;margin-bottom:0">
-        <label class="form-label">Subtitel</label>
-        <textarea name="subtitle" class="form-control" rows="2">{{ content.agents.subtitle }}</textarea>
+      <div class="form-row cols-2">
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subtitel EN</label><textarea name="cta_subtitle_en" class="form-control" rows="3">{{ ct.get('cta_subtitle_en','') }}</textarea></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Subtitel NL</label><textarea name="cta_subtitle_nl" class="form-control" rows="3">{{ ct.get('cta_subtitle_nl','') }}</textarea></div>
       </div>
     </div>
   </div>
 
-  <!-- Agent cards -->
-  <div class="card">
-    <div class="card-header">
-      <div>
-        <div class="card-title">Agent cards</div>
-        <div class="card-subtitle">Elke agent heeft een naam, rol, features en een voorbeeld</div>
-      </div>
-      <button type="button" class="add-btn" onclick="addCard()">+ Voeg agent toe</button>
-    </div>
+  <!-- Features -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><div class="card-title">Features (2 bullets)</div></div>
     <div class="card-body">
-      <div id="cards-container">
-        {% for card in content.agents.cards %}
-        <div class="nested-card" style="margin-bottom:16px">
-          <div class="nested-card-header">
-            {{ card.name }} — {{ card.role }}
-            <button type="button" class="remove-btn" style="width:auto;padding:2px 10px;font-size:12px;border-radius:5px"
-                    onclick="this.closest('.nested-card').remove()">Verwijderen</button>
-          </div>
-          <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
-            <div class="form-row cols-2">
-              <div class="form-group" style="margin-bottom:0">
-                <label class="form-label">Agent naam</label>
-                <input type="text" name="card_name[]" class="form-control"
-                       value="{{ card.name }}" placeholder="Eventmanager Agent">
-              </div>
-              <div class="form-group" style="margin-bottom:0">
-                <label class="form-label">Rol / subtitel</label>
-                <input type="text" name="card_role[]" class="form-control"
-                       value="{{ card.role }}" placeholder="De Verkeerstoren">
-              </div>
-            </div>
-            <div class="form-group" style="margin-bottom:0">
-              <label class="form-label">Features</label>
-              <div id="features-{{ loop.index0 }}">
-                {% for feat in card.features %}
-                <div class="array-item" style="padding:8px 12px;margin-bottom:6px">
-                  <div class="item-fields">
-                    <input type="text" name="card_features_{{ loop.index0 }}[]" class="form-control"
-                           value="{{ feat }}" placeholder="Feature">
-                  </div>
-                  <button type="button" class="remove-btn" onclick="this.closest('.array-item').remove()">×</button>
-                </div>
-                {% endfor %}
-              </div>
-              <button type="button" class="add-btn" onclick="addFeature({{ loop.index0 }})">+ Feature toevoegen</button>
-            </div>
-            <div class="form-group" style="margin-bottom:0">
-              <label class="form-label">Voorbeeld (cursief blokje onderaan card)</label>
-              <textarea name="card_example[]" class="form-control" rows="2">{{ card.example }}</textarea>
-            </div>
-          </div>
-        </div>
-        {% endfor %}
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Feature 1 titel EN</label><input type="text" name="f1_title_en" class="form-control" value="{{ ct.get('f1_title_en','') }}" placeholder="Agentic workflows in 4 weeks"></div>
+        <div class="form-group"><label class="form-label">Feature 1 titel NL</label><input type="text" name="f1_title_nl" class="form-control" value="{{ ct.get('f1_title_nl','') }}" placeholder="Agentic workflows in 4 weken"></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Feature 1 sub EN</label><input type="text" name="f1_sub_en" class="form-control" value="{{ ct.get('f1_sub_en','') }}" placeholder="Discovery, setup, and deployment."></div>
+        <div class="form-group"><label class="form-label">Feature 1 sub NL</label><input type="text" name="f1_sub_nl" class="form-control" value="{{ ct.get('f1_sub_nl','') }}" placeholder="Onderzoek, inrichting en uitrol."></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Feature 2 titel EN</label><input type="text" name="f2_title_en" class="form-control" value="{{ ct.get('f2_title_en','') }}" placeholder="Your hybrid team awaits"></div>
+        <div class="form-group"><label class="form-label">Feature 2 titel NL</label><input type="text" name="f2_title_nl" class="form-control" value="{{ ct.get('f2_title_nl','') }}" placeholder="Jouw hybride team wacht"></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Feature 2 sub EN</label><input type="text" name="f2_sub_en" class="form-control" value="{{ ct.get('f2_sub_en','') }}" placeholder="Humans and digital colleagues together."></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Feature 2 sub NL</label><input type="text" name="f2_sub_nl" class="form-control" value="{{ ct.get('f2_sub_nl','') }}" placeholder="Mensen en digitale collega's samen."></div>
       </div>
     </div>
   </div>
 
-  <!-- Save bar -->
+  <!-- Contact form -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><div class="card-title">Contactformulier (rechts)</div></div>
+    <div class="card-body">
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Formulier titel EN</label><input type="text" name="form_title_en" class="form-control" value="{{ ct.get('form_title_en','') }}" placeholder="Get in touch"></div>
+        <div class="form-group"><label class="form-label">Formulier titel NL</label><input type="text" name="form_title_nl" class="form-control" value="{{ ct.get('form_title_nl','') }}" placeholder="Neem contact op"></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Subtitel EN</label><textarea name="form_sub_en" class="form-control" rows="2">{{ ct.get('form_sub_en','') }}</textarea></div>
+        <div class="form-group"><label class="form-label">Subtitel NL</label><textarea name="form_sub_nl" class="form-control" rows="2">{{ ct.get('form_sub_nl','') }}</textarea></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Knop label EN</label><input type="text" name="btn_en" class="form-control" value="{{ ct.get('btn_en','') }}" placeholder="Request Demo →"></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">Knop label NL</label><input type="text" name="btn_nl" class="form-control" value="{{ ct.get('btn_nl','') }}" placeholder="Contact opnemen →"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><div class="card-title">Footer</div></div>
+    <div class="card-body">
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Tagline EN</label><textarea name="footer_tagline_en" class="form-control" rows="2">{{ ft.get('tagline_en','') }}</textarea></div>
+        <div class="form-group"><label class="form-label">Tagline NL</label><textarea name="footer_tagline_nl" class="form-control" rows="2">{{ ft.get('tagline_nl','') }}</textarea></div>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Copyright</label>
+        <input type="text" name="footer_copyright" class="form-control" value="{{ ft.get('copyright','') }}" placeholder="© 2026 Aiventity. All rights reserved.">
+      </div>
+    </div>
+  </div>
+
   <div style="position:sticky;bottom:0;background:#f0f2f5;padding:16px 0;margin-top:24px;display:flex;gap:12px;align-items:center">
     <button type="submit" class="btn btn-primary">Opslaan</button>
     <a href="{{ url_for('content_index') }}" class="btn btn-ghost">Annuleren</a>
-    <a href="{{ url_for('website') }}" target="_blank" class="btn btn-ghost btn-sm" style="margin-left:auto">↗ Live preview</a>
+    <a href="https://aiventitytool.netlify.app" target="_blank" class="btn btn-ghost btn-sm" style="margin-left:auto">↗ Bekijk live</a>
   </div>
 </form>
-{% endblock %}
-
-{% block scripts %}
-<script>
-var cardCount = {{ content.agents.cards|length }};
-
-function addFeature(cardIdx) {
-  var container = document.getElementById('features-' + cardIdx);
-  var div = document.createElement('div');
-  div.className = 'array-item';
-  div.style.cssText = 'padding:8px 12px;margin-bottom:6px';
-  div.innerHTML = '<div class="item-fields"><input type="text" name="card_features_' + cardIdx + '[]" class="form-control" placeholder="Feature omschrijving"></div><button type="button" class="remove-btn" onclick="this.closest(\'.array-item\').remove()">×</button>';
-  container.appendChild(div);
-  div.querySelector('input').focus();
-}
-
-function addCard() {
-  var idx = cardCount;
-  cardCount++;
-  var container = document.getElementById('cards-container');
-  var div = document.createElement('div');
-  div.className = 'nested-card';
-  div.style.marginBottom = '16px';
-  div.innerHTML = `
-    <div class="nested-card-header">
-      Nieuwe agent
-      <button type="button" class="remove-btn" style="width:auto;padding:2px 10px;font-size:12px;border-radius:5px"
-              onclick="this.closest('.nested-card').remove()">Verwijderen</button>
-    </div>
-    <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
-      <div class="form-row cols-2">
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">Agent naam</label>
-          <input type="text" name="card_name[]" class="form-control" placeholder="Nieuwe Agent">
-        </div>
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">Rol / subtitel</label>
-          <input type="text" name="card_role[]" class="form-control" placeholder="Rol omschrijving">
-        </div>
-      </div>
-      <div class="form-group" style="margin-bottom:0">
-        <label class="form-label">Features</label>
-        <div id="features-${idx}"></div>
-        <button type="button" class="add-btn" onclick="addFeature(${idx})">+ Feature toevoegen</button>
-      </div>
-      <div class="form-group" style="margin-bottom:0">
-        <label class="form-label">Voorbeeld</label>
-        <textarea name="card_example[]" class="form-control" rows="2" placeholder="Voorbeeld scenario..."></textarea>
-      </div>
-    </div>`;
-  container.appendChild(div);
-}
-</script>
 {% endblock %}

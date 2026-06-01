@@ -1,344 +1,93 @@
 {
-  "nav": {
-    "links": [
-      {
-        "label": "Platform",
-        "href": "#platform"
-      },
-      {
-        "label": "Diensten",
-        "href": "#diensten"
-      },
-      {
-        "label": "Agents",
-        "href": "#agents"
-      },
-      {
-        "label": "Consultancy",
-        "href": "#consultancy"
-      },
-      {
-        "label": "Contact",
-        "href": "#contact"
-      }
-    ],
-    "cta_label": "Boek een intro"
-  },
   "hero": {
-    "title": "Uw AI Workforce.",
-    "title_accent": "Altijd aan.",
-    "subtitle": "Versnel uw operatie met autonome AI-agents die samenwerken, automatiseren en meeschalen met uw teams — van strategie tot uitvoering.",
-    "cta_primary": "Boek een intro →",
-    "cta_secondary": "Hoe het werkt",
-    "pills": [
-      "Agentic AI",
-      "Human-in-the-Loop",
-      "Enterprise Ready"
-    ],
-    "stats": [
-      {
-        "num": "30%+",
-        "label": "Tijdsbesparing binnen 14 dagen"
-      },
-      {
-        "num": "3×",
-        "label": "Snellere verwerking"
-      },
-      {
-        "num": "Dag 1",
-        "label": "Eerste agent live op uw data"
-      }
-    ]
+    "badge_en": "The operating system for the Agentic Enterprise",
+    "badge_nl": "Het besturingssysteem voor de Agentic Enterprise",
+    "headline_pre_en": "The next step in",
+    "headline_pre_nl": "De volgende stap in",
+    "headline_accent_en": "automation",
+    "headline_accent_nl": "automatisering",
+    "headline_post_en": "and collaboration.",
+    "headline_post_nl": "en samenwerking.",
+    "subtitle_en": "Work seamlessly with configured digital colleagues — internal and external — in one environment. No more isolated chatbots. Real team members.",
+    "subtitle_nl": "Werk naadloos samen met geconfigureerde digitale collega's — intern en extern — in één omgeving. Geen geïsoleerde chatbots meer. Volwaardige teamleden.",
+    "cta_primary_en": "Request a Demo →",
+    "cta_primary_nl": "Demo aanvragen →",
+    "cta_secondary_en": "Explore the Platform",
+    "cta_secondary_nl": "Ontdek het platform",
+    "agents_title_en": "Multi-agent orchestration",
+    "agents_title_nl": "Multi-agent orkestratie",
+    "agents_sub_en": "Ready to deploy in your workflows",
+    "agents_sub_nl": "Direct inzetbaar in uw workflows"
   },
-  "platform": {
-    "section_label": "Platform",
-    "title": "Niet nóg een AI-tool.Een compleet platform.",
-    "subtitle": "Aiventity is geen losse chatbot of plugin. Het is een geïntegreerd platform waarop autonome AI-agents samenwerken, leren en schalen — binnen de kaders die u bepaalt.",
-    "cards": [
-      {
-        "icon_emoji": "🧠",
-        "icon_bg": "var(--purple-bg)",
-        "title": "Multi-Agent Orchestratie",
-        "desc": "Meerdere gespecialiseerde agents die samenwerken als een team. De ene agent haalt data op, de andere analyseert, de derde voert uit — gecoördineerd en transparant."
-      },
-      {
-        "icon_emoji": "🔄",
-        "icon_bg": "#E6F1FB",
-        "title": "Model-Agnostisch",
-        "desc": "Niet gebonden aan één AI-provider. Aiventity werkt met OpenAI, Anthropic, Google en open-source modellen — altijd het beste model voor de taak."
-      },
-      {
-        "icon_emoji": "🛡️",
-        "icon_bg": "#E8F8F5",
-        "title": "Enterprise Security & Governance",
-        "desc": "GDPR-compliant, AI Act-ready, ISO 27001. Volledige audit trails, rolgebaseerde toegang en encrypted dataverwerking. Gehost in Nederland."
-      },
-      {
-        "icon_emoji": "⚡",
-        "icon_bg": "#FEF9E7",
-        "title": "Human-in-the-Loop",
-        "desc": "U bepaalt hoeveel autonomie elke agent krijgt. Van assistent tot volledig autonoom — vertrouwen bouwt u op met bewijs, niet met beloftes."
-      }
-    ]
+  "knowledge_worker": {
+    "label_en": "SOCIOTECHNICAL IMPACT",
+    "label_nl": "SOCIOTECHNISCHE IMPACT",
+    "title_en": "The New Knowledge Worker",
+    "title_nl": "De nieuwe kenniswerker",
+    "subtitle_en": "How Aiventity redefines the role of people in your organisation.",
+    "subtitle_nl": "Hoe Aiventity de rol van de mens in de organisatie herdefiniërt.",
+    "c1_title_en": "From Creation to Orchestration",
+    "c1_title_nl": "Van creatie naar orkestratie",
+    "c1_desc_en": "Digital colleagues handle the raw, repetitive work. Humans plan, steer, and delegate.",
+    "c1_desc_nl": "Digitale collega's nemen het ruwe, repetitieve werk over. De mens plant, stuurt bij en delegeert.",
+    "c2_title_en": "Human Validation (HITL)",
+    "c2_title_nl": "Menselijke validatie (HITL)",
+    "c2_desc_en": "Employees refine output, check nuances, and approve via label-triggers in the async feed.",
+    "c2_desc_nl": "Medewerkers verfijnen output, controleren nuances en verlenen goedkeuring via label-triggers in de asynchrone feed.",
+    "c3_title_en": "Knowledge Curation",
+    "c3_title_nl": "Kenniscuratie",
+    "c3_desc_en": "Specialists and managers focus on keeping the knowledge base clean and current — not on manual execution.",
+    "c3_desc_nl": "Specialisten en managers focussen op het schoon en actueel houden van de kennisbank, niet op handmatige uitvoering."
   },
-  "services": {
-    "section_label": "Onze Diensten",
-    "title": "Drie pijlers.\nEén doel: aantoonbare impact.",
-    "subtitle": "Of u nu wilt starten met kant-en-klare agents, een custom oplossing nodig heeft, of strategisch advies zoekt — Aiventity begeleidt u door elke fase.",
-    "cards": [
-      {
-        "num": "01",
-        "badge_label": "Platform",
-        "badge_color": "purple",
-        "title": "Enterprise AI-Platform",
-        "desc": "Het fundament: een managed platform waarop uw AI-agents draaien, samenwerken en schalen. Alles wat u nodig heeft in één omgeving.",
-        "items": [
-          "Multi-agent orchestratie",
-          "Real-time monitoring dashboard",
-          "API-integraties met uw stack",
-          "Volledige audit trail & governance",
-          "Schaalbaar van 1 tot 100+ agents"
-        ]
-      },
-      {
-        "num": "02",
-        "badge_label": "Agents",
-        "badge_color": "teal",
-        "title": "AI-Agents",
-        "desc": "Gespecialiseerde AI-collega's die uw processen overnemen. Plug & Play voor veelvoorkomende taken, of custom gebouwd voor uw unieke workflows.",
-        "items": [
-          "Plug & Play agents — live in 2 weken",
-          "Custom agents voor unieke processen",
-          "Diepe systeemintegratie",
-          "Domeinkennis ingebouwd",
-          "Leert van resultaten en feedback"
-        ]
-      },
-      {
-        "num": "03",
-        "badge_label": "Consultancy",
-        "badge_color": "yellow",
-        "title": "AI-Consultancy",
-        "desc": "Strategische begeleiding voor organisaties die willen starten met AI maar niet weten waar te beginnen. Van use case tot productie.",
-        "items": [
-          "Use Case Identificatie",
-          "AI Roadmap & Training",
-          "Governance & Compliance advies",
-          "Change Management",
-          "ROI Modellering"
-        ]
-      }
-    ]
-  },
-  "agents": {
-    "section_label": "De Workforce",
-    "title": "Drie AI-collega's. Één team.",
-    "subtitle": "Elke agent heeft zijn eigen domein, zijn eigen bevoegdheid — en ze communiceren met elkaar. Zo werkt uw organisatie als geheel, niet als losse tools.",
-    "cards": [
-      {
-        "name": "Eventmanager Agent",
-        "role": "De Verkeerstoren",
-        "features": [
-          "Coördineert alle agents",
-          "Real-time margeberekening",
-          "Automatische offertes opvragen"
-        ],
-        "example": "180 berichten → 7 actiepunten met prioriteit en eigenaar."
-      },
-      {
-        "name": "Finance Agent",
-        "role": "Budget & Marge",
-        "features": [
-          "Filtert chaos naar actielijsten",
-          "Budget scenario's doorrekenen",
-          "Dag-coördinatie uitvoering"
-        ],
-        "example": "Budgetoverschrijding gedetecteerd 3 dagen eerder dan handmatige controle."
-      },
-      {
-        "name": "Sourcing & Ops Agent",
-        "role": "Inkoop & Uitvoering",
-        "features": [
-          "Bewaakt planning & deadlines",
-          "Alarmeert bij overschrijding",
-          "Bewaakt voorraden & weer"
-        ],
-        "example": "7 offertes verwerkt in 3 dagen — handmatig kostte dit 4 uur per offerte."
-      }
-    ]
-  },
-  "hitl": {
-    "section_label": "Controle",
-    "title": "U bepaalt hoeveel de agent doet.",
-    "subtitle": "Elke agent start op niveau 1. U bouwt vertrouwen op met bewijs — niet met beloftes. Autonomie verhogen is altijd uw keuze.",
-    "levels": [
-      {
-        "num_label": "Niveau 1",
-        "num_color": "#2E86DE",
-        "title": "Assistent",
-        "desc": "Agent doet het voorwerk. U voert uit. Ideaal om te wennen en vertrouwen te bouwen."
-      },
-      {
-        "num_label": "Niveau 2",
-        "num_color": "#0d6e52",
-        "title": "Co-piloot",
-        "desc": "Agent voert uit, u keurt goed via de Verkeerstoren. Eén klik voor akkoord of bijsturing."
-      },
-      {
-        "num_label": "Niveau 3",
-        "num_color": "#2563EB",
-        "title": "Autonoom",
-        "desc": "Agent handelt zelfstandig binnen uw kaders. Actief na minimaal 5 correct afgeronde taken."
-      }
-    ]
-  },
-  "consultancy": {
-    "section_label": "Consultancy & Enterprise",
-    "title": "Strategische ondersteuning\nvoor AI-adoptie.",
-    "subtitle": "Niet alleen technologie, ook strategie. Aiventity helpt organisaties van de eerste use case tot een volledig opererend AI-team.",
-    "cards": [
-      {
-        "title": "AI Consultancy",
-        "items": [
-          {
-            "color": "var(--purple-light)",
-            "label": "Use Case Identificatie"
-          },
-          {
-            "color": "var(--purple-light)",
-            "label": "AI Roadmap & Training"
-          },
-          {
-            "color": "var(--purple-light)",
-            "label": "Governance & Compliance"
-          },
-          {
-            "color": "var(--purple-light)",
-            "label": "Change Management"
-          },
-          {
-            "color": "var(--purple-light)",
-            "label": "ROI Modellering"
-          },
-          {
-            "color": "var(--purple-light)",
-            "label": "Operating Model Design"
-          }
-        ]
-      },
-      {
-        "title": "Enterprise Services",
-        "items": [
-          {
-            "color": "var(--teal)",
-            "label": "Dedicated Accountmanager"
-          },
-          {
-            "color": "var(--teal)",
-            "label": "Custom Agent Development"
-          },
-          {
-            "color": "var(--teal)",
-            "label": "On-premise Deployment"
-          },
-          {
-            "color": "var(--teal)",
-            "label": "SLA & Priority Support"
-          },
-          {
-            "color": "var(--teal)",
-            "label": "Security Audit & Pentest"
-          },
-          {
-            "color": "var(--teal)",
-            "label": "Team Training & Workshops"
-          }
-        ]
-      }
-    ]
-  },
-  "trust": {
-    "items": [
-      "Gehost in Nederland",
-      "GDPR-compliant",
-      "AI Act-ready",
-      "ISO 27001",
-      "Encrypted data"
-    ]
-  },
-  "cta": {
-    "title": "Klaar om uw AI-reis\nte starten?",
-    "desc": "Plan een introductie om uw unieke behoeften in kaart te brengen. We kijken samen welke agents direct waarde leveren voor uw organisatie.",
-    "btn_label": "Boek een intro →"
+  "architecture": {
+    "label_en": "THE ARCHITECTURE",
+    "label_nl": "DE ARCHITECTUUR",
+    "title_en": "The Cognitive Foundation",
+    "title_nl": "Het cognitieve fundament",
+    "subtitle_en": "A structured environment where work, context, and execution converge.",
+    "subtitle_nl": "Een gestructureerde omgeving waar werk, context en uitvoering samensmelten.",
+    "c1_title_en": "Aiventity as Cognitive Containers",
+    "c1_title_nl": "Aiventity als cognitieve containers",
+    "c1_desc_en": "Each topic is an isolated workspace with real-time vector ingestion and filtered RAG.",
+    "c1_desc_nl": "Elk onderwerp is een afgeschermde werkomgeving met real-time vector ingestion en gefilterde RAG.",
+    "c1_items_en": ["Strict domain separation", "Real-time vector ingestion", "Elimination of hallucinations"],
+    "c1_items_nl": ["Strikte scheiding van domeinen", "Real-time vector ingestion", "Eliminatie van hallucinaties"],
+    "c2_title_en": "The Universal Adapter (MCP)",
+    "c2_title_nl": "De universele adapter (MCP)",
+    "c2_desc_en": "Aiventity acts as an MCP host, giving digital colleagues direct, authorised access to external systems.",
+    "c2_desc_nl": "Aiventity fungeert als een MCP-host, waardoor digitale collega's direct geautoriseerde toegang krijgen tot externe systemen.",
+    "c2_items_en": ["No integration bottlenecks", "Native access to CRM, ERP, and Jira", "Secure sandboxed execution"],
+    "c2_items_nl": ["Geen integratieflessenhals", "Native toegang tot CRM, ERP en Jira", "Veilige sandboxed execution"],
+    "c3_title_en": "A2A Collaboration",
+    "c3_title_nl": "A2A-samenwerking",
+    "c3_desc_en": "Teams automatically delegate subtasks to specialised executing digital colleagues.",
+    "c3_desc_nl": "Teams delegeren deeltaken automatisch naar gespecialiseerde uitvoerende digitale collega's.",
+    "c3_items_en": ["Autonomous multi-step planning", "Specialised skill sets per agent", "Dynamic routing to the right agent"],
+    "c3_items_nl": ["Autonome meerstappenplannen", "Gespecialiseerde vaardighedensets", "Dynamische routing naar de juiste agent"]
   },
   "contact": {
-    "section_label": "Contact",
-    "title": "Stuur een bericht",
-    "subtitle": "Wil je meer weten of een kennismaking inplannen? Vul het formulier in — we reageren binnen één werkdag.",
-    "btn_label": "Verstuur bericht →",
-    "success_msg": "Bedankt! We nemen zo snel mogelijk contact met u op."
+    "cta_title_en": "Start Building Your Agentic Enterprise",
+    "cta_title_nl": "Start met het bouwen van jouw Agentic Enterprise",
+    "cta_subtitle_en": "The infrastructure for a new division of labour is ready. It’s time to connect knowledge creation and autonomous task execution.",
+    "cta_subtitle_nl": "De infrastructuur voor de nieuwe arbeidsverdeling is klaar. Het is tijd om kenniscreatie en autonome taakuitvoering onlosmakelijk te verbinden.",
+    "f1_title_en": "Agentic workflows in 4 weeks",
+    "f1_title_nl": "Agentic workflows in 4 weken",
+    "f1_sub_en": "Discovery, setup, and deployment.",
+    "f1_sub_nl": "Onderzoek, inrichting en uitrol.",
+    "f2_title_en": "Your hybrid team awaits",
+    "f2_title_nl": "Jouw hybride team wacht",
+    "f2_sub_en": "Humans and digital colleagues together.",
+    "f2_sub_nl": "Mensen en digitale collega's samen.",
+    "form_title_en": "Get in touch",
+    "form_title_nl": "Neem contact op",
+    "form_sub_en": "Fill in the form and we’ll get back to you within one business day.",
+    "form_sub_nl": "Vul het formulier in en we reageren binnen één werkdag.",
+    "btn_en": "Request Demo →",
+    "btn_nl": "Contact opnemen →"
   },
-  "custom_blocks": [],
   "footer": {
-    "brand": "Aiventity",
-    "tagline": "De AI Workforce voor uw organisatie. Autonome agents die samenwerken, leren en schalen — altijd binnen uw controle.",
-    "copyright": "© 2026 Aiventity. Alle rechten voorbehouden.",
-    "columns": [
-      {
-        "title": "Product",
-        "links": [
-          {
-            "label": "Platform",
-            "href": "#platform"
-          },
-          {
-            "label": "Diensten",
-            "href": "#diensten"
-          },
-          {
-            "label": "Agents",
-            "href": "#agents"
-          },
-          {
-            "label": "Consultancy",
-            "href": "#consultancy"
-          }
-        ]
-      },
-      {
-        "title": "Bedrijf",
-        "links": [
-          {
-            "label": "Over ons",
-            "href": "#"
-          },
-          {
-            "label": "Contact",
-            "href": "#contact"
-          },
-          {
-            "label": "LinkedIn",
-            "href": "#"
-          }
-        ]
-      },
-      {
-        "title": "Resources",
-        "links": [
-          {
-            "label": "AI Playbook",
-            "href": "#"
-          },
-          {
-            "label": "Case Studies",
-            "href": "#"
-          },
-          {
-            "label": "Blog",
-            "href": "#"
-          }
-        ]
-      }
-    ]
+    "tagline_en": "The Agentic Enterprise OS. Autonomous agents that collaborate, learn, and scale.",
+    "tagline_nl": "Het besturingssysteem voor de Agentic Enterprise. Autonome agents die samenwerken, leren en schalen.",
+    "copyright": "© 2026 Aiventity. All rights reserved."
   }
 }

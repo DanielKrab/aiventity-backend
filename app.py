@@ -156,21 +156,25 @@ def content_hero():
             flash('Ongeldig formuliertoken.', 'error')
             return redirect(url_for('content_hero'))
         f = request.form
-        # pills
-        pills = [v.strip() for v in f.getlist('pills[]') if v.strip()]
-        # stats
-        stat_nums = f.getlist('stat_num[]')
-        stat_labels = f.getlist('stat_label[]')
-        stats = [{'num': n.strip(), 'label': l.strip()}
-                 for n, l in zip(stat_nums, stat_labels) if n.strip()]
         content['hero'] = {
-            'title': f.get('title', ''),
-            'title_accent': f.get('title_accent', ''),
-            'subtitle': f.get('subtitle', ''),
-            'cta_primary': f.get('cta_primary', ''),
-            'cta_secondary': f.get('cta_secondary', ''),
-            'pills': pills,
-            'stats': stats,
+            'badge_en':          f.get('badge_en', ''),
+            'badge_nl':          f.get('badge_nl', ''),
+            'headline_pre_en':   f.get('headline_pre_en', ''),
+            'headline_pre_nl':   f.get('headline_pre_nl', ''),
+            'headline_accent_en':f.get('headline_accent_en', ''),
+            'headline_accent_nl':f.get('headline_accent_nl', ''),
+            'headline_post_en':  f.get('headline_post_en', ''),
+            'headline_post_nl':  f.get('headline_post_nl', ''),
+            'subtitle_en':       f.get('subtitle_en', ''),
+            'subtitle_nl':       f.get('subtitle_nl', ''),
+            'cta_primary_en':    f.get('cta_primary_en', ''),
+            'cta_primary_nl':    f.get('cta_primary_nl', ''),
+            'cta_secondary_en':  f.get('cta_secondary_en', ''),
+            'cta_secondary_nl':  f.get('cta_secondary_nl', ''),
+            'agents_title_en':   f.get('agents_title_en', ''),
+            'agents_title_nl':   f.get('agents_title_nl', ''),
+            'agents_sub_en':     f.get('agents_sub_en', ''),
+            'agents_sub_nl':     f.get('agents_sub_nl', ''),
         }
         save_content_with_history(content)
         flash('Hero sectie opgeslagen!', 'success')
@@ -187,27 +191,28 @@ def content_platform():
             flash('Ongeldig formuliertoken.', 'error')
             return redirect(url_for('content_platform'))
         f = request.form
-        icons = f.getlist('card_icon[]')
-        icon_bgs = f.getlist('card_icon_bg[]')
-        titles = f.getlist('card_title[]')
-        descs = f.getlist('card_desc[]')
-        cards = []
-        for i, t in enumerate(titles):
-            if t.strip():
-                cards.append({
-                    'icon_emoji': icons[i] if i < len(icons) else '',
-                    'icon_bg': icon_bgs[i] if i < len(icon_bgs) else '',
-                    'title': t.strip(),
-                    'desc': descs[i].strip() if i < len(descs) else '',
-                })
-        content['platform'] = {
-            'section_label': f.get('section_label', ''),
-            'title': f.get('title', ''),
-            'subtitle': f.get('subtitle', ''),
-            'cards': cards,
+        content['knowledge_worker'] = {
+            'label_en':    f.get('label_en', ''),
+            'label_nl':    f.get('label_nl', ''),
+            'title_en':    f.get('title_en', ''),
+            'title_nl':    f.get('title_nl', ''),
+            'subtitle_en': f.get('subtitle_en', ''),
+            'subtitle_nl': f.get('subtitle_nl', ''),
+            'c1_title_en': f.get('c1_title_en', ''),
+            'c1_title_nl': f.get('c1_title_nl', ''),
+            'c1_desc_en':  f.get('c1_desc_en', ''),
+            'c1_desc_nl':  f.get('c1_desc_nl', ''),
+            'c2_title_en': f.get('c2_title_en', ''),
+            'c2_title_nl': f.get('c2_title_nl', ''),
+            'c2_desc_en':  f.get('c2_desc_en', ''),
+            'c2_desc_nl':  f.get('c2_desc_nl', ''),
+            'c3_title_en': f.get('c3_title_en', ''),
+            'c3_title_nl': f.get('c3_title_nl', ''),
+            'c3_desc_en':  f.get('c3_desc_en', ''),
+            'c3_desc_nl':  f.get('c3_desc_nl', ''),
         }
         save_content_with_history(content)
-        flash('Platform sectie opgeslagen!', 'success')
+        flash('Knowledge Worker sectie opgeslagen!', 'success')
         return redirect(url_for('content_platform'))
     return render_template('content/platform.html', content=content)
 
@@ -221,33 +226,36 @@ def content_services():
             flash('Ongeldig formuliertoken.', 'error')
             return redirect(url_for('content_services'))
         f = request.form
-        nums = f.getlist('card_num[]')
-        badge_labels = f.getlist('badge_label[]')
-        badge_colors = f.getlist('badge_color[]')
-        titles = f.getlist('card_title[]')
-        descs = f.getlist('card_desc[]')
-        # items are passed as card_items_0[], card_items_1[], etc.
-        cards = []
-        for i, t in enumerate(titles):
-            if t.strip():
-                items = f.getlist(f'card_items_{i}[]')
-                items = [it.strip() for it in items if it.strip()]
-                cards.append({
-                    'num': nums[i] if i < len(nums) else '',
-                    'badge_label': badge_labels[i] if i < len(badge_labels) else '',
-                    'badge_color': badge_colors[i] if i < len(badge_colors) else '',
-                    'title': t.strip(),
-                    'desc': descs[i].strip() if i < len(descs) else '',
-                    'items': items,
-                })
-        content['services'] = {
-            'section_label': f.get('section_label', ''),
-            'title': f.get('title', ''),
-            'subtitle': f.get('subtitle', ''),
-            'cards': cards,
+        def parse_items(raw):
+            return [l.strip() for l in raw.splitlines() if l.strip()]
+        content['architecture'] = {
+            'label_en':    f.get('label_en', ''),
+            'label_nl':    f.get('label_nl', ''),
+            'title_en':    f.get('title_en', ''),
+            'title_nl':    f.get('title_nl', ''),
+            'subtitle_en': f.get('subtitle_en', ''),
+            'subtitle_nl': f.get('subtitle_nl', ''),
+            'c1_title_en': f.get('c1_title_en', ''),
+            'c1_title_nl': f.get('c1_title_nl', ''),
+            'c1_desc_en':  f.get('c1_desc_en', ''),
+            'c1_desc_nl':  f.get('c1_desc_nl', ''),
+            'c1_items_en': parse_items(f.get('c1_items_en', '')),
+            'c1_items_nl': parse_items(f.get('c1_items_nl', '')),
+            'c2_title_en': f.get('c2_title_en', ''),
+            'c2_title_nl': f.get('c2_title_nl', ''),
+            'c2_desc_en':  f.get('c2_desc_en', ''),
+            'c2_desc_nl':  f.get('c2_desc_nl', ''),
+            'c2_items_en': parse_items(f.get('c2_items_en', '')),
+            'c2_items_nl': parse_items(f.get('c2_items_nl', '')),
+            'c3_title_en': f.get('c3_title_en', ''),
+            'c3_title_nl': f.get('c3_title_nl', ''),
+            'c3_desc_en':  f.get('c3_desc_en', ''),
+            'c3_desc_nl':  f.get('c3_desc_nl', ''),
+            'c3_items_en': parse_items(f.get('c3_items_en', '')),
+            'c3_items_nl': parse_items(f.get('c3_items_nl', '')),
         }
         save_content_with_history(content)
-        flash('Diensten sectie opgeslagen!', 'success')
+        flash('Architectuur sectie opgeslagen!', 'success')
         return redirect(url_for('content_services'))
     return render_template('content/services.html', content=content)
 
@@ -261,28 +269,33 @@ def content_agents():
             flash('Ongeldig formuliertoken.', 'error')
             return redirect(url_for('content_agents'))
         f = request.form
-        names = f.getlist('card_name[]')
-        roles = f.getlist('card_role[]')
-        examples = f.getlist('card_example[]')
-        cards = []
-        for i, name in enumerate(names):
-            if name.strip():
-                features = f.getlist(f'card_features_{i}[]')
-                features = [ft.strip() for ft in features if ft.strip()]
-                cards.append({
-                    'name': name.strip(),
-                    'role': roles[i].strip() if i < len(roles) else '',
-                    'features': features,
-                    'example': examples[i].strip() if i < len(examples) else '',
-                })
-        content['agents'] = {
-            'section_label': f.get('section_label', ''),
-            'title': f.get('title', ''),
-            'subtitle': f.get('subtitle', ''),
-            'cards': cards,
+        content['contact'] = {
+            'cta_title_en':    f.get('cta_title_en', ''),
+            'cta_title_nl':    f.get('cta_title_nl', ''),
+            'cta_subtitle_en': f.get('cta_subtitle_en', ''),
+            'cta_subtitle_nl': f.get('cta_subtitle_nl', ''),
+            'f1_title_en':     f.get('f1_title_en', ''),
+            'f1_title_nl':     f.get('f1_title_nl', ''),
+            'f1_sub_en':       f.get('f1_sub_en', ''),
+            'f1_sub_nl':       f.get('f1_sub_nl', ''),
+            'f2_title_en':     f.get('f2_title_en', ''),
+            'f2_title_nl':     f.get('f2_title_nl', ''),
+            'f2_sub_en':       f.get('f2_sub_en', ''),
+            'f2_sub_nl':       f.get('f2_sub_nl', ''),
+            'form_title_en':   f.get('form_title_en', ''),
+            'form_title_nl':   f.get('form_title_nl', ''),
+            'form_sub_en':     f.get('form_sub_en', ''),
+            'form_sub_nl':     f.get('form_sub_nl', ''),
+            'btn_en':          f.get('btn_en', ''),
+            'btn_nl':          f.get('btn_nl', ''),
+        }
+        content['footer'] = {
+            'tagline_en':  f.get('footer_tagline_en', ''),
+            'tagline_nl':  f.get('footer_tagline_nl', ''),
+            'copyright':   f.get('footer_copyright', ''),
         }
         save_content_with_history(content)
-        flash('Agents sectie opgeslagen!', 'success')
+        flash('Contact & Footer opgeslagen!', 'success')
         return redirect(url_for('content_agents'))
     return render_template('content/agents.html', content=content)
 
