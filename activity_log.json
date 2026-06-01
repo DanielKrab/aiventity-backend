@@ -158,5 +158,10 @@
     "ts": "2026-06-01T20:03:48.869Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: formation-google-sheet-belgique.png"
+  },
+  {
+    "ts": "2026-06-01T20:03:54.828Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: integration"
   }
 ]
