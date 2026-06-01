@@ -193,5 +193,10 @@
     "ts": "2026-06-01T20:06:43.332Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
+  },
+  {
+    "ts": "2026-06-01T20:07:53.649Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: integration"
   }
 ]
