@@ -454,15 +454,16 @@ kbd {
 
     </div><!-- /editor-sections -->
 
-    <!-- ─── Save bar ─── -->
+    <!-- ─── Save / Publish bar ─── -->
     <div class="editor-savebar">
       <button class="btn btn-primary btn-sm" id="save-btn" onclick="saveSection()">💾 Opslaan</button>
       <span class="save-msg" id="save-msg"></span>
-      <span class="kbd-hint"><kbd>⌘S</kbd> / <kbd>Ctrl+S</kbd></span>
-      <a href="{{ url_for('publish_netlify') }}"
-         class="btn btn-ghost btn-sm"
-         style="margin-left:auto"
-         onclick="this.textContent='Publiceren...';this.style.opacity='.7'">🚀 Publiceer</a>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+        <span id="publish-status" style="font-size:11px;color:#8a96b0"></span>
+        <button class="btn btn-sm" id="publish-btn"
+          style="background:#16a34a;color:#fff;border:none"
+          onclick="publishToNetlify()">🚀 Publiceer op Netlify</button>
+      </div>
     </div>
   </div>
   <!-- /editor-left -->
@@ -550,6 +551,51 @@ function reloadPreview() {
   const iframe = document.getElementById('prev-iframe');
   iframe.src = '/?' + Date.now();
 }
+
+// ── Publish to Netlify via AJAX
+async function publishToNetlify() {
+  const btn = document.getElementById('publish-btn');
+  const status = document.getElementById('publish-status');
+  btn.disabled = true;
+  btn.textContent = '⏳ Publiceren...';
+  status.textContent = '';
+  try {
+    const res = await fetch('/api/publish', { method: 'POST' });
+    const json = await res.json();
+    if (json.ok) {
+      btn.textContent = '✓ Gepubliceerd!';
+      btn.style.background = '#15803d';
+      status.style.color = '#16a34a';
+      status.textContent = 'Live op Netlify · ' + new Date().toLocaleTimeString('nl-NL', {hour:'2-digit',minute:'2-digit'});
+      setTimeout(() => {
+        btn.textContent = '🚀 Publiceer op Netlify';
+        btn.disabled = false;
+      }, 3000);
+    } else {
+      btn.textContent = '✕ Mislukt';
+      btn.style.background = '#dc2626';
+      status.style.color = '#dc2626';
+      status.textContent = json.message || 'Fout bij publiceren';
+      setTimeout(() => {
+        btn.textContent = '🚀 Publiceer op Netlify';
+        btn.style.background = '#16a34a';
+        btn.disabled = false;
+      }, 3000);
+    }
+  } catch(e) {
+    btn.textContent = '✕ Netwerkfout';
+    btn.disabled = false;
+  }
+}
+
+// ── Load last publish status on page load
+fetch('/api/publish-status').then(r => r.json()).then(d => {
+  if (d.last_published) {
+    const dt = new Date(d.last_published);
+    document.getElementById('publish-status').textContent =
+      'Laatst gepubliceerd: ' + dt.toLocaleString('nl-NL', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  }
+});
 
 // ── Keyboard shortcut Ctrl/Cmd+S
 document.addEventListener('keydown', e => {

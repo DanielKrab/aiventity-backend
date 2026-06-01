@@ -674,45 +674,32 @@ def public_site():
 # NETLIFY PUBLISH
 # ══════════════════════════════════════════════════════════════════════════
 
-@app.route('/publish-netlify')
-@login_required
-def publish_netlify():
+def _do_netlify_publish():
+    """Core publish logic — returns (ok: bool, message: str)."""
     import urllib.request, hashlib, re as _re, os as _os
     import json as _json
     cfg = load_json(CONFIG_FILE)
     token = cfg.get('netlify_token', '')
     site_id = cfg.get('netlify_site_id', '')
-
     if not token or not site_id:
-        flash('Netlify token of site ID ontbreekt in config.', 'error')
-        return redirect(url_for('dashboard'))
-
+        return False, 'Netlify token of site ID ontbreekt in config.'
     try:
-        # Render website HTML and strip the Flask admin bar
         html = render_template('website.html', content=load_json(CONTENT_FILE), cfg=cfg)
-        # Note: website is also live at aiventity-website.onrender.com/ directly
         html = _re.sub(r'<!-- Flask Admin Bar -->.*?</div>\n', '', html, flags=_re.DOTALL)
         html_bytes = html.encode('utf-8')
-
         headers_bytes = b"/*\n  Content-Type: text/html; charset=utf-8\n  Cache-Control: public, max-age=0, must-revalidate\n"
-
-        # Load logo
         logo_path = _os.path.join(_os.path.dirname(__file__), 'static', 'logo.png')
         with open(logo_path, 'rb') as f:
             logo_bytes = f.read()
-
-        html_sha1  = hashlib.sha1(html_bytes).hexdigest()
-        hdrs_sha1  = hashlib.sha1(headers_bytes).hexdigest()
-        logo_sha1  = hashlib.sha1(logo_bytes).hexdigest()
-
-        # Create deploy manifest (HTML + headers + logo)
+        html_sha1 = hashlib.sha1(html_bytes).hexdigest()
+        hdrs_sha1 = hashlib.sha1(headers_bytes).hexdigest()
+        logo_sha1 = hashlib.sha1(logo_bytes).hexdigest()
         manifest = _json.dumps({"files": {
             "/index.html":   html_sha1,
             "/website.html": html_sha1,
             "/_headers":     hdrs_sha1,
             "/logo.png":     logo_sha1,
         }}).encode()
-
         req = urllib.request.Request(
             f"https://api.netlify.com/api/v1/sites/{site_id}/deploys",
             data=manifest,
@@ -721,14 +708,12 @@ def publish_netlify():
         )
         with urllib.request.urlopen(req) as r:
             deploy = _json.loads(r.read())
-
         deploy_id = deploy["id"]
         required  = deploy.get("required", [])
-
         files_map = {
-            html_sha1:  ("index.html",   html_bytes,    "text/html; charset=utf-8"),
-            hdrs_sha1:  ("_headers",     headers_bytes, "text/plain"),
-            logo_sha1:  ("logo.png",     logo_bytes,    "image/png"),
+            html_sha1: ("index.html",  html_bytes,    "text/html; charset=utf-8"),
+            hdrs_sha1: ("_headers",    headers_bytes, "text/plain"),
+            logo_sha1: ("logo.png",    logo_bytes,    "image/png"),
         }
         for sha in required:
             if sha in files_map:
@@ -741,12 +726,36 @@ def publish_netlify():
                 )
                 with urllib.request.urlopen(req2) as r2:
                     r2.read()
-
-        flash('✅ Website gepubliceerd op aiventitytool.netlify.app!', 'success')
+        # Save publish timestamp
+        cfg['last_published'] = datetime.now().isoformat()
+        save_json(CONFIG_FILE, cfg)
+        return True, '✅ Live op aiventitytool.netlify.app!'
     except Exception as e:
-        flash(f'Fout bij publiceren: {str(e)}', 'error')
+        return False, f'Fout bij publiceren: {str(e)}'
 
+
+@app.route('/publish-netlify')
+@login_required
+def publish_netlify():
+    ok, msg = _do_netlify_publish()
+    flash(msg, 'success' if ok else 'error')
     return redirect(url_for('dashboard'))
+
+
+@app.route('/api/publish', methods=['POST'])
+@login_required
+def api_publish():
+    """AJAX publish to Netlify — called from editor."""
+    ok, msg = _do_netlify_publish()
+    return jsonify({'ok': ok, 'message': msg})
+
+
+@app.route('/api/publish-status')
+@login_required
+def api_publish_status():
+    """Returns last publish timestamp from config."""
+    cfg = load_json(CONFIG_FILE)
+    return jsonify({'last_published': cfg.get('last_published', None)})
 
 
 # ══════════════════════════════════════════════════════════════════════════
