@@ -13,10 +13,11 @@
   "netlify_site_id": "5559f234-9246-4edf-a2c5-778983c63285",
   "secret_key": "00e3323101f0141b53f24be521309c051da43d3947fad78ffe6fe29a7cf719d0",
   "theme": {
-    "primary_color": "#007AFF",
+    "primary_color": "#007aff",
     "accent_color": "#10b981",
     "heading_font": "Space Grotesk",
-    "body_font": "Inter"
+    "body_font": "Inter",
+    "nav_bg": "#070d1c"
   },
   "last_published": "1-6-2026, 18:32:05"
 }
