@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aiventity CMS</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--surface:#171b26;--surface2:#1e2333;--border:#2a2f3e;
+  --text:#e8eaf0;--text2:#8a96b0;--accent:#3b82f6;--accent2:#10b981;
+  --danger:#ef4444;--warn:#f59e0b;--radius:12px;--sidebar:240px;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit}
+input,textarea,select{font-family:inherit}
+
+/* ── Sidebar ── */
+.sidebar{position:fixed;left:0;top:0;width:var(--sidebar);height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100}
+.sidebar-logo{padding:20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.sidebar-logo span{font-family:'Outfit',sans-serif;font-weight:700;font-size:17px;color:#fff}
+.sidebar-logo small{font-size:10px;color:var(--text2);display:block;margin-top:1px}
+.sidebar-logo .dot{width:8px;height:8px;background:var(--accent2);border-radius:50%;flex-shrink:0}
+.sidebar-nav{flex:1;overflow-y:auto;padding:12px 8px}
+.nav-section{font-size:10px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;padding:8px 8px 4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:var(--text2);cursor:pointer;transition:all .15s;font-size:13px;font-weight:500;margin-bottom:2px;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:rgba(59,130,246,.15);color:var(--accent)}
+.nav-item svg{flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.sidebar-bottom{padding:12px;border-top:1px solid var(--border)}
+.btn-logout{width:100%;padding:8px 12px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--text2);font-size:13px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all .15s}
+.btn-logout:hover{border-color:var(--danger);color:var(--danger)}
+
+/* ── Main ── */
+.main{margin-left:var(--sidebar);min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar-title{font-weight:600;font-size:15px}
+.topbar-actions{display:flex;align-items:center;gap:10px}
+.content-area{flex:1;padding:28px 28px}
+
+/* ── Cards ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-weight:600;font-size:14px}
+.card-subtitle{font-size:12px;color:var(--text2);margin-top:2px}
+.card-body{padding:20px}
+
+/* ── Forms ── */
+.form-row{display:grid;gap:16px}
+.form-row.cols-2{grid-template-columns:1fr 1fr}
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.form-label{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em}
+.form-control{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;transition:border .15s;outline:none;width:100%}
+.form-control:focus{border-color:var(--accent)}
+textarea.form-control{resize:vertical;min-height:80px}
+.form-hint{font-size:11px;color:var(--text2)}
+.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lang-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.06em}
+.lang-en{background:rgba(59,130,246,.2);color:#60a5fa}
+.lang-nl{background:rgba(245,158,11,.2);color:#fbbf24}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:600;border:none;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#2563eb}
+.btn-success{background:var(--accent2);color:#fff}
+.btn-success:hover{background:#059669}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-danger:hover{background:#dc2626}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--surface2);color:var(--text)}
+.btn-sm{padding:6px 12px;font-size:12px}
+
+/* ── Badge ── */
+.badge{font-size:11px;font-weight:600;padding:3px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
+.badge-blue{background:rgba(59,130,246,.2);color:#60a5fa}
+.badge-green{background:rgba(16,185,129,.2);color:#34d399}
+.badge-warn{background:rgba(245,158,11,.2);color:#fbbf24}
+
+/* ── Toast ── */
+#toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{padding:12px 16px;border-radius:10px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;min-width:260px;animation:slideIn .2s ease;box-shadow:0 4px 24px rgba(0,0,0,.4)}
+.toast-success{background:#065f46;color:#a7f3d0;border:1px solid #10b981}
+.toast-error{background:#7f1d1d;color:#fca5a5;border:1px solid #ef4444}
+.toast-info{background:#1e3a5f;color:#93c5fd;border:1px solid #3b82f6}
+@keyframes slideIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* ── Save bar ── */
+.save-bar{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;gap:12px}
+
+/* ── Tabs ── */
+.tab-bar{display:flex;gap:4px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:4px;margin-bottom:20px;width:fit-content}
+.tab-btn{padding:6px 16px;border-radius:6px;border:none;background:transparent;color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+.tab-btn.active{background:var(--accent);color:#fff}
+
+/* ── Editor split ── */
+.editor-split{display:grid;grid-template-columns:400px 1fr;gap:0;height:calc(100vh - 56px - 58px);overflow:hidden}
+.editor-panel{overflow-y:auto;padding:20px;border-right:1px solid var(--border)}
+.preview-panel{display:flex;flex-direction:column;background:#111}
+.preview-toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;gap:8px}
+.preview-toolbar span{font-size:12px;color:var(--text2);flex:1}
+.preview-iframe{flex:1;border:none;background:#fff;width:100%}
+.device-btn{padding:5px 12px;border-radius:6px;border:none;background:transparent;color:var(--text2);font-size:12px;cursor:pointer}
+.device-btn.active{background:var(--surface2);color:var(--text)}
+
+/* ── Stats grid ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.stat-label{font-size:11px;color:var(--text2);text-transform:uppercase;font-weight:600;letter-spacing:.06em}
+.stat-value{font-size:26px;font-weight:700;margin-top:6px;font-family:'Outfit',sans-serif}
+.stat-hint{font-size:11px;color:var(--text2);margin-top:4px}
+
+/* ── Login ── */
+#login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg)}
+.login-box{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:36px;text-align:center}
+.login-logo{font-family:'Outfit',sans-serif;font-size:24px;font-weight:700;margin-bottom:6px}
+.login-logo span{color:var(--accent)}
+.login-subtitle{color:var(--text2);font-size:13px;margin-bottom:28px}
+.login-box .form-group{text-align:left}
+.login-box input{font-size:15px;padding:11px 14px}
+.login-box .btn{width:100%;justify-content:center;padding:12px;font-size:14px;margin-top:6px}
+.login-error{color:#fca5a5;font-size:13px;margin-top:8px;display:none}
+
+/* ── Loader ── */
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Media grid ── */
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.media-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden;position:relative}
+.media-item img{width:100%;height:110px;object-fit:cover;display:block;background:#111}
+.media-item-info{padding:8px}
+.media-item-name{font-size:11px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.media-item-meta{font-size:10px;color:var(--text2);margin-top:2px}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* ── Page visibility ── */
+.page{display:none}
+.page.active{display:block}
+.editor-page.active{display:flex;flex-direction:column}
+</style>
+</head>
+<body>
+
+<!-- ─── LOGIN ──────────────────────────────────────────────────────────── -->
+<div id="login-page">
+  <div class="login-box">
+    <div class="login-logo">Aiven<span>tity</span></div>
+    <div class="login-subtitle">CMS Beheerpaneel</div>
+    <div class="form-group">
+      <label class="form-label">Wachtwoord</label>
+      <input type="password" id="login-pw" class="form-control" placeholder="••••••••" autofocus>
+    </div>
+    <div class="login-error" id="login-err">Ongeldig wachtwoord.</div>
+    <button class="btn btn-primary" id="login-btn" onclick="doLogin()">Inloggen</button>
+  </div>
+</div>
+
+<!-- ─── APP ───────────────────────────────────────────────────────────── -->
+<div id="app" style="display:none">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="dot"></div>
+      <div>
+        <span>Aiventity</span>
+        <small style="color:var(--text2)">CMS Beheer</small>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Overzicht</div>
+      <button class="nav-item active" onclick="showPage('dashboard')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </button>
+
+      <div class="nav-section" style="margin-top:8px">Content</div>
+      <button class="nav-item" onclick="showPage('editor')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Visuele Editor
+      </button>
+
+      <div class="nav-section" style="margin-top:8px">Beheer</div>
+      <button class="nav-item" onclick="showPage('settings')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Website Instellingen
+      </button>
+      <button class="nav-item" onclick="showPage('history')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Activiteitenlog
+      </button>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="https://aiventitytool.netlify.app" target="_blank" class="nav-item" style="margin-bottom:6px">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Bekijk website
+      </a>
+      <button class="btn-logout" onclick="doLogout()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Uitloggen
+      </button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="page-title">Dashboard</div>
+      <div class="topbar-actions">
+        <span id="publish-status" style="font-size:12px;color:var(--text2)"></span>
+        <button class="btn btn-success" onclick="publishSite(this)">🚀 Publiceer op Netlify</button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="page-dashboard" class="page active content-area">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Laatste publicatie</div>
+          <div class="stat-value" id="stat-published" style="font-size:16px;margin-top:10px">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Website</div>
+          <div class="stat-value" style="font-size:14px;margin-top:10px">
+            <a href="https://aiventitytool.netlify.app" target="_blank" style="color:var(--accent)">aiventitytool.netlify.app ↗</a>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Admin</div>
+          <div class="stat-value" style="font-size:14px;margin-top:10px">
+            <span style="color:var(--accent2)">aiventity-admin.netlify.app ✓</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Snelle acties</div>
+            <div class="card-subtitle">Beheer je website</div>
+          </div>
+        </div>
+        <div class="card-body" style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="showPage('editor')">✏️ Content bewerken</button>
+          <button class="btn btn-ghost" onclick="showPage('settings')">⚙️ Instellingen</button>
+          <button class="btn btn-success" onclick="publishSite(this)">🚀 Nu publiceren</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISUAL EDITOR -->
+    <div id="page-editor" class="page editor-page">
+      <div class="editor-split">
+        <!-- Left: forms -->
+        <div class="editor-panel" id="editor-panel">
+          <div class="tab-bar" id="section-tabs"></div>
+          <div id="section-forms"></div>
+        </div>
+        <!-- Right: preview -->
+        <div class="preview-panel">
+          <div class="preview-toolbar">
+            <span>Live preview — <a href="https://aiventitytool.netlify.app" target="_blank" style="color:var(--accent)">aiventitytool.netlify.app</a></span>
+            <button class="device-btn active" onclick="setDevice('100%',this)">🖥 Desktop</button>
+            <button class="device-btn" onclick="setDevice('768px',this)">📱 Tablet</button>
+            <button class="device-btn" onclick="setDevice('390px',this)">📲 Mobiel</button>
+          </div>
+          <div style="flex:1;display:flex;align-items:stretch;background:#222;overflow:hidden">
+            <iframe id="preview-frame" class="preview-iframe" src="https://aiventitytool.netlify.app"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="save-bar">
+        <button class="btn btn-primary" onclick="saveCurrentSection(this)">💾 Opslaan</button>
+        <button class="btn btn-success" onclick="publishSite(this)">🚀 Publiceer op Netlify</button>
+        <span id="save-status" style="font-size:12px;color:var(--text2)"></span>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="page-settings" class="page content-area">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Algemeen</div><div class="card-subtitle">Naam en tagline</div></div>
+        </div>
+        <div class="card-body">
+          <div class="form-row cols-2">
+            <div class="form-group"><label class="form-label">Website naam</label><input type="text" class="form-control" id="cfg-site_name" placeholder="Aiventity"></div>
+            <div class="form-group"><label class="form-label">Tagline</label><input type="text" class="form-control" id="cfg-site_tagline" placeholder="Imagine. Automate. Execute."></div>
+          </div>
+          <div class="form-group"><label class="form-label">Contact e-mail</label><input type="email" class="form-control" id="cfg-contact_email" placeholder="hello@aiventity.com"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">SEO &amp; Open Graph</div></div><span class="badge badge-blue">Meta tags</span></div>
+        <div class="card-body">
+          <div class="form-group"><label class="form-label">Meta Titel</label><input type="text" class="form-control" id="cfg-seo_meta_title" placeholder="Aiventity — Intelligent Agent Space"></div>
+          <div class="form-group"><label class="form-label">Meta Beschrijving</label><textarea class="form-control" id="cfg-seo_meta_description" rows="3"></textarea></div>
+          <div class="form-row cols-2">
+            <div class="form-group"><label class="form-label">OG Afbeelding URL</label><input type="url" class="form-control" id="cfg-og_image_url"></div>
+            <div class="form-group"><label class="form-label">Canonical URL</label><input type="url" class="form-control" id="cfg-canonical_url"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Social Media</div></div>
+        <div class="card-body">
+          <div class="form-row cols-2">
+            <div class="form-group"><label class="form-label">Twitter / X URL</label><input type="url" class="form-control" id="cfg-twitter_url"></div>
+            <div class="form-group"><label class="form-label">LinkedIn URL</label><input type="url" class="form-control" id="cfg-linkedin_url"></div>
+            <div class="form-group"><label class="form-label">Instagram URL</label><input type="url" class="form-control" id="cfg-instagram_url"></div>
+            <div class="form-group"><label class="form-label">GitHub URL</label><input type="url" class="form-control" id="cfg-github_url"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">🚀 Netlify Integratie</div></div><span class="badge badge-green">Publiceren</span></div>
+        <div class="card-body">
+          <div class="form-row cols-2">
+            <div class="form-group"><label class="form-label">Netlify Token</label><input type="password" class="form-control" id="cfg-netlify_token" placeholder="nfp_xxxxxxxx" autocomplete="new-password"></div>
+            <div class="form-group"><label class="form-label">Publieke Site ID</label><input type="text" class="form-control" id="cfg-netlify_site_id" placeholder="5559f234-..."></div>
+          </div>
+        </div>
+      </div>
+      <div class="save-bar">
+        <button class="btn btn-primary" onclick="saveSettings(this)">💾 Instellingen opslaan</button>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div id="page-history" class="page content-area">
+      <div class="card">
+        <div class="card-header"><div class="card-title">📋 Activiteitenlog</div></div>
+        <div class="card-body" id="history-list" style="padding:0">
+          <div style="padding:20px;color:var(--text2)">Laden...</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<div id="toast-container"></div>
+
+<script>
+// ── State ────────────────────────────────────────────────────────────────
+const API = '/api';
+let token = localStorage.getItem('cms_token') || '';
+let contentData = {};
+let currentSection = 'hero';
+
+const SECTIONS = [
+  { key:'hero',        label:'Hero' },
+  { key:'creativity',  label:'Creativity' },
+  { key:'integration', label:'Integration' },
+  { key:'execution',   label:'Execution' },
+  { key:'apply',       label:'Apply' },
+  { key:'footer',      label:'Footer' },
+];
+
+const FIELDS = {
+  hero:        [['heading_en','Titel (EN)'],['heading_nl','Titel (NL)'],['subheading_en','Subtitel (EN)'],['subheading_nl','Subtitel (NL)'],['cta_label_en','CTA Label (EN)'],['cta_label_nl','CTA Label (NL)']],
+  creativity:  [['heading_en','Titel (EN)'],['heading_nl','Titel (NL)'],['body_en','Tekst (EN)'],['body_nl','Tekst (NL)']],
+  integration: [['heading_en','Titel (EN)'],['heading_nl','Titel (NL)'],['body_en','Tekst (EN)'],['body_nl','Tekst (NL)']],
+  execution:   [['heading_en','Titel (EN)'],['heading_nl','Titel (NL)'],['body_en','Tekst (EN)'],['body_nl','Tekst (NL)']],
+  apply:       [['heading_en','Titel (EN)'],['heading_nl','Titel (NL)'],['body_en','Tekst (EN)'],['body_nl','Tekst (NL)'],['cta_label_en','CTA (EN)'],['cta_label_nl','CTA (NL)']],
+  footer:      [['tagline_en','Tagline (EN)'],['tagline_nl','Tagline (NL)'],['copyright_en','Copyright (EN)'],['copyright_nl','Copyright (NL)']],
+};
+
+// ── Auth ─────────────────────────────────────────────────────────────────
+async function doLogin() {
+  const pw = document.getElementById('login-pw').value;
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('login-err');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>';
+  err.style.display = 'none';
+  try {
+    const r = await apiFetch('/login', 'POST', {password: pw}, true);
+    if (r.ok && r.token) {
+      token = r.token;
+      localStorage.setItem('cms_token', token);
+      showApp();
+    } else {
+      err.textContent = r.error || 'Inloggen mislukt.';
+      err.style.display = 'block';
+    }
+  } catch(e) {
+    err.textContent = 'Verbindingsfout: ' + e.message;
+    err.style.display = 'block';
+  }
+  btn.disabled = false;
+  btn.textContent = 'Inloggen';
+}
+
+function doLogout() {
+  token = '';
+  localStorage.removeItem('cms_token');
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-page').style.display = 'flex';
+}
+
+document.getElementById('login-pw').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+// ── API helper ────────────────────────────────────────────────────────────
+async function apiFetch(path, method='GET', body=null, noAuth=false) {
+  const opts = {
+    method,
+    headers: {'Content-Type':'application/json'},
+  };
+  if (!noAuth && token) opts.headers['Authorization'] = 'Bearer ' + token;
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(API + path, opts);
+  if (r.status === 401 && !noAuth) { doLogout(); return {}; }
+  return r.json();
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────
+function toast(msg, type='info') {
+  const el = document.createElement('div');
+  el.className = `toast toast-${type}`;
+  el.textContent = msg;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+async function init() {
+  if (token) {
+    // Quick check
+    const r = await apiFetch('/publish-status');
+    if (r && !r.error) {
+      showApp();
+      return;
+    }
+    token = '';
+    localStorage.removeItem('cms_token');
+  }
+  document.getElementById('login-page').style.display = 'flex';
+}
+
+async function showApp() {
+  document.getElementById('login-page').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  // Load publish status
+  const ps = await apiFetch('/publish-status');
+  if (ps.last_published) {
+    document.getElementById('stat-published').textContent = ps.last_published;
+    const el = document.getElementById('publish-status');
+    if (el) el.textContent = '✅ ' + ps.last_published;
+  }
+}
+
+// ── Pages ─────────────────────────────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  // Activate nav item
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + name + "'"))
+      n.classList.add('active');
+  });
+  const titles = {dashboard:'Dashboard',editor:'Visuele Editor',settings:'Website Instellingen',history:'Activiteitenlog'};
+  document.getElementById('page-title').textContent = titles[name] || name;
+  if (name === 'editor') initEditor();
+  if (name === 'settings') loadSettings();
+  if (name === 'history') loadHistory();
+}
+
+// ── Editor ────────────────────────────────────────────────────────────────
+async function initEditor() {
+  if (Object.keys(contentData).length === 0) {
+    contentData = await apiFetch('/content');
+  }
+  buildTabs();
+  showSection(currentSection);
+}
+
+function buildTabs() {
+  const bar = document.getElementById('section-tabs');
+  bar.innerHTML = SECTIONS.map(s =>
+    `<button class="tab-btn${s.key===currentSection?' active':''}" onclick="showSection('${s.key}')">${s.label}</button>`
+  ).join('');
+}
+
+function showSection(key) {
+  currentSection = key;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if (b.textContent === SECTIONS.find(s=>s.key===key)?.label) b.classList.add('active');
+  });
+  const sec = contentData[key] || {};
+  const fields = FIELDS[key] || [];
+  const html = fields.map(([f, label]) => {
+    const val = (sec[f] || '').replace(/"/g,'&quot;');
+    const isLong = f.includes('body') || f.includes('description');
+    const inp = isLong
+      ? `<textarea class="form-control" id="f-${f}" rows="3">${sec[f]||''}</textarea>`
+      : `<input type="text" class="form-control" id="f-${f}" value="${val}">`;
+    const lang = f.endsWith('_en') ? '<span class="lang-badge lang-en">EN</span>' : f.endsWith('_nl') ? '<span class="lang-badge lang-nl">NL</span>' : '';
+    return `<div class="form-group"><label class="form-label">${lang} ${label}</label>${inp}</div>`;
+  }).join('');
+  document.getElementById('section-forms').innerHTML = html || '<p style="color:var(--text2)">Geen velden voor deze sectie.</p>';
+}
+
+async function saveCurrentSection(btn) {
+  const key = currentSection;
+  const fields = FIELDS[key] || [];
+  const data = {};
+  fields.forEach(([f]) => {
+    const el = document.getElementById('f-' + f);
+    if (el) data[f] = el.value;
+  });
+  contentData[key] = {...(contentData[key]||{}), ...data};
+  const orig = btn.innerHTML;
+  btn.innerHTML = '<span class="spinner"></span>';
+  btn.disabled = true;
+  const r = await apiFetch('/content', 'POST', {[key]: data});
+  btn.innerHTML = orig;
+  btn.disabled = false;
+  if (r.ok) {
+    toast('✅ Opgeslagen!', 'success');
+    document.getElementById('save-status').textContent = 'Opgeslagen ' + new Date().toLocaleTimeString('nl');
+    // Reload preview
+    const frame = document.getElementById('preview-frame');
+    frame.src = frame.src;
+  } else {
+    toast('❌ ' + (r.error || 'Opslaan mislukt'), 'error');
+  }
+}
+
+function setDevice(width, btn) {
+  document.getElementById('preview-frame').style.maxWidth = width;
+  document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── Publish ───────────────────────────────────────────────────────────────
+async function publishSite(btn) {
+  const orig = btn.innerHTML;
+  btn.innerHTML = '<span class="spinner"></span> Publiceren...';
+  btn.disabled = true;
+  try {
+    const r = await apiFetch('/publish', 'POST');
+    if (r.ok) {
+      toast(r.message || '✅ Gepubliceerd!', 'success');
+      const el = document.getElementById('publish-status');
+      if (el) el.textContent = '✅ Zojuist gepubliceerd';
+    } else {
+      toast('❌ ' + (r.error || 'Publiceren mislukt'), 'error');
+    }
+  } catch(e) {
+    toast('❌ Verbindingsfout: ' + e.message, 'error');
+  }
+  btn.innerHTML = orig;
+  btn.disabled = false;
+}
+
+// ── Settings ──────────────────────────────────────────────────────────────
+async function loadSettings() {
+  const cfg = await apiFetch('/config');
+  const keys = ['site_name','site_tagline','contact_email','seo_meta_title','seo_meta_description',
+                 'og_image_url','canonical_url','twitter_url','linkedin_url','instagram_url',
+                 'github_url','netlify_token','netlify_site_id'];
+  keys.forEach(k => {
+    const el = document.getElementById('cfg-' + k);
+    if (el && cfg[k] != null) el.value = cfg[k];
+  });
+}
+
+async function saveSettings(btn) {
+  const keys = ['site_name','site_tagline','contact_email','seo_meta_title','seo_meta_description',
+                 'og_image_url','canonical_url','twitter_url','linkedin_url','instagram_url',
+                 'github_url','netlify_token','netlify_site_id'];
+  const data = {};
+  keys.forEach(k => {
+    const el = document.getElementById('cfg-' + k);
+    if (el && el.value) data[k] = el.value;
+  });
+  const orig = btn.innerHTML;
+  btn.innerHTML = '<span class="spinner"></span>';
+  btn.disabled = true;
+  const r = await apiFetch('/config', 'POST', data);
+  btn.innerHTML = orig;
+  btn.disabled = false;
+  if (r.ok) toast('✅ Instellingen opgeslagen!', 'success');
+  else toast('❌ ' + (r.error || 'Opslaan mislukt'), 'error');
+}
+
+// ── History ───────────────────────────────────────────────────────────────
+async function loadHistory() {
+  const list = document.getElementById('history-list');
+  const data = await apiFetch('/history');
+  if (!Array.isArray(data) || data.length === 0) {
+    list.innerHTML = '<div style="padding:20px;color:var(--text2)">Geen geschiedenis gevonden.</div>';
+    return;
+  }
+  list.innerHTML = data.slice().reverse().map((h, i) => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border)">
+      <div>
+        <div style="font-size:13px;font-weight:500">${h.label||'Snapshot'}</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:3px">${h.timestamp||''}</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="restoreSnapshot(${data.length-1-i})">↩ Herstel</button>
+    </div>
+  `).join('');
+}
+
+async function restoreSnapshot(idx) {
+  if (!confirm('Weet je zeker dat je dit snapshot wilt terugzetten?')) return;
+  const r = await apiFetch('/restore/' + idx, 'POST');
+  if (r.ok) { toast('✅ Hersteld!', 'success'); contentData = {}; }
+  else toast('❌ ' + (r.error || 'Herstel mislukt'), 'error');
+}
+
+// ── Keyboard shortcuts ────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    const editorVisible = document.getElementById('page-editor').classList.contains('active');
+    if (editorVisible) {
+      const btn = document.querySelector('#page-editor .save-bar .btn-primary');
+      if (btn) saveCurrentSection(btn);
+    }
+  }
+});
+
+// ── Start ─────────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>

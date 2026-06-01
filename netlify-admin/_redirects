@@ -1,1 +1,2 @@
-/* https://aiventity-website.onrender.com/:splat 200
+/api/*  /.netlify/functions/api  200
+/admin  /admin.html  200

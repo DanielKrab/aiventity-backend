@@ -1,0 +1,522 @@
+{% set h  = content.get('hero', {}) %}
+{% set cr = content.get('creativity', {}) %}
+{% set ig = content.get('integration', {}) %}
+{% set ex = content.get('execution', {}) %}
+{% set ap = content.get('apply', {}) %}
+{% set ft = content.get('footer', {}) %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aiventity — Imagine. Automate. Execute.</title>
+  <meta name="description" content="Aiventity is the intelligent Agent Space. We translate your creative vision into working workflows, connect your tools via MCP, and manage execution autonomously.">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'ai-black': '#050505',
+            'ai-blue': '#007AFF',
+            'ai-blue-dark': '#0055CC',
+          },
+          fontFamily: {
+            heading: ['"Space Grotesk"', 'sans-serif'],
+            body:    ['"Inter"', 'sans-serif'],
+          },
+          animation: {
+            'fade-in-up': 'fadeInUp 0.7s ease forwards',
+            'glow-pulse': 'glowPulse 2s ease-in-out infinite',
+          },
+          keyframes: {
+            fadeInUp:  { '0%': { opacity:'0', transform:'translateY(30px)' }, '100%': { opacity:'1', transform:'translateY(0)' } },
+            glowPulse: { '0%,100%': { boxShadow:'0 0 20px rgba(0,122,255,0.3)' }, '50%': { boxShadow:'0 0 40px rgba(0,122,255,0.7)' } },
+          },
+        },
+      },
+    }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { background-color: #050505; font-family: 'Inter', sans-serif; color: #ffffff; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    h1,h2,h3,h4,.font-heading { font-family: 'Space Grotesk', sans-serif; }
+
+    /* ── Hero radial bg ── */
+    .hero-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%,  rgba(0,122,255,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,122,255,0.08) 0%, transparent 60%),
+        #050505;
+    }
+
+    /* ── Glass ── */
+    .glass      { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+    .glass-blue { background: rgba(0,122,255,0.08);  border: 1px solid rgba(0,122,255,0.25);   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+
+    /* ── Nav ── */
+    .nav-blur { background: rgba(5,5,5,0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06); }
+
+    /* ── Logo float ── */
+    @keyframes logoFloat { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+    .logo-float { animation: logoFloat 4s ease-in-out infinite; }
+
+    /* ── Buttons ── */
+    .btn-primary   { background: linear-gradient(135deg,#007AFF 0%,#0055CC 100%); border: none; transition: all 0.2s ease; }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(0,122,255,0.5); }
+    .btn-secondary { background: transparent; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s ease; }
+    .btn-secondary:hover { border-color: rgba(0,122,255,0.6); background: rgba(0,122,255,0.08); }
+
+    /* ── Console ── */
+    .console-log { opacity: 0; transform: translateY(4px); transition: opacity 0.4s ease, transform 0.4s ease; font-family: 'Courier New', monospace; font-size: 0.75rem; }
+    .console-log.visible { opacity: 1; transform: translateY(0); }
+    .tag-creative { color: #00E5CC; }
+    .tag-mcep     { color: #007AFF; }
+    .tag-agent    { color: #A78BFA; }
+    .tag-ok       { color: #34D399; }
+    .cursor-blink { display: inline-block; width: 7px; height: 12px; background: #007AFF; animation: blink 1s step-end infinite; vertical-align: text-bottom; }
+    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+
+    /* ── Scroll reveal ── */
+    .reveal { transition: opacity 0.7s ease, transform 0.7s ease; }
+    .js-ready .reveal { opacity: 0; transform: translateY(40px); }
+    .js-ready .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Feature card hover ── */
+    .feature-card { transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; }
+    .feature-card:hover { transform: translateY(-4px); border-color: rgba(0,122,255,0.4); box-shadow: 0 20px 60px rgba(0,122,255,0.12); }
+
+    /* ── Noise texture ── */
+    .noise::before { content: ''; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); pointer-events: none; z-index: 0; }
+
+    /* ── Gradient text ── */
+    .gradient-text { background: linear-gradient(135deg,#ffffff 30%,#007AFF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: linear-gradient(90deg,transparent,rgba(0,122,255,0.3),transparent); }
+
+    /* ── Ping dot ── */
+    .ping-dot { position: relative; display: inline-flex; align-items: center; }
+    .ping-dot::before { content: ''; position: absolute; inset: 0; border-radius: 50%; background: #34D399; animation: ping 1.5s cubic-bezier(0,0,0.2,1) infinite; }
+    @keyframes ping { 75%,100% { transform: scale(2); opacity: 0; } }
+
+    /* ── Mobile menu ── */
+    #mobile-menu { display: none; }
+    #mobile-menu.open { display: block; }
+
+    /* ── Lang buttons ── */
+    .lbtn { border-radius: 999px; padding: 4px 12px; font-size: 0.75rem; font-weight: 600; transition: all 0.2s; cursor: pointer; border: none; }
+    .lbtn-on  { background: rgba(0,122,255,1); color: #fff; }
+    .lbtn-off { background: transparent; color: rgba(255,255,255,0.45); }
+
+    /* ── Admin bar (hidden in static, shown in Flask) ── */
+    .ve-bar { display: none; }
+  </style>
+</head>
+
+<body class="hero-bg noise relative">
+
+<!-- Flask Admin Bar -->
+<div class="ve-bar" style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(0,0,0,0.9);border-top:1px solid rgba(0,122,255,0.3);padding:10px 20px;display:flex;gap:12px;align-items:center;">
+  <span style="font-family:monospace;font-size:11px;color:rgba(255,255,255,0.4);">ADMIN</span>
+  <a href="{{ url_for('dashboard') }}" style="font-size:12px;color:#007AFF;text-decoration:none;padding:4px 10px;border:1px solid rgba(0,122,255,0.3);border-radius:4px;">Dashboard →</a>
+</div>
+
+<!-- ══ NAV ══════════════════════════════════════════════════════════════ -->
+<header id="nav" class="fixed top-0 left-0 right-0 z-50 nav-blur">
+  <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+    <a id="nav-logo" href="#" class="flex items-center gap-2 group leading-none">
+      <img src="/logo.png" alt="Aiventity" class="h-8 w-8 object-contain logo-float" />
+      <span class="font-heading font-semibold text-white text-[15px] tracking-tight">Aiventity</span>
+    </a>
+
+    <ul class="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide text-white/60">
+      <li><a href="#creativity"  class="hover:text-white transition-colors duration-200 uppercase tracking-widest text-xs" data-en="Creativity"  data-nl="Creativiteit">Creativity</a></li>
+      <li><a href="#integration" class="hover:text-white transition-colors duration-200 uppercase tracking-widest text-xs" data-en="Integration" data-nl="Integratie">Integration</a></li>
+      <li><a href="#execution"   class="hover:text-white transition-colors duration-200 uppercase tracking-widest text-xs" data-en="Execution"   data-nl="Uitvoering">Execution</a></li>
+    </ul>
+
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-0.5 rounded-full p-0.5" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);">
+        <button id="lbtn-en" onclick="setLang('en')" class="lbtn lbtn-on">EN</button>
+        <button id="lbtn-nl" onclick="setLang('nl')" class="lbtn lbtn-off">NL</button>
+      </div>
+      <a href="#apply" class="hidden md:inline-flex btn-primary px-5 py-2 rounded-full text-sm font-semibold text-white"
+         data-en="{{ h.get('cta_primary_en','') }}" data-nl="{{ h.get('cta_primary_nl','') }}">{{ h.get('cta_primary_en','Apply') }}</a>
+      <button id="hamburger" class="md:hidden text-white/70 hover:text-white" onclick="toggleMenu()">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobile-menu" class="md:hidden glass border-t border-white/5 px-6 py-4 space-y-3">
+    <a href="#creativity"  onclick="toggleMenu()" class="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-widest" data-en="Creativity"  data-nl="Creativiteit">Creativity</a>
+    <a href="#integration" onclick="toggleMenu()" class="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-widest" data-en="Integration" data-nl="Integratie">Integration</a>
+    <a href="#execution"   onclick="toggleMenu()" class="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-widest" data-en="Execution"   data-nl="Uitvoering">Execution</a>
+    <div class="flex items-center gap-2 py-1">
+      <button id="lbtn-en-m" onclick="setLang('en')" class="lbtn lbtn-on">EN</button>
+      <button id="lbtn-nl-m" onclick="setLang('nl')" class="lbtn lbtn-off" style="border:1px solid rgba(255,255,255,0.1);">NL</button>
+    </div>
+    <a href="#apply" onclick="toggleMenu()" class="inline-flex btn-primary px-5 py-2 rounded-full text-sm font-semibold text-white mt-2"
+       data-en="{{ h.get('cta_primary_en','') }}" data-nl="{{ h.get('cta_primary_nl','') }}">{{ h.get('cta_primary_en','Apply') }}</a>
+  </div>
+</header>
+
+<!-- ══ HERO ══════════════════════════════════════════════════════════════ -->
+<section id="cms-hero" class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-24 pb-16 relative">
+
+  <!-- Badge -->
+  <div class="glass-blue rounded-full px-4 py-1.5 text-xs font-medium text-ai-blue tracking-widest uppercase mb-8 inline-flex items-center gap-2 reveal">
+    <span class="ping-dot relative w-2 h-2 rounded-full bg-green-400 inline-block"></span>
+    <span data-en="{{ h.get('badge_en','') }}" data-nl="{{ h.get('badge_nl','') }}">{{ h.get('badge_en','') }}</span>
+  </div>
+
+  <!-- Hero logo -->
+  <div class="logo-float mb-10 reveal">
+    <img src="/logo.png" alt="Aiventity Logo" class="w-48 h-48 md:w-56 md:h-56 object-contain" />
+  </div>
+
+  <!-- Headline -->
+  <h1 class="font-heading text-5xl md:text-7xl lg:text-8xl font-bold leading-none tracking-tight mb-6 reveal">
+    <span data-en="{{ h.get('h1_en','Imagine.') }}"    data-nl="{{ h.get('h1_nl','') }}">{{ h.get('h1_en','Imagine.') }}</span><br class="md:hidden" />
+    <span class="text-ai-blue" data-en="{{ h.get('h2_en','Automate.') }}" data-nl="{{ h.get('h2_nl','') }}"> {{ h.get('h2_en','Automate.') }}</span><br class="md:hidden" />
+    <span data-en="{{ h.get('h3_en','Execute.') }}"    data-nl="{{ h.get('h3_nl','') }}">{{ h.get('h3_en','Execute.') }}</span>
+  </h1>
+
+  <!-- Subheadline -->
+  <p class="font-heading text-lg md:text-2xl font-semibold tracking-widest text-white/50 uppercase mb-6 reveal"
+     data-en="{{ h.get('subheadline_en','') }}" data-nl="{{ h.get('subheadline_nl','') }}">{{ h.get('subheadline_en','') }}</p>
+
+  <!-- Body -->
+  <p class="max-w-2xl text-base md:text-lg text-white/55 leading-relaxed mb-10 reveal"
+     data-en="{{ h.get('body_en','') }}" data-nl="{{ h.get('body_nl','') }}">{{ h.get('body_en','') }}</p>
+
+  <!-- CTAs -->
+  <div class="flex flex-col sm:flex-row items-center gap-4 mb-16 reveal">
+    <a href="#apply" class="btn-primary px-8 py-3.5 rounded-full text-sm font-semibold text-white inline-flex items-center gap-2"
+       data-en="{{ h.get('cta_primary_en','') }}" data-nl="{{ h.get('cta_primary_nl','') }}">
+      <i data-lucide="zap" class="w-4 h-4"></i>
+      <span>{{ h.get('cta_primary_en','') }}</span>
+    </a>
+    <a href="#creativity" class="btn-secondary px-8 py-3.5 rounded-full text-sm font-semibold text-white/80 inline-flex items-center gap-2"
+       data-en="{{ h.get('cta_secondary_en','') }}" data-nl="{{ h.get('cta_secondary_nl','') }}">
+      <i data-lucide="play-circle" class="w-4 h-4"></i>
+      <span>{{ h.get('cta_secondary_en','') }}</span>
+    </a>
+  </div>
+
+  <!-- Live Workflow Console -->
+  <div class="w-full max-w-4xl reveal">
+    <div class="glass rounded-2xl overflow-hidden shadow-2xl">
+      <div class="flex items-center justify-between px-5 py-3 border-b border-white/[0.08]" style="background:rgba(255,255,255,0.02);">
+        <div class="flex items-center gap-2">
+          <div class="w-3 h-3 rounded-full bg-red-500/70"></div>
+          <div class="w-3 h-3 rounded-full bg-yellow-500/70"></div>
+          <div class="w-3 h-3 rounded-full bg-green-500/70"></div>
+          <span class="ml-3 text-xs font-medium text-white/40 uppercase tracking-widest font-heading" data-en="Live Workflow Engine" data-nl="Live Workflow Engine">Live Workflow Engine</span>
+        </div>
+        <div class="flex items-center gap-4 text-xs">
+          <span class="glass px-3 py-1 rounded-full text-white/40" data-en="Expert Mode" data-nl="Expert Modus">Expert Mode</span>
+          <span class="glass-blue px-3 py-1 rounded-full text-ai-blue" data-en="Automation Logs" data-nl="Automatie Logs">Automation Logs</span>
+        </div>
+      </div>
+      <div class="flex flex-col md:flex-row">
+        <div id="console-feed" class="flex-1 p-5 space-y-2 min-h-[160px]"></div>
+        <div class="md:w-48 border-t md:border-t-0 md:border-l border-white/[0.08] p-5 space-y-3">
+          <p class="text-xs font-heading font-semibold text-white/30 uppercase tracking-widest mb-4" data-en="System Status" data-nl="Systeemstatus">System Status</p>
+          <div class="flex items-center gap-2">
+            <span class="ping-dot relative w-2 h-2 rounded-full bg-green-400 inline-block shrink-0"></span>
+            <span class="text-xs text-white/60">Status: <span class="text-green-400 font-medium" data-en="Online" data-nl="Online">Online</span></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-ai-blue shrink-0"></span>
+            <span class="text-xs text-white/60">MCP: <span class="text-ai-blue font-medium" data-en="Active" data-nl="Actief">Active</span></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-purple-400 shrink-0"></span>
+            <span class="text-xs text-white/60" data-en="Mode: Expert" data-nl="Modus: Expert">Mode: Expert</span>
+          </div>
+          <div class="divider my-3"></div>
+          <div class="text-xs text-white/30 font-mono">uptime: 99.9%</div>
+          <div class="text-xs text-white/30 font-mono" data-en="agents: 3 active" data-nl="agents: 3 actief">agents: 3 active</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider max-w-7xl mx-auto px-6"></div>
+
+<!-- ══ CREATIVITY ════════════════════════════════════════════════════════ -->
+<section id="creativity" class="py-28 px-6 max-w-7xl mx-auto">
+  <div class="text-center mb-16 reveal">
+    <span class="text-xs font-heading font-semibold text-ai-blue uppercase tracking-widest mb-4 block"
+          data-en="{{ cr.get('label_en','') }}" data-nl="{{ cr.get('label_nl','') }}">{{ cr.get('label_en','') }}</span>
+    <h2 class="font-heading text-4xl md:text-5xl font-bold gradient-text mb-4"
+        data-en="{{ cr.get('title_en','') }}" data-nl="{{ cr.get('title_nl','') }}">{{ cr.get('title_en','') }}</h2>
+    <p class="text-white/50 max-w-xl mx-auto"
+       data-en="{{ cr.get('subtitle_en','') }}" data-nl="{{ cr.get('subtitle_nl','') }}">{{ cr.get('subtitle_en','') }}</p>
+  </div>
+  <div class="grid md:grid-cols-3 gap-6">
+    {% for num, delay in [('1','0s'),('2','0.1s'),('3','0.2s')] %}
+    <div class="glass feature-card rounded-2xl p-7 reveal" style="transition-delay:{{ delay }}">
+      <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center mb-5">
+        <span class="text-xl">{{ cr.get('c' ~ num ~ '_icon', '✦') }}</span>
+      </div>
+      <h3 class="font-heading font-semibold text-lg mb-2"
+          data-en="{{ cr.get('c' ~ num ~ '_title_en','') }}" data-nl="{{ cr.get('c' ~ num ~ '_title_nl','') }}">{{ cr.get('c' ~ num ~ '_title_en','') }}</h3>
+      <p class="text-white/45 text-sm leading-relaxed"
+         data-en="{{ cr.get('c' ~ num ~ '_text_en','') }}" data-nl="{{ cr.get('c' ~ num ~ '_text_nl','') }}">{{ cr.get('c' ~ num ~ '_text_en','') }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<div class="divider max-w-7xl mx-auto px-6"></div>
+
+<!-- ══ INTEGRATION ══════════════════════════════════════════════════════ -->
+<section id="integration" class="py-28 px-6 max-w-7xl mx-auto">
+  <div class="text-center mb-16 reveal">
+    <span class="text-xs font-heading font-semibold text-ai-blue uppercase tracking-widest mb-4 block"
+          data-en="{{ ig.get('label_en','') }}" data-nl="{{ ig.get('label_nl','') }}">{{ ig.get('label_en','') }}</span>
+    <h2 class="font-heading text-4xl md:text-5xl font-bold gradient-text mb-4"
+        data-en="{{ ig.get('title_en','') }}" data-nl="{{ ig.get('title_nl','') }}">{{ ig.get('title_en','') }}</h2>
+    <p class="text-white/50 max-w-xl mx-auto"
+       data-en="{{ ig.get('subtitle_en','') }}" data-nl="{{ ig.get('subtitle_nl','') }}">{{ ig.get('subtitle_en','') }}</p>
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 reveal">
+    <div class="glass-blue rounded-xl p-4 flex items-center gap-3 feature-card"><i data-lucide="kanban"       class="w-5 h-5 text-ai-blue shrink-0"></i><span class="text-sm font-medium">Monday.com</span></div>
+    <div class="glass-blue rounded-xl p-4 flex items-center gap-3 feature-card"><i data-lucide="image"        class="w-5 h-5 text-ai-blue shrink-0"></i><span class="text-sm font-medium">Pinterest</span></div>
+    <div class="glass-blue rounded-xl p-4 flex items-center gap-3 feature-card"><i data-lucide="slack"        class="w-5 h-5 text-ai-blue shrink-0"></i><span class="text-sm font-medium">Slack</span></div>
+    <div class="glass-blue rounded-xl p-4 flex items-center gap-3 feature-card"><i data-lucide="table-2"      class="w-5 h-5 text-ai-blue shrink-0"></i><span class="text-sm font-medium">Google Sheets</span></div>
+    <div class="glass-blue rounded-xl p-4 flex items-center gap-3 feature-card"><i data-lucide="calendar"     class="w-5 h-5 text-ai-blue shrink-0"></i><span class="text-sm font-medium">Google Calendar</span></div>
+    <div class="glass-blue rounded-xl p-4 flex items-center gap-3 feature-card"><i data-lucide="file-text"    class="w-5 h-5 text-ai-blue shrink-0"></i><span class="text-sm font-medium">Notion</span></div>
+    <div class="glass-blue rounded-xl p-4 flex items-center gap-3 feature-card"><i data-lucide="shopping-bag" class="w-5 h-5 text-ai-blue shrink-0"></i><span class="text-sm font-medium">Airtable</span></div>
+    <div class="glass rounded-xl p-4 flex items-center gap-3 feature-card" style="border-style:dashed">
+      <i data-lucide="plus-circle" class="w-5 h-5 text-white/30 shrink-0"></i>
+      <span class="text-sm font-medium text-white/30" data-en="Your Tool" data-nl="Uw Tool">Your Tool</span>
+    </div>
+  </div>
+
+  <div class="glass rounded-2xl p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center gap-6 reveal">
+    <div class="w-14 h-14 rounded-2xl bg-ai-blue/15 flex items-center justify-center shrink-0 animate-glow-pulse">
+      <i data-lucide="network" class="w-7 h-7 text-ai-blue"></i>
+    </div>
+    <div>
+      <h3 class="font-heading font-bold text-xl mb-1"
+          data-en="{{ ig.get('mcep_title_en','') }}" data-nl="{{ ig.get('mcep_title_nl','') }}">{{ ig.get('mcep_title_en','') }}</h3>
+      <p class="text-white/50 text-sm leading-relaxed max-w-2xl"
+         data-en="{{ ig.get('mcep_text_en','') }}" data-nl="{{ ig.get('mcep_text_nl','') }}">{{ ig.get('mcep_text_en','') }}</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider max-w-7xl mx-auto px-6"></div>
+
+<!-- ══ EXECUTION ════════════════════════════════════════════════════════ -->
+{% set ex_icons = ['bot', 'shield-check', 'bar-chart-2', 'refresh-cw'] %}
+<section id="execution" class="py-28 px-6 max-w-7xl mx-auto">
+  <div class="text-center mb-16 reveal">
+    <span class="text-xs font-heading font-semibold text-ai-blue uppercase tracking-widest mb-4 block"
+          data-en="{{ ex.get('label_en','') }}" data-nl="{{ ex.get('label_nl','') }}">{{ ex.get('label_en','') }}</span>
+    <h2 class="font-heading text-4xl md:text-5xl font-bold gradient-text mb-4"
+        data-en="{{ ex.get('title_en','') }}" data-nl="{{ ex.get('title_nl','') }}">{{ ex.get('title_en','') }}</h2>
+    <p class="text-white/50 max-w-xl mx-auto"
+       data-en="{{ ex.get('subtitle_en','') }}" data-nl="{{ ex.get('subtitle_nl','') }}">{{ ex.get('subtitle_en','') }}</p>
+  </div>
+  <div class="grid md:grid-cols-2 gap-6">
+    {% for num, delay, icon in [('1','0s','bot'),('2','0.1s','shield-check'),('3','0s','bar-chart-2'),('4','0.1s','refresh-cw')] %}
+    <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:{{ delay }}">
+      <div class="flex items-start gap-5">
+        <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center shrink-0">
+          <i data-lucide="{{ icon }}" class="w-5 h-5 text-ai-blue"></i>
+        </div>
+        <div>
+          <h3 class="font-heading font-semibold text-lg mb-2"
+              data-en="{{ ex.get('c' ~ num ~ '_title_en','') }}" data-nl="{{ ex.get('c' ~ num ~ '_title_nl','') }}">{{ ex.get('c' ~ num ~ '_title_en','') }}</h3>
+          <p class="text-white/45 text-sm leading-relaxed"
+             data-en="{{ ex.get('c' ~ num ~ '_text_en','') }}" data-nl="{{ ex.get('c' ~ num ~ '_text_nl','') }}">{{ ex.get('c' ~ num ~ '_text_en','') }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<div class="divider max-w-7xl mx-auto px-6"></div>
+
+<!-- ══ APPLY / CTA ════════════════════════════════════════════════════ -->
+<section id="apply" class="py-32 px-6 text-center">
+  <div class="max-w-2xl mx-auto reveal">
+    <span class="text-xs font-heading font-semibold text-ai-blue uppercase tracking-widest mb-6 block"
+          data-en="{{ ap.get('label_en','') }}" data-nl="{{ ap.get('label_nl','') }}">{{ ap.get('label_en','') }}</span>
+    <h2 class="font-heading text-4xl md:text-5xl font-bold mb-5">
+      <span data-en="{{ ap.get('headline_part1_en','') }}" data-nl="{{ ap.get('headline_part1_nl','') }}">{{ ap.get('headline_part1_en','') }}</span><br/>
+      <span class="text-ai-blue" data-en="{{ ap.get('headline_accent_en','') }}" data-nl="{{ ap.get('headline_accent_nl','') }}">{{ ap.get('headline_accent_en','') }}</span>
+    </h2>
+    <p class="text-white/50 text-base mb-10"
+       data-en="{{ ap.get('body_en','') }}" data-nl="{{ ap.get('body_nl','') }}">{{ ap.get('body_en','') }}</p>
+
+    <form id="apply-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="handleApply(event)">
+      <input type="email" name="email" required
+             class="flex-1 glass rounded-full px-5 py-3.5 text-sm text-white outline-none border border-white/10 transition-all focus:border-ai-blue/50"
+             placeholder="your@company.com" />
+      <button type="submit" class="btn-primary px-6 py-3.5 rounded-full text-sm font-semibold text-white whitespace-nowrap inline-flex items-center gap-2">
+        <span data-en="{{ ap.get('btn_en','Apply Now') }}" data-nl="{{ ap.get('btn_nl','Aanmelden') }}">{{ ap.get('btn_en','Apply Now') }}</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </button>
+    </form>
+    <div id="apply-success" class="hidden mt-6">
+      <p class="text-green-400 font-semibold text-lg" data-en="Applied! We will be in touch within 48 hours." data-nl="Aangemeld! We nemen binnen 48 uur contact op.">Applied! We will be in touch within 48 hours.</p>
+    </div>
+
+    <p class="text-xs text-white/25 mt-4"
+       data-en="{{ ap.get('note_en','No credit card required') }}" data-nl="{{ ap.get('note_nl','Geen creditcard vereist') }}">{{ ap.get('note_en','No credit card required') }}</p>
+  </div>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════════════════ -->
+<footer id="cms-footer" class="border-t border-white/[0.06] py-10 px-6">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/30 mb-6">
+    <div class="flex items-center gap-2">
+      <img src="/logo.png" alt="Aiventity" style="height:20px;width:auto;opacity:0.7;">
+      <span class="font-heading font-semibold text-white/60">Aiventity</span>
+      <span class="mx-2">·</span>
+      <span data-en="{{ ft.get('tagline_en','') }}" data-nl="{{ ft.get('tagline_nl','') }}">{{ ft.get('tagline_en','') }}</span>
+    </div>
+    <div class="flex items-center gap-6">
+      <a href="#" class="hover:text-white/60 transition-colors" data-en="Privacy" data-nl="Privacy">Privacy</a>
+      <a href="#" class="hover:text-white/60 transition-colors" data-en="Terms" data-nl="Voorwaarden">Terms</a>
+      <a href="#apply" class="hover:text-white/60 transition-colors" data-en="Contact" data-nl="Contact">Contact</a>
+    </div>
+    <p>{{ ft.get('copyright','') }}</p>
+  </div>
+</footer>
+
+<script>
+  document.body.classList.add('js-ready');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+
+  /* ── Language toggle ─────────────────────────── */
+  let currentLang = 'en';
+
+  function setLang(lang) {
+    currentLang = lang;
+    document.querySelectorAll('[data-' + lang + ']').forEach(function(el) {
+      var txt = el.getAttribute('data-' + lang);
+      if (txt !== null) el.textContent = txt;
+    });
+    document.documentElement.lang = lang;
+    updateLangBtns();
+    renderConsole();
+  }
+
+  function updateLangBtns() {
+    ['lbtn-en','lbtn-en-m'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.className = el.className.replace(/lbtn-o[fn]+/g, '').trim() + ' ' + (currentLang === 'en' ? 'lbtn-on' : 'lbtn-off');
+    });
+    ['lbtn-nl','lbtn-nl-m'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.className = el.className.replace(/lbtn-o[fn]+/g, '').trim() + ' ' + (currentLang === 'nl' ? 'lbtn-on' : 'lbtn-off');
+    });
+  }
+
+  function toggleMenu() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+  }
+
+  /* ── Console animation ──────────────────────── */
+  var CONSOLE = {
+    en: [
+      { cls:'tag-creative', tag:'CREATIVE_SCAN', text:'processing moodboard... <span class="tag-ok">(✓)</span>' },
+      { cls:'tag-mcep',     tag:'MCP',           text:'connecting to external systems... <span class="tag-ok">linked.</span>' },
+      { cls:'tag-mcep',     tag:'MCP',           text:'syncing task board... <span class="tag-ok">updated.</span>' },
+      { cls:'tag-agent',    tag:'AGENT',          text:'delegating to workflow-agent... <span class="tag-ok">complete.</span>' },
+      { cls:'tag-agent',    tag:'AGENT',          text:'generating execution plan v1... <span class="tag-ok">Done.</span>' },
+    ],
+    nl: [
+      { cls:'tag-creative', tag:'CREATIVE_SCAN', text:'moodboard verwerken... <span class="tag-ok">(✓)</span>' },
+      { cls:'tag-mcep',     tag:'MCP',           text:'verbinden met externe systemen... <span class="tag-ok">gekoppeld.</span>' },
+      { cls:'tag-mcep',     tag:'MCP',           text:'takenbord synchroniseren... <span class="tag-ok">bijgewerkt.</span>' },
+      { cls:'tag-agent',    tag:'AGENT',          text:'delegeren aan workflow-agent... <span class="tag-ok">klaar.</span>' },
+      { cls:'tag-agent',    tag:'AGENT',          text:'uitvoeringsplan v1 genereren... <span class="tag-ok">Gereed.</span>' },
+    ]
+  };
+
+  var cTimer = null, cIdx = 0;
+
+  function renderConsole() {
+    var feed = document.getElementById('console-feed');
+    if (!feed) return;
+    var lines = CONSOLE[currentLang] || CONSOLE.en;
+    feed.innerHTML = lines.map(function(l, i) {
+      return '<div class="console-log" id="cl-' + i + '"><span class="' + l.cls + '">[' + l.tag + ']</span> ' + l.text + '</div>';
+    }).join('') + '<div class="console-log" id="cl-cur"><span class="text-white/30">&gt; </span><span class="cursor-blink"></span></div>';
+    if (cTimer) clearTimeout(cTimer);
+    cIdx = 0;
+    revealNext(lines.length + 1);
+  }
+
+  function revealNext(total) {
+    var el = document.getElementById('cl-' + cIdx);
+    if (el) el.classList.add('visible');
+    cIdx++;
+    if (cIdx < total) {
+      cTimer = setTimeout(function() { revealNext(total); }, 1800);
+    } else {
+      cTimer = setTimeout(renderConsole, 5000);
+    }
+  }
+
+  /* ── Scroll reveal ───────────────────────────── */
+  var revObs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(function(el) { revObs.observe(el); });
+
+  /* ── Start console when hero is visible ─────── */
+  var heroSection = document.getElementById('cms-hero');
+  if (heroSection) {
+    var heroObs = new IntersectionObserver(function(entries) {
+      if (entries[0].isIntersecting) { setTimeout(renderConsole, 400); heroObs.disconnect(); }
+    }, { threshold: 0.1 });
+    heroObs.observe(heroSection);
+  }
+
+  /* ── Nav shadow on scroll ────────────────────── */
+  window.addEventListener('scroll', function() {
+    var nav = document.getElementById('nav');
+    if (nav) nav.style.boxShadow = window.scrollY > 20 ? '0 4px 40px rgba(0,0,0,0.6)' : 'none';
+  });
+
+  /* ── Apply form ──────────────────────────────── */
+  async function handleApply(e) {
+    e.preventDefault();
+    var email = e.target.querySelector('input[name=email]').value;
+    try {
+      await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ naam: email, email: email, onderwerp: 'Early Access Request', bericht: 'Early access request from ' + email })
+      });
+    } catch(_) {}
+    document.getElementById('apply-form').classList.add('hidden');
+    document.getElementById('apply-success').classList.remove('hidden');
+  }
+</script>
+</body>
+</html>
