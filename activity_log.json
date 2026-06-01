@@ -88,5 +88,10 @@
     "ts": "2026-06-01T19:51:15.548Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
+  },
+  {
+    "ts": "2026-06-01T19:52:08.126Z",
+    "action": "media_upload",
+    "detail": "Bestand geüpload: Salesforce.com_logo.svg.png"
   }
 ]
