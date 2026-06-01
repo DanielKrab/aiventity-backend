@@ -3,5 +3,10 @@
     "ts": "2026-06-01T15:59:27.550Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero"
+  },
+  {
+    "ts": "2026-06-01T15:59:33.568Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero"
   }
 ]
