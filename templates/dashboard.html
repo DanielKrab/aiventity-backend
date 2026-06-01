@@ -80,46 +80,46 @@
     </div>
     <div class="card-body" style="padding:16px">
       <div class="quick-actions">
+        <a href="{{ url_for('editor') }}" class="quick-action" style="border-color:#2563EB;background:#eff6ff">
+          <div class="qa-icon" style="background:#dbeafe">✏️</div>
+          <div>
+            <div class="qa-title" style="color:#2563EB">Visuele Editor</div>
+            <div class="qa-sub">Live preview & bewerken</div>
+          </div>
+        </a>
         <a href="{{ url_for('content_hero') }}" class="quick-action">
           <div class="qa-icon">🏠</div>
           <div>
             <div class="qa-title">Hero bewerken</div>
-            <div class="qa-sub">Titel, subtitel, stats</div>
-          </div>
-        </a>
-        <a href="{{ url_for('content_services') }}" class="quick-action">
-          <div class="qa-icon">💼</div>
-          <div>
-            <div class="qa-title">Diensten bewerken</div>
-            <div class="qa-sub">3 service cards</div>
-          </div>
-        </a>
-        <a href="{{ url_for('content_agents') }}" class="quick-action">
-          <div class="qa-icon">🤖</div>
-          <div>
-            <div class="qa-title">Agents bewerken</div>
-            <div class="qa-sub">Agent cards & features</div>
+            <div class="qa-sub">Badge, headline, CTA</div>
           </div>
         </a>
         <a href="{{ url_for('content_platform') }}" class="quick-action">
-          <div class="qa-icon">🧩</div>
+          <div class="qa-icon">✦</div>
           <div>
-            <div class="qa-title">Platform bewerken</div>
-            <div class="qa-sub">Platform feature cards</div>
+            <div class="qa-title">Creativity</div>
+            <div class="qa-sub">Sectie 01 — 3 feature cards</div>
           </div>
         </a>
-        <a href="{{ url_for('security') }}" class="quick-action">
-          <div class="qa-icon">🔒</div>
+        <a href="{{ url_for('content_services') }}" class="quick-action">
+          <div class="qa-icon">🔗</div>
           <div>
-            <div class="qa-title">Beveiliging</div>
-            <div class="qa-sub">Wachtwoord, HTTPS</div>
+            <div class="qa-title">Integration</div>
+            <div class="qa-sub">Sectie 02 — MCP protocol</div>
           </div>
         </a>
-        <a href="{{ url_for('domain') }}" class="quick-action">
-          <div class="qa-icon">🌐</div>
+        <a href="{{ url_for('content_agents') }}" class="quick-action">
+          <div class="qa-icon">⚡</div>
           <div>
-            <div class="qa-title">Domein instellen</div>
-            <div class="qa-sub">DNS & nginx config</div>
+            <div class="qa-title">Execution + Footer</div>
+            <div class="qa-sub">Sectie 03, Apply, Footer</div>
+          </div>
+        </a>
+        <a href="{{ url_for('media_library') }}" class="quick-action">
+          <div class="qa-icon">🖼️</div>
+          <div>
+            <div class="qa-title">Media Bibliotheek</div>
+            <div class="qa-sub">Afbeeldingen & bestanden</div>
           </div>
         </a>
       </div>

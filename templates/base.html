@@ -162,6 +162,9 @@ input:checked+.toggle-slider:before{transform:translateX(20px)}
     <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' else '' }}">
       <span class="icon">⊞</span> Dashboard
     </a>
+    <a href="{{ url_for('editor') }}" class="{{ 'active' if request.endpoint == 'editor' else '' }}">
+      <span class="icon">✏️</span> Visuele Editor
+    </a>
 
     <div class="nav-section">Inhoud</div>
     <a href="{{ url_for('content_index') }}" class="{{ 'active' if request.endpoint == 'content_index' else '' }}">
@@ -172,24 +175,20 @@ input:checked+.toggle-slider:before{transform:translateX(20px)}
         <span class="icon">🏠</span> Hero
       </a>
       <a href="{{ url_for('content_platform') }}" class="{{ 'active' if request.endpoint == 'content_platform' else '' }}">
-        <span class="icon">🧩</span> Platform
+        <span class="icon">✦</span> Creativity
       </a>
       <a href="{{ url_for('content_services') }}" class="{{ 'active' if request.endpoint == 'content_services' else '' }}">
-        <span class="icon">💼</span> Diensten
+        <span class="icon">🔗</span> Integration
       </a>
       <a href="{{ url_for('content_agents') }}" class="{{ 'active' if request.endpoint == 'content_agents' else '' }}">
-        <span class="icon">🤖</span> Agents
-      </a>
-      <a href="{{ url_for('content_consultancy') }}" class="{{ 'active' if request.endpoint == 'content_consultancy' else '' }}">
-        <span class="icon">🎯</span> Consultancy
-      </a>
-      <a href="{{ url_for('content_nav') }}" class="{{ 'active' if request.endpoint == 'content_nav' else '' }}">
-        <span class="icon">🔗</span> Navigatie
-      </a>
-      <a href="{{ url_for('content_blocks') }}" class="{{ 'active' if request.endpoint == 'content_blocks' else '' }}">
-        <span class="icon">📦</span> Blokken
+        <span class="icon">⚡</span> Execution + Footer
       </a>
     </div>
+
+    <div class="nav-section">Media</div>
+    <a href="{{ url_for('media_library') }}" class="{{ 'active' if request.endpoint == 'media_library' else '' }}">
+      <span class="icon">🖼️</span> Media Bibliotheek
+    </a>
 
     <div class="nav-section">Berichten</div>
     <a href="{{ url_for('messages') }}" class="{{ 'active' if request.endpoint == 'messages' else '' }}">
@@ -197,14 +196,17 @@ input:checked+.toggle-slider:before{transform:translateX(20px)}
     </a>
 
     <div class="nav-section">Instellingen</div>
+    <a href="{{ url_for('site_settings') }}" class="{{ 'active' if request.endpoint == 'site_settings' else '' }}">
+      <span class="icon">⚙️</span> Website Instellingen
+    </a>
     <a href="{{ url_for('security') }}" class="{{ 'active' if request.endpoint == 'security' else '' }}">
       <span class="icon">🔒</span> Beveiliging
     </a>
     <a href="{{ url_for('domain') }}" class="{{ 'active' if request.endpoint == 'domain' else '' }}">
       <span class="icon">🌐</span> Domein
     </a>
-    <a href="{{ url_for('theme') }}" class="{{ 'active' if request.endpoint == 'theme' else '' }}">
-      <span class="icon">🎨</span> Thema
+    <a href="{{ url_for('activity_log') }}" class="{{ 'active' if request.endpoint == 'activity_log' else '' }}">
+      <span class="icon">📊</span> Activiteitenlog
     </a>
   </div>
 

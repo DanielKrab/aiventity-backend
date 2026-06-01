@@ -1,0 +1,562 @@
+{% extends "base.html" %}
+{% block title %}Visuele Editor{% endblock %}
+{% block page_title %}
+✏️ Visuele Editor
+<span id="save-indicator" style="font-size:12px;font-weight:400;color:#8a96b0;margin-left:12px"></span>
+{% endblock %}
+
+{# ── Jinja2 shortcuts ── #}
+{% set h  = content.get('hero', {}) %}
+{% set cr = content.get('creativity', {}) %}
+{% set ig = content.get('integration', {}) %}
+{% set ex = content.get('execution', {}) %}
+{% set ap = content.get('apply', {}) %}
+{% set ft = content.get('footer', {}) %}
+
+{% block extra_head %}
+<style>
+/* ── Full-height editor layout ── */
+.content-area {
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 60px);
+  overflow: hidden;
+}
+/* ── Tab bar ── */
+.etabsbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 12px;
+  background: #fff;
+  border-bottom: 1px solid #e5e9f0;
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+.etab {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #8a96b0;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  white-space: nowrap;
+  transition: all .15s;
+}
+.etab:hover { background: #f0f2f5; color: #454f5c; }
+.etab.active { background: #eff6ff; color: #2563EB; }
+/* ── Two-column grid ── */
+.editor-grid {
+  display: grid;
+  grid-template-columns: 390px 1fr;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+/* ── Left panel ── */
+.editor-left {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fafbfc;
+  border-right: 1px solid #e5e9f0;
+  min-height: 0;
+}
+.editor-sections { flex: 1; overflow-y: auto; min-height: 0; }
+.editor-sec { display: none; padding: 20px; }
+.editor-sec.show { display: block; }
+/* ── Field styles ── */
+.sec-heading {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a2e;
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #f0f2f5;
+}
+.subsec {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .9px;
+  text-transform: uppercase;
+  color: #9aa3b0;
+  margin: 16px 0 10px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f2f5;
+}
+.subsec:first-of-type { margin-top: 0; border-top: none; padding-top: 0; }
+.lang-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.lang-badge {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+.lang-en { background: #dbeafe; color: #1d4ed8; }
+.lang-nl { background: #dcfce7; color: #166534; }
+.ef-field { margin-bottom: 10px; }
+.ef-field label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+.ef-field input, .ef-field textarea {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1.5px solid #e5e9f0;
+  border-radius: 7px;
+  font-size: 12.5px;
+  color: #1a1a2e;
+  background: #fff;
+  font-family: inherit;
+  transition: border-color .15s;
+}
+.ef-field input:focus, .ef-field textarea:focus {
+  outline: none;
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.08);
+}
+.ef-field textarea { resize: vertical; min-height: 56px; }
+/* ── Save bar ── */
+.editor-savebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #fff;
+  border-top: 1px solid #e5e9f0;
+  flex-shrink: 0;
+}
+.save-msg { font-size: 12px; color: #8a96b0; }
+.save-msg.saved { color: #16a34a; font-weight: 600; }
+.save-msg.saving { color: #d97706; }
+.save-msg.err { color: #dc2626; }
+/* ── Right panel ── */
+.editor-right {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #dde2ea;
+  min-height: 0;
+}
+.preview-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #fff;
+  border-bottom: 1px solid #e5e9f0;
+  flex-shrink: 0;
+}
+.dv-btn {
+  padding: 5px 12px;
+  border: 1.5px solid #e5e9f0;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #8a96b0;
+  background: #f9f9fb;
+  transition: all .15s;
+}
+.dv-btn.on { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+.preview-url {
+  flex: 1;
+  font-size: 11px;
+  color: #8a96b0;
+  font-family: monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: #f0f2f5;
+  padding: 4px 10px;
+  border-radius: 5px;
+}
+.preview-scroll {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  min-height: 0;
+}
+.frame-wrap {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 32px rgba(0,0,0,.18);
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: width .25s;
+  align-self: flex-start;
+}
+.frame-wrap.dv-desktop { width: 100%; min-width: 860px; }
+.frame-wrap.dv-tablet  { width: 768px; }
+.frame-wrap.dv-mobile  { width: 390px; }
+#prev-iframe {
+  display: block;
+  width: 100%;
+  border: none;
+  height: calc(100vh - 130px);
+}
+/* ── Keyboard shortcut hint ── */
+.kbd-hint {
+  font-size: 11px;
+  color: #b0b8c4;
+  margin-left: auto;
+}
+kbd {
+  background: #f0f2f5;
+  border: 1px solid #d1d5db;
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 10px;
+  font-family: inherit;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ─── Tabs bar ─── -->
+<div class="etabsbar">
+  <button class="etab active" data-tab="hero"        onclick="switchTab(this)">🏠 Hero</button>
+  <button class="etab"        data-tab="creativity"  onclick="switchTab(this)">✦ Creativity</button>
+  <button class="etab"        data-tab="integration" onclick="switchTab(this)">🔗 Integration</button>
+  <button class="etab"        data-tab="execution"   onclick="switchTab(this)">⚡ Execution</button>
+  <button class="etab"        data-tab="apply"       onclick="switchTab(this)">🎯 Apply</button>
+  <button class="etab"        data-tab="footer"      onclick="switchTab(this)">📄 Footer</button>
+</div>
+
+<div class="editor-grid">
+
+  <!-- ═══════════ LEFT: FORM PANEL ═══════════ -->
+  <div class="editor-left">
+    <div class="editor-sections">
+
+      <!-- ─── HERO ─── -->
+      <div class="editor-sec show" id="sec-hero">
+        <div class="sec-heading">🏠 Hero sectie</div>
+
+        <div class="subsec">Badge</div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN</span><input type="text" name="badge_en" value="{{ h.get('badge_en','') }}" placeholder="Agent Space — Now Live"></div>
+          <div><span class="lang-badge lang-nl">NL</span><input type="text" name="badge_nl" value="{{ h.get('badge_nl','') }}" placeholder="Agent Space — Nu Live"></div>
+        </div>
+
+        <div class="subsec">H1 — Regel 1</div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN</span><input type="text" name="h1_en" value="{{ h.get('h1_en','') }}" placeholder="Imagine."></div>
+          <div><span class="lang-badge lang-nl">NL</span><input type="text" name="h1_nl" value="{{ h.get('h1_nl','') }}" placeholder="Bedenk."></div>
+        </div>
+
+        <div class="subsec">H1 — Regel 2 <small style="color:#3B82F6">(blauw)</small></div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN</span><input type="text" name="h2_en" value="{{ h.get('h2_en','') }}" placeholder="Automate."></div>
+          <div><span class="lang-badge lang-nl">NL</span><input type="text" name="h2_nl" value="{{ h.get('h2_nl','') }}" placeholder="Automatiseer."></div>
+        </div>
+
+        <div class="subsec">H1 — Regel 3</div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN</span><input type="text" name="h3_en" value="{{ h.get('h3_en','') }}" placeholder="Execute."></div>
+          <div><span class="lang-badge lang-nl">NL</span><input type="text" name="h3_nl" value="{{ h.get('h3_nl','') }}" placeholder="Voer uit."></div>
+        </div>
+
+        <div class="subsec">Subheadline</div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN</span><input type="text" name="subheadline_en" value="{{ h.get('subheadline_en','') }}"></div>
+          <div><span class="lang-badge lang-nl">NL</span><input type="text" name="subheadline_nl" value="{{ h.get('subheadline_nl','') }}"></div>
+        </div>
+
+        <div class="subsec">Body tekst</div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN</span><textarea name="body_en" rows="3">{{ h.get('body_en','') }}</textarea></div>
+          <div><span class="lang-badge lang-nl">NL</span><textarea name="body_nl" rows="3">{{ h.get('body_nl','') }}</textarea></div>
+        </div>
+
+        <div class="subsec">CTA knoppen</div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Primair</span><input type="text" name="cta_primary_en" value="{{ h.get('cta_primary_en','') }}" placeholder="Start Agent Space"></div>
+          <div><span class="lang-badge lang-nl">NL — Primair</span><input type="text" name="cta_primary_nl" value="{{ h.get('cta_primary_nl','') }}" placeholder="Start Agent Space"></div>
+        </div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Secundair</span><input type="text" name="cta_secondary_en" value="{{ h.get('cta_secondary_en','') }}" placeholder="See how it works"></div>
+          <div><span class="lang-badge lang-nl">NL — Secundair</span><input type="text" name="cta_secondary_nl" value="{{ h.get('cta_secondary_nl','') }}" placeholder="Hoe werkt het"></div>
+        </div>
+      </div>
+      <!-- /sec-hero -->
+
+      <!-- ─── CREATIVITY ─── -->
+      <div class="editor-sec" id="sec-creativity">
+        <div class="sec-heading">✦ Creativity — 01</div>
+
+        <div class="subsec">Sectie koptekst</div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Label</span><input type="text" name="label_en" value="{{ cr.get('label_en','') }}" placeholder="01 — Creativity"></div>
+          <div><span class="lang-badge lang-nl">NL — Label</span><input type="text" name="label_nl" value="{{ cr.get('label_nl','') }}" placeholder="01 — Creativiteit"></div>
+        </div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Titel</span><input type="text" name="title_en" value="{{ cr.get('title_en','') }}"></div>
+          <div><span class="lang-badge lang-nl">NL — Titel</span><input type="text" name="title_nl" value="{{ cr.get('title_nl','') }}"></div>
+        </div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Subtitel</span><textarea name="subtitle_en" rows="2">{{ cr.get('subtitle_en','') }}</textarea></div>
+          <div><span class="lang-badge lang-nl">NL — Subtitel</span><textarea name="subtitle_nl" rows="2">{{ cr.get('subtitle_nl','') }}</textarea></div>
+        </div>
+
+        {% for num in ['1','2','3'] %}
+        <div class="subsec">Card {{ num }}</div>
+        <div class="ef-field" style="max-width:90px">
+          <label>Icoon</label>
+          <input type="text" name="c{{ num }}_icon" value="{{ cr.get('c' ~ num ~ '_icon','') }}" placeholder="✦">
+        </div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Titel</span><input type="text" name="c{{ num }}_title_en" value="{{ cr.get('c' ~ num ~ '_title_en','') }}"></div>
+          <div><span class="lang-badge lang-nl">NL — Titel</span><input type="text" name="c{{ num }}_title_nl" value="{{ cr.get('c' ~ num ~ '_title_nl','') }}"></div>
+        </div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Tekst</span><textarea name="c{{ num }}_text_en" rows="2">{{ cr.get('c' ~ num ~ '_text_en','') }}</textarea></div>
+          <div><span class="lang-badge lang-nl">NL — Tekst</span><textarea name="c{{ num }}_text_nl" rows="2">{{ cr.get('c' ~ num ~ '_text_nl','') }}</textarea></div>
+        </div>
+        {% endfor %}
+      </div>
+      <!-- /sec-creativity -->
+
+      <!-- ─── INTEGRATION ─── -->
+      <div class="editor-sec" id="sec-integration">
+        <div class="sec-heading">🔗 Integration — 02</div>
+
+        <div class="subsec">Sectie koptekst</div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Label</span><input type="text" name="label_en" value="{{ ig.get('label_en','') }}" placeholder="02 — Integration"></div>
+          <div><span class="lang-badge lang-nl">NL — Label</span><input type="text" name="label_nl" value="{{ ig.get('label_nl','') }}" placeholder="02 — Integratie"></div>
+        </div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Titel</span><input type="text" name="title_en" value="{{ ig.get('title_en','') }}"></div>
+          <div><span class="lang-badge lang-nl">NL — Titel</span><input type="text" name="title_nl" value="{{ ig.get('title_nl','') }}"></div>
+        </div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Subtitel</span><textarea name="subtitle_en" rows="2">{{ ig.get('subtitle_en','') }}</textarea></div>
+          <div><span class="lang-badge lang-nl">NL — Subtitel</span><textarea name="subtitle_nl" rows="2">{{ ig.get('subtitle_nl','') }}</textarea></div>
+        </div>
+
+        <div class="subsec">MCP Protocol highlight</div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Titel</span><input type="text" name="mcep_title_en" value="{{ ig.get('mcep_title_en','') }}" placeholder="MCP Protocol"></div>
+          <div><span class="lang-badge lang-nl">NL — Titel</span><input type="text" name="mcep_title_nl" value="{{ ig.get('mcep_title_nl','') }}" placeholder="MCP Protocol"></div>
+        </div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Tekst</span><textarea name="mcep_text_en" rows="3">{{ ig.get('mcep_text_en','') }}</textarea></div>
+          <div><span class="lang-badge lang-nl">NL — Tekst</span><textarea name="mcep_text_nl" rows="3">{{ ig.get('mcep_text_nl','') }}</textarea></div>
+        </div>
+      </div>
+      <!-- /sec-integration -->
+
+      <!-- ─── EXECUTION ─── -->
+      <div class="editor-sec" id="sec-execution">
+        <div class="sec-heading">⚡ Execution — 03</div>
+
+        <div class="subsec">Sectie koptekst</div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Label</span><input type="text" name="label_en" value="{{ ex.get('label_en','') }}" placeholder="03 — Execution"></div>
+          <div><span class="lang-badge lang-nl">NL — Label</span><input type="text" name="label_nl" value="{{ ex.get('label_nl','') }}" placeholder="03 — Uitvoering"></div>
+        </div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Titel</span><input type="text" name="title_en" value="{{ ex.get('title_en','') }}"></div>
+          <div><span class="lang-badge lang-nl">NL — Titel</span><input type="text" name="title_nl" value="{{ ex.get('title_nl','') }}"></div>
+        </div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Subtitel</span><textarea name="subtitle_en" rows="2">{{ ex.get('subtitle_en','') }}</textarea></div>
+          <div><span class="lang-badge lang-nl">NL — Subtitel</span><textarea name="subtitle_nl" rows="2">{{ ex.get('subtitle_nl','') }}</textarea></div>
+        </div>
+
+        {% for num in ['1','2','3','4'] %}
+        <div class="subsec">Card {{ num }}</div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Titel</span><input type="text" name="c{{ num }}_title_en" value="{{ ex.get('c' ~ num ~ '_title_en','') }}"></div>
+          <div><span class="lang-badge lang-nl">NL — Titel</span><input type="text" name="c{{ num }}_title_nl" value="{{ ex.get('c' ~ num ~ '_title_nl','') }}"></div>
+        </div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Tekst</span><textarea name="c{{ num }}_text_en" rows="2">{{ ex.get('c' ~ num ~ '_text_en','') }}</textarea></div>
+          <div><span class="lang-badge lang-nl">NL — Tekst</span><textarea name="c{{ num }}_text_nl" rows="2">{{ ex.get('c' ~ num ~ '_text_nl','') }}</textarea></div>
+        </div>
+        {% endfor %}
+      </div>
+      <!-- /sec-execution -->
+
+      <!-- ─── APPLY ─── -->
+      <div class="editor-sec" id="sec-apply">
+        <div class="sec-heading">🎯 Apply / CTA sectie</div>
+
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Label</span><input type="text" name="label_en" value="{{ ap.get('label_en','') }}" placeholder="Early Access"></div>
+          <div><span class="lang-badge lang-nl">NL — Label</span><input type="text" name="label_nl" value="{{ ap.get('label_nl','') }}" placeholder="Vroeg Toegang"></div>
+        </div>
+
+        <div class="subsec">Headline</div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Regel 1</span><input type="text" name="headline_part1_en" value="{{ ap.get('headline_part1_en','') }}"></div>
+          <div><span class="lang-badge lang-nl">NL — Regel 1</span><input type="text" name="headline_part1_nl" value="{{ ap.get('headline_part1_nl','') }}"></div>
+        </div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Accent <small style="color:#3B82F6">(blauw)</small></span><input type="text" name="headline_accent_en" value="{{ ap.get('headline_accent_en','') }}"></div>
+          <div><span class="lang-badge lang-nl">NL — Accent</span><input type="text" name="headline_accent_nl" value="{{ ap.get('headline_accent_nl','') }}"></div>
+        </div>
+
+        <div class="subsec">Body</div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN</span><textarea name="body_en" rows="3">{{ ap.get('body_en','') }}</textarea></div>
+          <div><span class="lang-badge lang-nl">NL</span><textarea name="body_nl" rows="3">{{ ap.get('body_nl','') }}</textarea></div>
+        </div>
+
+        <div class="subsec">Knop &amp; Noot</div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Knop</span><input type="text" name="btn_en" value="{{ ap.get('btn_en','') }}" placeholder="Apply Now"></div>
+          <div><span class="lang-badge lang-nl">NL — Knop</span><input type="text" name="btn_nl" value="{{ ap.get('btn_nl','') }}" placeholder="Aanmelden"></div>
+        </div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN — Noot</span><input type="text" name="note_en" value="{{ ap.get('note_en','') }}"></div>
+          <div><span class="lang-badge lang-nl">NL — Noot</span><input type="text" name="note_nl" value="{{ ap.get('note_nl','') }}"></div>
+        </div>
+      </div>
+      <!-- /sec-apply -->
+
+      <!-- ─── FOOTER ─── -->
+      <div class="editor-sec" id="sec-footer">
+        <div class="sec-heading">📄 Footer</div>
+
+        <div class="subsec">Tagline</div>
+        <div class="lang-grid">
+          <div><span class="lang-badge lang-en">EN</span><input type="text" name="tagline_en" value="{{ ft.get('tagline_en','') }}" placeholder="Imagine. Automate. Execute."></div>
+          <div><span class="lang-badge lang-nl">NL</span><input type="text" name="tagline_nl" value="{{ ft.get('tagline_nl','') }}" placeholder="Bedenk. Automatiseer. Voer uit."></div>
+        </div>
+
+        <div class="subsec">Copyright</div>
+        <div class="ef-field">
+          <input type="text" name="copyright" value="{{ ft.get('copyright','') }}" placeholder="© 2026 Aiventity. All rights reserved.">
+        </div>
+      </div>
+      <!-- /sec-footer -->
+
+    </div><!-- /editor-sections -->
+
+    <!-- ─── Save bar ─── -->
+    <div class="editor-savebar">
+      <button class="btn btn-primary btn-sm" id="save-btn" onclick="saveSection()">💾 Opslaan</button>
+      <span class="save-msg" id="save-msg"></span>
+      <span class="kbd-hint"><kbd>⌘S</kbd> / <kbd>Ctrl+S</kbd></span>
+      <a href="{{ url_for('publish_netlify') }}"
+         class="btn btn-ghost btn-sm"
+         style="margin-left:auto"
+         onclick="this.textContent='Publiceren...';this.style.opacity='.7'">🚀 Publiceer</a>
+    </div>
+  </div>
+  <!-- /editor-left -->
+
+  <!-- ═══════════ RIGHT: PREVIEW ═══════════ -->
+  <div class="editor-right">
+    <div class="preview-bar">
+      <button class="dv-btn on" id="dv-desktop" onclick="setDevice('desktop')">💻 Desktop</button>
+      <button class="dv-btn"    id="dv-tablet"  onclick="setDevice('tablet')">🪟 Tablet</button>
+      <button class="dv-btn"    id="dv-mobile"  onclick="setDevice('mobile')">📱 Mobile</button>
+      <span class="preview-url">{{ request.host_url }}website</span>
+      <button class="btn btn-ghost btn-sm" onclick="reloadPreview()" title="Vernieuwen">↺</button>
+      <a href="/website" target="_blank" class="btn btn-ghost btn-sm">↗ Open</a>
+    </div>
+    <div class="preview-scroll">
+      <div class="frame-wrap dv-desktop" id="frame-wrap">
+        <iframe id="prev-iframe" src="/website" title="Website preview"></iframe>
+      </div>
+    </div>
+  </div>
+  <!-- /editor-right -->
+
+</div><!-- /editor-grid -->
+
+<script>
+// ── Active section tracking
+let currentSection = 'hero';
+
+function switchTab(btn) {
+  document.querySelectorAll('.etab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  currentSection = btn.dataset.tab;
+  document.querySelectorAll('.editor-sec').forEach(s => s.classList.remove('show'));
+  document.getElementById('sec-' + currentSection).classList.add('show');
+}
+
+// ── AJAX Save
+async function saveSection() {
+  const sec = currentSection;
+  const container = document.getElementById('sec-' + sec);
+  const fields = container.querySelectorAll('input, textarea');
+  const payload = {};
+  fields.forEach(f => { if (f.name) payload[f.name] = f.value; });
+
+  setSaveMsg('saving', '⟳ Opslaan...');
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/content', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ [sec]: payload })
+    });
+    const json = await res.json();
+    if (json.ok) {
+      setSaveMsg('saved', '✓ Opgeslagen');
+      document.getElementById('save-indicator').textContent = '✓ Saved ' + new Date().toLocaleTimeString('nl-NL', {hour:'2-digit',minute:'2-digit'});
+      reloadPreview();
+      setTimeout(() => setSaveMsg('', ''), 4000);
+    } else {
+      setSaveMsg('err', '✕ ' + (json.error || 'Onbekende fout'));
+    }
+  } catch(e) {
+    setSaveMsg('err', '✕ Netwerkfout');
+  }
+  btn.disabled = false;
+}
+
+function setSaveMsg(cls, msg) {
+  const el = document.getElementById('save-msg');
+  el.textContent = msg;
+  el.className = 'save-msg' + (cls ? ' ' + cls : '');
+}
+
+// ── Device toggle
+function setDevice(dev) {
+  document.getElementById('frame-wrap').className = 'frame-wrap dv-' + dev;
+  document.querySelectorAll('.dv-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('dv-' + dev).classList.add('on');
+}
+
+// ── Reload preview iframe
+function reloadPreview() {
+  const iframe = document.getElementById('prev-iframe');
+  iframe.src = '/website?' + Date.now();
+}
+
+// ── Keyboard shortcut Ctrl/Cmd+S
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    saveSection();
+  }
+});
+</script>
+{% endblock %}

@@ -16,6 +16,8 @@ CONTENT_FILE = os.path.join(DATA_DIR, 'content.json')
 CONFIG_FILE = os.path.join(DATA_DIR, 'config.json')
 MESSAGES_FILE = os.path.join(DATA_DIR, 'messages.json')
 HISTORY_FILE = os.path.join(DATA_DIR, 'content_history.json')
+MEDIA_DIR = os.path.join(DATA_DIR, 'media')
+os.makedirs(MEDIA_DIR, exist_ok=True)
 
 # On first deploy: copy seed files from repo into the persistent data dir
 SEED_CONTENT = os.path.join(BASE_DIR, 'content.json')
@@ -126,7 +128,7 @@ def dashboard():
     content_modified = datetime.fromtimestamp(content_mtime).strftime('%d-%m-%Y %H:%M')
     config_modified = datetime.fromtimestamp(config_mtime).strftime('%d-%m-%Y %H:%M')
 
-    sections = ['hero', 'platform', 'services', 'agents', 'hitl', 'consultancy', 'trust', 'cta', 'footer', 'nav']
+    sections = ['hero', 'creativity', 'integration', 'execution', 'apply', 'footer']
 
     return render_template('dashboard.html',
                            cfg=cfg,
@@ -738,6 +740,170 @@ def publish_netlify():
         flash(f'Fout bij publiceren: {str(e)}', 'error')
 
     return redirect(url_for('dashboard'))
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# VISUAL EDITOR
+# ══════════════════════════════════════════════════════════════════════════
+
+@app.route('/editor')
+@login_required
+def editor():
+    content = load_json(CONTENT_FILE)
+    return render_template('editor.html', content=content)
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# MEDIA LIBRARY
+# ══════════════════════════════════════════════════════════════════════════
+
+def _fmt_size(n):
+    if n < 1024:
+        return f'{n} B'
+    elif n < 1024 * 1024:
+        return f'{n // 1024} KB'
+    else:
+        return f'{round(n / (1024*1024), 1)} MB'
+
+
+@app.route('/media')
+@login_required
+def media_library():
+    files = []
+    for fn in sorted(os.listdir(MEDIA_DIR)):
+        fp = os.path.join(MEDIA_DIR, fn)
+        if os.path.isfile(fp):
+            stat = os.stat(fp)
+            ext = fn.rsplit('.', 1)[-1].lower() if '.' in fn else ''
+            files.append({
+                'name': fn,
+                'size': stat.st_size,
+                'size_str': _fmt_size(stat.st_size),
+                'ext': ext,
+                'is_image': ext in ('png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'),
+                'mtime': datetime.fromtimestamp(stat.st_mtime).strftime('%d-%m-%Y %H:%M'),
+            })
+    return render_template('media.html', files=files)
+
+
+@app.route('/media/upload', methods=['POST'])
+@login_required
+def media_upload():
+    if not validate_csrf(request.form.get('csrf_token')):
+        flash('Ongeldig formuliertoken.', 'error')
+        return redirect(url_for('media_library'))
+    if 'file' not in request.files:
+        flash('Geen bestand geselecteerd.', 'error')
+        return redirect(url_for('media_library'))
+    f = request.files['file']
+    if f.filename == '':
+        flash('Geen bestand geselecteerd.', 'error')
+        return redirect(url_for('media_library'))
+    from werkzeug.utils import secure_filename
+    ALLOWED = {'png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'pdf', 'mp4', 'mov', 'ico'}
+    ext = f.filename.rsplit('.', 1)[-1].lower() if '.' in f.filename else ''
+    if ext not in ALLOWED:
+        flash(f'Bestandstype .{ext} is niet toegestaan.', 'error')
+        return redirect(url_for('media_library'))
+    fn = secure_filename(f.filename)
+    if os.path.exists(os.path.join(MEDIA_DIR, fn)):
+        ts = datetime.now().strftime('%Y%m%d_%H%M%S_')
+        fn = ts + fn
+    f.save(os.path.join(MEDIA_DIR, fn))
+    flash(f'"{fn}" succesvol geüpload!', 'success')
+    return redirect(url_for('media_library'))
+
+
+@app.route('/media/delete/<filename>', methods=['POST'])
+@login_required
+def media_delete(filename):
+    from werkzeug.utils import secure_filename
+    fn = secure_filename(filename)
+    fp = os.path.join(MEDIA_DIR, fn)
+    if os.path.isfile(fp):
+        os.remove(fp)
+        flash(f'"{fn}" verwijderd.', 'success')
+    else:
+        flash('Bestand niet gevonden.', 'error')
+    return redirect(url_for('media_library'))
+
+
+@app.route('/media/file/<filename>')
+def media_file(filename):
+    """Serve media files — public so they can be used in website content."""
+    from flask import send_from_directory
+    from werkzeug.utils import secure_filename
+    fn = secure_filename(filename)
+    return send_from_directory(MEDIA_DIR, fn)
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# SITE SETTINGS
+# ══════════════════════════════════════════════════════════════════════════
+
+@app.route('/site-settings', methods=['GET', 'POST'])
+@login_required
+def site_settings():
+    cfg = load_json(CONFIG_FILE)
+    if request.method == 'POST':
+        if not validate_csrf(request.form.get('csrf_token')):
+            flash('Ongeldig formuliertoken.', 'error')
+            return redirect(url_for('site_settings'))
+        f = request.form
+        cfg['site_name'] = f.get('site_name', '').strip()
+        cfg['site_tagline'] = f.get('site_tagline', '').strip()
+        cfg['seo_meta_title'] = f.get('seo_meta_title', '').strip()
+        cfg['seo_meta_description'] = f.get('seo_meta_description', '').strip()
+        cfg['og_image_url'] = f.get('og_image_url', '').strip()
+        cfg['canonical_url'] = f.get('canonical_url', '').strip()
+        cfg['twitter_url'] = f.get('twitter_url', '').strip()
+        cfg['linkedin_url'] = f.get('linkedin_url', '').strip()
+        cfg['instagram_url'] = f.get('instagram_url', '').strip()
+        cfg['github_url'] = f.get('github_url', '').strip()
+        cfg['google_analytics_id'] = f.get('google_analytics_id', '').strip()
+        cfg['contact_email'] = f.get('contact_email', '').strip()
+        cfg['favicon_url'] = f.get('favicon_url', '').strip()
+        save_json(CONFIG_FILE, cfg)
+        flash('Website instellingen opgeslagen!', 'success')
+        return redirect(url_for('site_settings'))
+    return render_template('site_settings.html', cfg=cfg)
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# ACTIVITY LOG / HISTORY
+# ══════════════════════════════════════════════════════════════════════════
+
+@app.route('/activity-log')
+@login_required
+def activity_log():
+    history = []
+    if os.path.exists(HISTORY_FILE):
+        history = load_json(HISTORY_FILE)
+    return render_template('activity_log.html', history=history)
+
+
+@app.route('/api/restore/<int:idx>', methods=['POST'])
+@login_required
+def api_restore(idx):
+    """Restore content to a specific history snapshot."""
+    if not os.path.exists(HISTORY_FILE):
+        return jsonify({'error': 'Geen geschiedenis beschikbaar'}), 400
+    history = load_json(HISTORY_FILE)
+    if idx < 0 or idx >= len(history):
+        return jsonify({'error': 'Ongeldige index'}), 400
+    target = history[idx]['data']
+    # Save current as new auto-backup snapshot
+    current = load_json(CONTENT_FILE)
+    history.insert(0, {
+        'timestamp': datetime.now().isoformat(),
+        'data': current,
+        'label': 'Auto-backup voor herstel'
+    })
+    if len(history) > 20:
+        history = history[:20]
+    save_json(HISTORY_FILE, history)
+    save_json(CONTENT_FILE, target)
+    return jsonify({'ok': True, 'message': 'Versie hersteld'})
 
 
 # ══════════════════════════════════════════════════════════════════════════

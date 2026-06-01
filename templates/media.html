@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% block title %}Media Bibliotheek{% endblock %}
+{% block page_title %}🖼️ Media Bibliotheek{% endblock %}
+{% block extra_head %}
+<style>
+.upload-zone {
+  border: 2.5px dashed #c5cde0;
+  border-radius: 12px;
+  padding: 36px 24px;
+  text-align: center;
+  background: #f9f9fb;
+  cursor: pointer;
+  transition: all .2s;
+  margin-bottom: 24px;
+}
+.upload-zone.drag-over { border-color: #2563EB; background: #eff6ff; }
+.upload-zone:hover { border-color: #93c5fd; background: #f5f8ff; }
+.upload-zone .uz-icon { font-size: 40px; margin-bottom: 12px; }
+.upload-zone .uz-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+.upload-zone .uz-sub { font-size: 12px; color: #8a96b0; }
+.upload-zone input[type=file] { display: none; }
+
+.media-stats { display: flex; gap: 20px; margin-bottom: 20px; }
+.media-stat { font-size: 13px; color: #8a96b0; }
+.media-stat strong { color: #1a1a2e; font-weight: 700; }
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+}
+.media-item {
+  background: #fff;
+  border: 1px solid #e5e9f0;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all .15s;
+  position: relative;
+}
+.media-item:hover { border-color: #2563EB; box-shadow: 0 2px 12px rgba(37,99,235,.1); }
+.media-thumb {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+  background: #f0f2f5;
+}
+.media-icon-thumb {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0f4ff, #e8ecf8);
+  font-size: 40px;
+}
+.media-info { padding: 10px 12px 12px; }
+.media-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #1a1a2e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 3px;
+}
+.media-meta { font-size: 10px; color: #8a96b0; margin-bottom: 8px; }
+.media-actions { display: flex; gap: 6px; }
+.media-actions .btn-copy {
+  flex: 1;
+  padding: 5px 8px;
+  background: #eff6ff;
+  color: #2563EB;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all .15s;
+}
+.media-actions .btn-copy:hover { background: #dbeafe; }
+.media-actions .btn-del {
+  padding: 5px 8px;
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s;
+}
+.media-actions .btn-del:hover { background: #fecaca; }
+.media-empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: #8a96b0;
+}
+.media-empty .em-icon { font-size: 48px; margin-bottom: 16px; }
+.media-empty .em-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Upload zone -->
+<div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+  <div class="uz-icon">☁️</div>
+  <div class="uz-title">Sleep bestanden hierheen of klik om te uploaden</div>
+  <div class="uz-sub">PNG, JPG, GIF, SVG, WebP, PDF, MP4, MOV — max 10 MB per bestand</div>
+  <form id="upload-form" method="POST" action="{{ url_for('media_upload') }}" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="file" id="file-input" name="file" accept="image/*,application/pdf,video/mp4,video/quicktime" onchange="submitUpload()">
+  </form>
+</div>
+
+<!-- Stats -->
+{% if files %}
+<div class="media-stats">
+  <div class="media-stat"><strong>{{ files|length }}</strong> bestanden</div>
+  <div class="media-stat"><strong>{{ files|sum(attribute='size') | filesizeformat if files else '0 B' }}</strong> totaal</div>
+</div>
+{% endif %}
+
+<!-- Media grid -->
+{% if files %}
+<div class="media-grid">
+  {% for f in files %}
+  <div class="media-item">
+    {% if f.is_image %}
+      <img class="media-thumb" src="{{ url_for('media_file', filename=f.name) }}" alt="{{ f.name }}" loading="lazy">
+    {% else %}
+      <div class="media-icon-thumb">
+        {% if f.ext == 'pdf' %}📄
+        {% elif f.ext in ('mp4','mov') %}🎬
+        {% else %}📁
+        {% endif %}
+      </div>
+    {% endif %}
+    <div class="media-info">
+      <div class="media-name" title="{{ f.name }}">{{ f.name }}</div>
+      <div class="media-meta">{{ f.size_str }} · {{ f.mtime }}</div>
+      <div class="media-actions">
+        <button class="btn-copy" onclick="copyUrl(this, '/media/file/{{ f.name }}')">Kopieer URL</button>
+        <form method="POST" action="{{ url_for('media_delete', filename=f.name) }}" style="display:inline" onsubmit="return confirm('Verwijder {{ f.name }}?')">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <button type="submit" class="btn-del">🗑</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="media-empty">
+  <div class="em-icon">🖼️</div>
+  <div class="em-title">Geen bestanden gevonden</div>
+  <div>Upload je eerste bestand via de zone hierboven.</div>
+</div>
+{% endif %}
+
+<script>
+// ── Drag and drop
+const zone = document.getElementById('upload-zone');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+zone.addEventListener('drop', e => {
+  e.preventDefault();
+  zone.classList.remove('drag-over');
+  const dt = e.dataTransfer;
+  if (dt.files.length) {
+    document.getElementById('file-input').files = dt.files;
+    submitUpload();
+  }
+});
+
+function submitUpload() {
+  const fi = document.getElementById('file-input');
+  if (fi.files.length) {
+    zone.innerHTML = '<div class="uz-icon">⏳</div><div class="uz-title">Uploaden...</div>';
+    document.getElementById('upload-form').submit();
+  }
+}
+
+// ── Copy URL to clipboard
+function copyUrl(btn, url) {
+  const full = window.location.origin + url;
+  navigator.clipboard.writeText(full).then(() => {
+    btn.textContent = '✓ Gekopieerd!';
+    btn.style.background = '#dcfce7';
+    btn.style.color = '#166534';
+    setTimeout(() => {
+      btn.textContent = 'Kopieer URL';
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 2000);
+  });
+}
+</script>
+{% endblock %}

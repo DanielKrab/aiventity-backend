@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block title %}Website Instellingen{% endblock %}
+{% block page_title %}⚙️ Website Instellingen{% endblock %}
+{% block content %}
+<form method="POST" action="{{ url_for('site_settings') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+  <!-- ── Algemeen ── -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Algemeen</div>
+        <div class="card-subtitle">Naam en tagline van de website</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-row cols-2">
+        <div class="form-group">
+          <label class="form-label">Website naam</label>
+          <input type="text" name="site_name" class="form-control" value="{{ cfg.get('site_name','Aiventity') }}" placeholder="Aiventity">
+          <div class="form-hint">Wordt gebruikt in de browser-tab titel</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tagline</label>
+          <input type="text" name="site_tagline" class="form-control" value="{{ cfg.get('site_tagline','') }}" placeholder="Imagine. Automate. Execute.">
+          <div class="form-hint">Korte omschrijving van de website</div>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Contact e-mailadres</label>
+        <input type="email" name="contact_email" class="form-control" value="{{ cfg.get('contact_email','') }}" placeholder="hello@aiventity.com">
+        <div class="form-hint">Wordt gebruikt voor contactformulier notificaties</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SEO ── -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">
+      <div>
+        <div class="card-title">SEO & Open Graph</div>
+        <div class="card-subtitle">Zoekmachine optimalisatie en social media preview</div>
+      </div>
+      <span class="badge badge-blue">Meta tags</span>
+    </div>
+    <div class="card-body">
+      <div class="form-group">
+        <label class="form-label">Meta Titel <span style="font-weight:400;color:#8a96b0">(max ~60 tekens)</span></label>
+        <input type="text" name="seo_meta_title" class="form-control" value="{{ cfg.get('seo_meta_title','') }}" placeholder="Aiventity — Intelligent Agent Space" maxlength="80">
+        <div class="form-hint">Verschijnt in Google zoekresultaten en browser-tabs</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Meta Beschrijving <span style="font-weight:400;color:#8a96b0">(max ~160 tekens)</span></label>
+        <textarea name="seo_meta_description" class="form-control" rows="3" maxlength="200" placeholder="Aiventity is the intelligent Agent Space that transforms your creative vision into autonomous, multi-step AI workflows.">{{ cfg.get('seo_meta_description','') }}</textarea>
+        <div class="form-hint">Verschijnt als beschrijving in Google zoekresultaten</div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group">
+          <label class="form-label">OG Afbeelding URL <span style="font-weight:400;color:#8a96b0">(1200×630px)</span></label>
+          <input type="url" name="og_image_url" class="form-control" value="{{ cfg.get('og_image_url','') }}" placeholder="https://aiventity.com/og-image.png">
+          <div class="form-hint">Afbeelding die getoond wordt bij delen op social media</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Canonical URL</label>
+          <input type="url" name="canonical_url" class="form-control" value="{{ cfg.get('canonical_url','') }}" placeholder="https://aiventity.com">
+          <div class="form-hint">Primaire URL van de website</div>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Favicon URL</label>
+        <input type="url" name="favicon_url" class="form-control" value="{{ cfg.get('favicon_url','') }}" placeholder="https://aiventity.com/favicon.ico">
+        <div class="form-hint">Laat leeg om de standaard favicon te gebruiken</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Social ── -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Social Media</div>
+        <div class="card-subtitle">Links naar social media profielen</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-row cols-2">
+        <div class="form-group">
+          <label class="form-label">𝕏 / Twitter URL</label>
+          <input type="url" name="twitter_url" class="form-control" value="{{ cfg.get('twitter_url','') }}" placeholder="https://x.com/aiventity">
+        </div>
+        <div class="form-group">
+          <label class="form-label">LinkedIn URL</label>
+          <input type="url" name="linkedin_url" class="form-control" value="{{ cfg.get('linkedin_url','') }}" placeholder="https://linkedin.com/company/aiventity">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Instagram URL</label>
+          <input type="url" name="instagram_url" class="form-control" value="{{ cfg.get('instagram_url','') }}" placeholder="https://instagram.com/aiventity">
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">GitHub URL</label>
+          <input type="url" name="github_url" class="form-control" value="{{ cfg.get('github_url','') }}" placeholder="https://github.com/aiventity">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Analytics ── -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Analytics &amp; Tracking</div>
+        <div class="card-subtitle">Meet het websiteverkeer</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Google Analytics 4 Measurement ID</label>
+        <input type="text" name="google_analytics_id" class="form-control" value="{{ cfg.get('google_analytics_id','') }}" placeholder="G-XXXXXXXXXX" style="max-width:280px">
+        <div class="form-hint">Formaat: G-XXXXXXXXXX — laat leeg om analytics uit te schakelen</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview card -->
+  {% if cfg.get('seo_meta_title') or cfg.get('seo_meta_description') %}
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><div class="card-title">🔍 Google Preview</div></div>
+    <div class="card-body">
+      <div style="max-width:560px;border:1px solid #e5e9f0;border-radius:8px;padding:16px;background:#fff">
+        <div style="font-size:12px;color:#202124;margin-bottom:2px;font-family:arial,sans-serif">{{ cfg.get('canonical_url','https://aiventity.com') }}</div>
+        <div style="font-size:18px;color:#1a0dab;font-weight:400;font-family:arial,sans-serif;margin-bottom:4px">{{ cfg.get('seo_meta_title','Aiventity') }}</div>
+        <div style="font-size:13px;color:#4d5156;font-family:arial,sans-serif;line-height:1.5">{{ cfg.get('seo_meta_description','') }}</div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div style="position:sticky;bottom:0;background:#f0f2f5;padding:16px 0;display:flex;gap:12px;align-items:center;margin-top:8px">
+    <button type="submit" class="btn btn-primary">💾 Instellingen opslaan</button>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">Annuleren</a>
+  </div>
+</form>
+{% endblock %}
