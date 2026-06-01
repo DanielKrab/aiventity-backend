@@ -40,5 +40,12 @@
     "type": "image/png",
     "size": 18416,
     "uploaded": "2026-06-01T20:06:26.265Z"
+  },
+  {
+    "name": "Slack_icon_2019.svg.png",
+    "url": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/Slack_icon_2019.svg.png",
+    "type": "image/png",
+    "size": 8496,
+    "uploaded": "2026-06-01T20:08:12.115Z"
   }
 ]
