@@ -173,5 +173,10 @@
     "ts": "2026-06-01T20:06:14.429Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
+  },
+  {
+    "ts": "2026-06-01T20:06:27.165Z",
+    "action": "media_upload",
+    "detail": "Bestand geüpload: int-hubspot-c0a825444022a1b22c452bf218d5626b.png"
   }
 ]
