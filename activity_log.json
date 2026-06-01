@@ -103,5 +103,10 @@
     "ts": "2026-06-01T19:53:11.048Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
+  },
+  {
+    "ts": "2026-06-01T19:53:23.142Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: integration"
   }
 ]
