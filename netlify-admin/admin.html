@@ -2,636 +2,1266 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Aiventity CMS</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
+/* ═══════════════════════════════════════════════════════════
+   RESET & VARS
+═══════════════════════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0f1117;--surface:#171b26;--surface2:#1e2333;--border:#2a2f3e;
-  --text:#e8eaf0;--text2:#8a96b0;--accent:#3b82f6;--accent2:#10b981;
-  --danger:#ef4444;--warn:#f59e0b;--radius:12px;--sidebar:240px;
+  --bg:#0d1017;--surface:#131720;--surface2:#1a1f2e;--surface3:#222840;
+  --border:#252d3d;--border2:#2e3850;
+  --text:#e2e8f4;--text2:#8a96b0;--text3:#5a6480;
+  --accent:#3b82f6;--accent-h:#2563eb;--accent-l:rgba(59,130,246,.12);
+  --green:#10b981;--green-h:#059669;--green-l:rgba(16,185,129,.12);
+  --red:#ef4444;--red-l:rgba(239,68,68,.1);
+  --yellow:#f59e0b;--yellow-l:rgba(245,158,11,.1);
+  --purple:#8b5cf6;--purple-l:rgba(139,92,246,.12);
+  --r:10px;--r-sm:6px;--r-lg:14px;
+  --sidebar:248px;--topbar:56px;
+  --transition:.15s ease;
+  --shadow:0 4px 20px rgba(0,0,0,.4);
+  --shadow-lg:0 8px 40px rgba(0,0,0,.5);
 }
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13.5px;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
-button{cursor:pointer;font-family:inherit}
-input,textarea,select{font-family:inherit}
+button,input,textarea,select{font-family:inherit;font-size:inherit}
+button{cursor:pointer}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+img{max-width:100%;display:block}
 
-/* ── Sidebar ── */
-.sidebar{position:fixed;left:0;top:0;width:var(--sidebar);height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100}
-.sidebar-logo{padding:20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.sidebar-logo span{font-family:'Outfit',sans-serif;font-weight:700;font-size:17px;color:#fff}
-.sidebar-logo small{font-size:10px;color:var(--text2);display:block;margin-top:1px}
-.sidebar-logo .dot{width:8px;height:8px;background:var(--accent2);border-radius:50%;flex-shrink:0}
-.sidebar-nav{flex:1;overflow-y:auto;padding:12px 8px}
-.nav-section{font-size:10px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;padding:8px 8px 4px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:var(--text2);cursor:pointer;transition:all .15s;font-size:13px;font-weight:500;margin-bottom:2px;border:none;background:none;width:100%;text-align:left}
-.nav-item:hover{background:var(--surface2);color:var(--text)}
-.nav-item.active{background:rgba(59,130,246,.15);color:var(--accent)}
-.nav-item svg{flex-shrink:0;opacity:.7}
-.nav-item.active svg{opacity:1}
-.sidebar-bottom{padding:12px;border-top:1px solid var(--border)}
-.btn-logout{width:100%;padding:8px 12px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--text2);font-size:13px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all .15s}
-.btn-logout:hover{border-color:var(--danger);color:var(--danger)}
-
-/* ── Main ── */
+/* ═══════════════════════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════════════════════ */
+#login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);background-image:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(59,130,246,.08) 0%,transparent 70%)}
+#app{display:none;min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;width:var(--sidebar);height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:200;overflow:hidden}
 .main{margin-left:var(--sidebar);min-height:100vh;display:flex;flex-direction:column}
-.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
-.topbar-title{font-weight:600;font-size:15px}
-.topbar-actions{display:flex;align-items:center;gap:10px}
-.content-area{flex:1;padding:28px 28px}
+.topbar{position:sticky;top:0;z-index:100;height:var(--topbar);background:rgba(19,23,32,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:12px}
+.page-area{flex:1;padding:28px}
+.page{display:none}.page.active{display:block}
+.editor-page{display:none;flex-direction:column;height:calc(100vh - var(--topbar))}
+.editor-page.active{display:flex}
 
-/* ── Cards ── */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px}
-.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.card-title{font-weight:600;font-size:14px}
-.card-subtitle{font-size:12px;color:var(--text2);margin-top:2px}
-.card-body{padding:20px}
+/* ═══════════════════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════════════════ */
+.sb-logo{padding:18px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.sb-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--purple));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;color:#fff;flex-shrink:0}
+.sb-logo-text{font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;color:var(--text)}
+.sb-logo-sub{font-size:10px;color:var(--text3);margin-top:1px}
+.sb-nav{flex:1;overflow-y:auto;padding:10px 8px}
+.sb-section{font-size:9.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:12px 8px 4px;margin-top:4px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:var(--r-sm);color:var(--text2);cursor:pointer;transition:all var(--transition);font-size:13px;font-weight:500;margin-bottom:1px;border:none;background:none;width:100%;text-align:left;position:relative}
+.sb-item:hover{background:var(--surface2);color:var(--text)}
+.sb-item.active{background:var(--accent-l);color:var(--accent)}
+.sb-item svg{flex-shrink:0;width:16px;height:16px;opacity:.7}
+.sb-item.active svg{opacity:1}
+.sb-item .badge-count{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;min-width:18px;text-align:center}
+.sb-bottom{padding:10px 8px;border-top:1px solid var(--border);flex-shrink:0}
+.sb-user{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r-sm);margin-bottom:6px}
+.sb-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.sb-user-info{flex:1;min-width:0}
+.sb-user-name{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-user-role{font-size:10px;color:var(--text3)}
+.btn-logout{width:100%;padding:7px 10px;border-radius:var(--r-sm);background:transparent;border:1px solid var(--border);color:var(--text2);font-size:12px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all var(--transition)}
+.btn-logout:hover{border-color:var(--red);color:var(--red)}
 
-/* ── Forms ── */
-.form-row{display:grid;gap:16px}
-.form-row.cols-2{grid-template-columns:1fr 1fr}
-.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
-.form-label{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em}
-.form-control{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;transition:border .15s;outline:none;width:100%}
-.form-control:focus{border-color:var(--accent)}
-textarea.form-control{resize:vertical;min-height:80px}
-.form-hint{font-size:11px;color:var(--text2)}
-.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.lang-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.06em}
-.lang-en{background:rgba(59,130,246,.2);color:#60a5fa}
-.lang-nl{background:rgba(245,158,11,.2);color:#fbbf24}
+/* ═══════════════════════════════════════════════════════════
+   TOPBAR
+═══════════════════════════════════════════════════════════ */
+.tb-title{font-weight:600;font-size:14px;flex:1}
+.tb-status{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
+.status-dot.saving{background:var(--yellow);animation:pulse .8s ease-in-out infinite}
+.status-dot.error{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+.tb-actions{display:flex;align-items:center;gap:8px}
 
-/* ── Buttons ── */
-.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:600;border:none;cursor:pointer;transition:all .15s;white-space:nowrap}
-.btn-primary{background:var(--accent);color:#fff}
-.btn-primary:hover{background:#2563eb}
-.btn-success{background:var(--accent2);color:#fff}
-.btn-success:hover{background:#059669}
-.btn-danger{background:var(--danger);color:#fff}
-.btn-danger:hover{background:#dc2626}
-.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border)}
-.btn-ghost:hover{background:var(--surface2);color:var(--text)}
-.btn-sm{padding:6px 12px;font-size:12px}
-
-/* ── Badge ── */
-.badge{font-size:11px;font-weight:600;padding:3px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
-.badge-blue{background:rgba(59,130,246,.2);color:#60a5fa}
-.badge-green{background:rgba(16,185,129,.2);color:#34d399}
-.badge-warn{background:rgba(245,158,11,.2);color:#fbbf24}
-
-/* ── Toast ── */
-#toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px}
-.toast{padding:12px 16px;border-radius:10px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;min-width:260px;animation:slideIn .2s ease;box-shadow:0 4px 24px rgba(0,0,0,.4)}
-.toast-success{background:#065f46;color:#a7f3d0;border:1px solid #10b981}
-.toast-error{background:#7f1d1d;color:#fca5a5;border:1px solid #ef4444}
-.toast-info{background:#1e3a5f;color:#93c5fd;border:1px solid #3b82f6}
-@keyframes slideIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
-
-/* ── Save bar ── */
-.save-bar{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;gap:12px}
-
-/* ── Tabs ── */
-.tab-bar{display:flex;gap:4px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:4px;margin-bottom:20px;width:fit-content}
-.tab-btn{padding:6px 16px;border-radius:6px;border:none;background:transparent;color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
-.tab-btn.active{background:var(--accent);color:#fff}
-
-/* ── Editor split ── */
-.editor-split{display:grid;grid-template-columns:400px 1fr;gap:0;height:calc(100vh - 56px - 58px);overflow:hidden}
-.editor-panel{overflow-y:auto;padding:20px;border-right:1px solid var(--border)}
-.preview-panel{display:flex;flex-direction:column;background:#111}
-.preview-toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;gap:8px}
-.preview-toolbar span{font-size:12px;color:var(--text2);flex:1}
-.preview-iframe{flex:1;border:none;background:#fff;width:100%}
-.device-btn{padding:5px 12px;border-radius:6px;border:none;background:transparent;color:var(--text2);font-size:12px;cursor:pointer}
-.device-btn.active{background:var(--surface2);color:var(--text)}
-
-/* ── Stats grid ── */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
-.stat-label{font-size:11px;color:var(--text2);text-transform:uppercase;font-weight:600;letter-spacing:.06em}
-.stat-value{font-size:26px;font-weight:700;margin-top:6px;font-family:'Outfit',sans-serif}
-.stat-hint{font-size:11px;color:var(--text2);margin-top:4px}
-
-/* ── Login ── */
-#login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg)}
-.login-box{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:36px;text-align:center}
-.login-logo{font-family:'Outfit',sans-serif;font-size:24px;font-weight:700;margin-bottom:6px}
-.login-logo span{color:var(--accent)}
-.login-subtitle{color:var(--text2);font-size:13px;margin-bottom:28px}
-.login-box .form-group{text-align:left}
-.login-box input{font-size:15px;padding:11px 14px}
-.login-box .btn{width:100%;justify-content:center;padding:12px;font-size:14px;margin-top:6px}
-.login-error{color:#fca5a5;font-size:13px;margin-top:8px;display:none}
-
-/* ── Loader ── */
-.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
+/* ═══════════════════════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════════════════════ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;border-radius:var(--r-sm);font-size:12.5px;font-weight:600;border:none;cursor:pointer;transition:all var(--transition);white-space:nowrap;line-height:1}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-h)}
+.btn-success{background:var(--green);color:#fff}.btn-success:hover{background:var(--green-h)}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border)}.btn-ghost:hover{background:var(--surface2);color:var(--text);border-color:var(--border2)}
+.btn-danger{background:var(--red);color:#fff}.btn-danger:hover{background:#dc2626}
+.btn-sm{padding:5px 11px;font-size:11.5px}
+.btn-icon{padding:7px;width:32px;height:32px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:spin .5s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── Media grid ── */
-.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
-.media-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden;position:relative}
-.media-item img{width:100%;height:110px;object-fit:cover;display:block;background:#111}
-.media-item-info{padding:8px}
-.media-item-name{font-size:11px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.media-item-meta{font-size:10px;color:var(--text2);margin-top:2px}
+/* ═══════════════════════════════════════════════════════════
+   CARDS
+═══════════════════════════════════════════════════════════ */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:20px}
+.card-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.card-title{font-weight:600;font-size:13.5px;color:var(--text)}
+.card-subtitle{font-size:11.5px;color:var(--text3);margin-top:2px}
+.card-body{padding:20px}
 
-/* ── Scrollbar ── */
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+/* ═══════════════════════════════════════════════════════════
+   FORMS
+═══════════════════════════════════════════════════════════ */
+.form-group{margin-bottom:16px}
+.form-row{display:grid;gap:14px}.form-row.cols-2{grid-template-columns:1fr 1fr}.form-row.cols-3{grid-template-columns:1fr 1fr 1fr}
+.form-label{display:block;font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.form-label span{font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0}
+.form-control{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:var(--r-sm);padding:8px 11px;color:var(--text);font-size:13px;transition:border var(--transition);outline:none;appearance:none}
+.form-control:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+textarea.form-control{resize:vertical;min-height:80px;line-height:1.5}
+select.form-control{cursor:pointer}
+.form-hint{font-size:11px;color:var(--text3);margin-top:4px;line-height:1.4}
+.form-hint a{color:var(--accent)}
+.lang-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lang-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
+.lang-en{background:rgba(59,130,246,.18);color:#60a5fa}
+.lang-nl{background:rgba(245,158,11,.18);color:#fbbf24}
+.color-row{display:flex;align-items:center;gap:8px}
+.color-row .form-control{flex:1}
+input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);border:1px solid var(--border2);background:var(--bg);cursor:pointer;flex-shrink:0}
+.toggle{position:relative;display:inline-block;width:40px;height:22px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;cursor:pointer;inset:0;background:var(--surface3);border-radius:11px;transition:.2s}
+.toggle-slider:before{position:absolute;content:"";height:16px;width:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s}
+.toggle input:checked+.toggle-slider{background:var(--accent)}
+.toggle input:checked+.toggle-slider:before{transform:translateX(18px)}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.toggle-row:last-child{border-bottom:none}
 
-/* ── Page visibility ── */
-.page{display:none}
-.page.active{display:block}
-.editor-page.active{display:flex;flex-direction:column}
+/* ═══════════════════════════════════════════════════════════
+   BADGES & CHIPS
+═══════════════════════════════════════════════════════════ */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:99px;text-transform:uppercase;letter-spacing:.05em}
+.badge-blue{background:var(--accent-l);color:var(--accent)}
+.badge-green{background:var(--green-l);color:var(--green)}
+.badge-red{background:var(--red-l);color:var(--red)}
+.badge-yellow{background:var(--yellow-l);color:var(--yellow)}
+.badge-purple{background:var(--purple-l);color:var(--purple)}
+
+/* ═══════════════════════════════════════════════════════════
+   TABS
+═══════════════════════════════════════════════════════════ */
+.tabs{display:flex;gap:2px;background:var(--bg);border:1px solid var(--border2);border-radius:var(--r-sm);padding:3px;width:fit-content;margin-bottom:20px}
+.tab-btn{padding:5px 14px;border-radius:5px;border:none;background:transparent;color:var(--text2);font-size:12.5px;font-weight:500;cursor:pointer;transition:all var(--transition)}
+.tab-btn.active{background:var(--accent);color:#fff}
+.tab-pane{display:none}.tab-pane.active{display:block}
+
+/* ═══════════════════════════════════════════════════════════
+   STATS GRID
+═══════════════════════════════════════════════════════════ */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent-color,var(--accent))}
+.stat-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.07em}
+.stat-value{font-family:'Outfit',sans-serif;font-size:24px;font-weight:700;color:var(--text);margin:8px 0 4px}
+.stat-hint{font-size:11px;color:var(--text3)}
+.stat-icon{position:absolute;top:18px;right:18px;opacity:.2;font-size:28px}
+
+/* ═══════════════════════════════════════════════════════════
+   EDITOR SPLIT
+═══════════════════════════════════════════════════════════ */
+.editor-split{flex:1;display:grid;grid-template-columns:420px 1fr;overflow:hidden}
+.editor-panel{overflow-y:auto;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column}
+.editor-panel-body{flex:1;overflow-y:auto;padding:20px}
+.preview-panel{display:flex;flex-direction:column;background:#111;min-width:0}
+.preview-toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 14px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.preview-info{flex:1;font-size:11.5px;color:var(--text2)}
+.preview-iframe{flex:1;border:none;width:100%;background:#fff;transition:max-width .3s ease;margin:0 auto;display:block}
+.device-group{display:flex;gap:3px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:2px}
+.device-btn{padding:4px 10px;border-radius:4px;border:none;background:transparent;color:var(--text3);font-size:11.5px;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;gap:4px}
+.device-btn.active{background:var(--accent);color:#fff}
+.save-bar{background:var(--surface);border-top:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.save-bar .auto-status{font-size:11px;color:var(--text3);margin-left:auto;display:flex;align-items:center;gap:5px}
+
+/* ═══════════════════════════════════════════════════════════
+   EDITOR SECTION TABS
+═══════════════════════════════════════════════════════════ */
+.section-tabs{border-bottom:1px solid var(--border);padding:0 20px;display:flex;gap:0;background:var(--surface);flex-shrink:0;overflow-x:auto}
+.section-tab{padding:10px 14px;font-size:12.5px;font-weight:500;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;transition:all var(--transition);white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none}
+.section-tab:hover{color:var(--text)}
+.section-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* ═══════════════════════════════════════════════════════════
+   EDITOR SUB-TABS (Content/Style/SEO)
+═══════════════════════════════════════════════════════════ */
+.field-tabs{display:flex;gap:0;margin-bottom:18px;border:1px solid var(--border2);border-radius:var(--r-sm);overflow:hidden;width:fit-content}
+.field-tab{padding:5px 14px;background:transparent;border:none;color:var(--text2);font-size:12px;font-weight:500;cursor:pointer;transition:all var(--transition)}
+.field-tab.active{background:var(--accent);color:#fff}
+
+/* ═══════════════════════════════════════════════════════════
+   MEDIA LIBRARY
+═══════════════════════════════════════════════════════════ */
+.media-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.media-search{flex:1;min-width:200px}
+.upload-zone{border:2px dashed var(--border2);border-radius:var(--r);padding:32px;text-align:center;cursor:pointer;transition:all var(--transition);position:relative;margin-bottom:20px}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--accent);background:var(--accent-l)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:32px;margin-bottom:10px;opacity:.5}
+.upload-text{font-size:13px;color:var(--text2);line-height:1.5}
+.upload-hint{font-size:11px;color:var(--text3);margin-top:4px}
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.media-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);overflow:hidden;position:relative;group}
+.media-thumb{width:100%;height:120px;object-fit:cover;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--text3)}
+.media-thumb img{width:100%;height:100%;object-fit:cover}
+.media-info{padding:8px 10px}
+.media-name{font-size:11.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.media-meta{font-size:10.5px;color:var(--text3);margin-top:2px}
+.media-actions{display:flex;gap:5px;padding:0 10px 10px}
+.media-actions button{flex:1;padding:5px 8px;font-size:11px}
+
+/* ═══════════════════════════════════════════════════════════
+   ACTIVITY LOG
+═══════════════════════════════════════════════════════════ */
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}
+.activity-item:last-child{border-bottom:none}
+.activity-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px}
+.activity-body{flex:1}
+.activity-action{font-size:13px;font-weight:500;color:var(--text)}
+.activity-detail{font-size:11.5px;color:var(--text2);margin-top:2px}
+.activity-time{font-size:11px;color:var(--text3);margin-top:3px}
+
+/* ═══════════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════════ */
+#toasts{position:fixed;top:18px;right:18px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{padding:11px 15px;border-radius:var(--r-sm);font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;min-width:260px;max-width:360px;animation:slideIn .2s ease;box-shadow:var(--shadow-lg);border:1px solid rgba(255,255,255,.07)}
+.toast-success{background:#064e3b;color:#a7f3d0;border-color:#10b981}
+.toast-error{background:#7f1d1d;color:#fca5a5;border-color:#ef4444}
+.toast-info{background:#1e3a5f;color:#93c5fd;border-color:#3b82f6}
+.toast-warn{background:#78350f;color:#fde68a;border-color:#f59e0b}
+@keyframes slideIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════════════════ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:28px;max-width:480px;width:100%;box-shadow:var(--shadow-lg)}
+.modal-title{font-size:16px;font-weight:700;font-family:'Outfit',sans-serif;margin-bottom:8px}
+.modal-body{color:var(--text2);font-size:13px;line-height:1.6;margin-bottom:24px}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end}
+
+/* ═══════════════════════════════════════════════════════════
+   LOGIN
+═══════════════════════════════════════════════════════════ */
+.login-wrap{width:100%;max-width:400px}
+.login-logo{font-family:'Outfit',sans-serif;font-size:28px;font-weight:700;text-align:center;margin-bottom:6px}
+.login-logo span{color:var(--accent)}
+.login-sub{text-align:center;color:var(--text3);font-size:13px;margin-bottom:32px}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:32px;box-shadow:var(--shadow-lg)}
+.login-card .btn{width:100%;justify-content:center;padding:11px;font-size:14px;margin-top:4px}
+.login-error{color:var(--red);font-size:12.5px;margin-top:8px;display:none;padding:8px 10px;background:var(--red-l);border-radius:var(--r-sm);border:1px solid rgba(239,68,68,.25)}
+.login-footer{text-align:center;font-size:11px;color:var(--text3);margin-top:20px}
+
+/* ═══════════════════════════════════════════════════════════
+   MISC
+═══════════════════════════════════════════════════════════ */
+.divider{border:none;border-top:1px solid var(--border);margin:20px 0}
+.empty-state{text-align:center;padding:48px 20px;color:var(--text3)}
+.empty-state .empty-icon{font-size:40px;margin-bottom:12px;opacity:.4}
+.empty-state p{font-size:13px;line-height:1.6}
+.seo-preview{max-width:540px;border:1px solid var(--border);border-radius:var(--r-sm);padding:16px;background:var(--surface2);margin-top:16px}
+.seo-url{font-size:12px;color:#3c8526;font-family:arial,sans-serif}
+.seo-title{font-size:18px;color:#1a0dab;font-weight:400;margin:3px 0;font-family:arial,sans-serif}
+.seo-desc{font-size:13px;color:#545454;font-family:arial,sans-serif;line-height:1.5}
 </style>
 </head>
 <body>
 
-<!-- ─── LOGIN ──────────────────────────────────────────────────────────── -->
+<!-- ═══════════════════════════════════ LOGIN ═══════════════════════════════════ -->
 <div id="login-page">
-  <div class="login-box">
-    <div class="login-logo">Aiven<span>tity</span></div>
-    <div class="login-subtitle">CMS Beheerpaneel</div>
+<div class="login-wrap">
+  <div class="login-logo">Aiven<span>tity</span></div>
+  <div class="login-sub">CMS Beheerpaneel — Inloggen</div>
+  <div class="login-card">
     <div class="form-group">
       <label class="form-label">Wachtwoord</label>
-      <input type="password" id="login-pw" class="form-control" placeholder="••••••••" autofocus>
+      <input type="password" id="pw" class="form-control" placeholder="••••••••" autofocus style="font-size:15px;padding:11px 14px">
     </div>
-    <div class="login-error" id="login-err">Ongeldig wachtwoord.</div>
-    <button class="btn btn-primary" id="login-btn" onclick="doLogin()">Inloggen</button>
+    <div id="login-err" class="login-error"></div>
+    <button class="btn btn-primary" id="login-btn" onclick="doLogin()">Inloggen →</button>
   </div>
+  <div class="login-footer">Aiventity CMS v2.0 • Veilige verbinding</div>
+</div>
 </div>
 
-<!-- ─── APP ───────────────────────────────────────────────────────────── -->
-<div id="app" style="display:none">
+<!-- ═══════════════════════════════════ APP ════════════════════════════════════ -->
+<div id="app">
+
+  <!-- SIDEBAR -->
   <div class="sidebar">
-    <div class="sidebar-logo">
-      <div class="dot"></div>
-      <div>
-        <span>Aiventity</span>
-        <small style="color:var(--text2)">CMS Beheer</small>
-      </div>
+    <div class="sb-logo">
+      <div class="sb-logo-icon">A</div>
+      <div><div class="sb-logo-text">Aiventity</div><div class="sb-logo-sub">CMS Beheer</div></div>
     </div>
-    <nav class="sidebar-nav">
-      <div class="nav-section">Overzicht</div>
-      <button class="nav-item active" onclick="showPage('dashboard')">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    <nav class="sb-nav">
+      <div class="sb-section">Overzicht</div>
+      <button class="sb-item active" onclick="nav('dashboard')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         Dashboard
       </button>
 
-      <div class="nav-section" style="margin-top:8px">Content</div>
-      <button class="nav-item" onclick="showPage('editor')">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      <div class="sb-section">Content</div>
+      <button class="sb-item" onclick="nav('editor')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         Visuele Editor
       </button>
+      <button class="sb-item" onclick="nav('media')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Media Bibliotheek
+      </button>
+      <button class="sb-item" onclick="nav('seo')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        SEO &amp; Pagina's
+      </button>
 
-      <div class="nav-section" style="margin-top:8px">Beheer</div>
-      <button class="nav-item" onclick="showPage('settings')">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <div class="sb-section">Stijl</div>
+      <button class="sb-item" onclick="nav('theme')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10"/><path d="M12 8a4 4 0 1 1 0 8"/></svg>
+        Thema &amp; Kleuren
+      </button>
+
+      <div class="sb-section">Beheer</div>
+      <button class="sb-item" onclick="nav('settings')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         Website Instellingen
       </button>
-      <button class="nav-item" onclick="showPage('history')">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <button class="sb-item" onclick="nav('activity')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         Activiteitenlog
       </button>
-    </nav>
-    <div class="sidebar-bottom">
-      <a href="https://aiventitytool.netlify.app" target="_blank" class="nav-item" style="margin-bottom:6px">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        Bekijk website
+
+      <div class="sb-section">Links</div>
+      <a href="https://aiventitytool.netlify.app" target="_blank" class="sb-item">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Live website ↗
       </a>
+    </nav>
+    <div class="sb-bottom">
+      <div class="sb-user">
+        <div class="sb-avatar">A</div>
+        <div class="sb-user-info"><div class="sb-user-name">Beheerder</div><div class="sb-user-role">Administrator</div></div>
+      </div>
       <button class="btn-logout" onclick="doLogout()">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         Uitloggen
       </button>
     </div>
   </div>
 
+  <!-- MAIN -->
   <div class="main">
+    <!-- TOPBAR -->
     <div class="topbar">
-      <div class="topbar-title" id="page-title">Dashboard</div>
-      <div class="topbar-actions">
-        <span id="publish-status" style="font-size:12px;color:var(--text2)"></span>
-        <button class="btn btn-success" onclick="publishSite(this)">🚀 Publiceer op Netlify</button>
+      <div class="tb-title" id="tb-title">Dashboard</div>
+      <div class="tb-status" id="tb-status">
+        <div class="status-dot" id="status-dot"></div>
+        <span id="status-text">Verbonden</span>
+      </div>
+      <div class="tb-actions">
+        <button class="btn btn-ghost btn-sm" onclick="undoAction()" id="undo-btn" title="Ongedaan maken (Ctrl+Z)" disabled>↩ Ongedaan</button>
+        <button class="btn btn-success btn-sm" onclick="publishSite(this)" id="pub-btn">🚀 Publiceer</button>
       </div>
     </div>
 
-    <!-- DASHBOARD -->
-    <div id="page-dashboard" class="page active content-area">
+    <!-- ═══════════ DASHBOARD ═══════════ -->
+    <div id="page-dashboard" class="page active page-area">
       <div class="stats-grid">
-        <div class="stat-card">
+        <div class="stat-card" style="--accent-color:var(--accent)">
           <div class="stat-label">Laatste publicatie</div>
-          <div class="stat-value" id="stat-published" style="font-size:16px;margin-top:10px">—</div>
+          <div class="stat-value" id="s-published" style="font-size:15px;line-height:1.4;margin-top:10px">—</div>
+          <div class="stat-icon">🚀</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" style="--accent-color:var(--green)">
           <div class="stat-label">Website</div>
-          <div class="stat-value" style="font-size:14px;margin-top:10px">
-            <a href="https://aiventitytool.netlify.app" target="_blank" style="color:var(--accent)">aiventitytool.netlify.app ↗</a>
-          </div>
+          <div class="stat-value" style="font-size:13px;margin-top:10px"><a href="https://aiventitytool.netlify.app" target="_blank" style="color:var(--accent)">aiventitytool.netlify.app ↗</a></div>
+          <div class="stat-icon">🌐</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">Admin</div>
-          <div class="stat-value" style="font-size:14px;margin-top:10px">
-            <span style="color:var(--accent2)">aiventity-admin.netlify.app ✓</span>
-          </div>
+        <div class="stat-card" style="--accent-color:var(--purple)">
+          <div class="stat-label">CMS versie</div>
+          <div class="stat-value" style="font-size:18px;margin-top:8px">v2.0</div>
+          <div class="stat-hint">Netlify Functions</div>
+          <div class="stat-icon">⚡</div>
+        </div>
+        <div class="stat-card" style="--accent-color:var(--yellow)">
+          <div class="stat-label">Secties</div>
+          <div class="stat-value">6</div>
+          <div class="stat-hint">Hero, Creativity, Integration...</div>
+          <div class="stat-icon">📄</div>
         </div>
       </div>
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Snelle acties</div>
-            <div class="card-subtitle">Beheer je website</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Snelle acties</div></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-primary" style="justify-content:flex-start;gap:10px" onclick="nav('editor')">✏️ Content bewerken</button>
+            <button class="btn btn-ghost" style="justify-content:flex-start;gap:10px" onclick="nav('media')">🖼 Media beheren</button>
+            <button class="btn btn-ghost" style="justify-content:flex-start;gap:10px" onclick="nav('seo')">🔍 SEO instellingen</button>
+            <button class="btn btn-ghost" style="justify-content:flex-start;gap:10px" onclick="nav('theme')">🎨 Thema aanpassen</button>
+            <button class="btn btn-success" style="justify-content:flex-start;gap:10px;margin-top:4px" onclick="publishSite(this)">🚀 Nu publiceren</button>
           </div>
         </div>
-        <div class="card-body" style="display:flex;gap:12px;flex-wrap:wrap">
-          <button class="btn btn-primary" onclick="showPage('editor')">✏️ Content bewerken</button>
-          <button class="btn btn-ghost" onclick="showPage('settings')">⚙️ Instellingen</button>
-          <button class="btn btn-success" onclick="publishSite(this)">🚀 Nu publiceren</button>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Recente activiteit</div><a onclick="nav('activity')" class="btn btn-ghost btn-sm" style="cursor:pointer">Alles bekijken</a></div>
+          <div id="dash-activity" class="card-body" style="padding:0">
+            <div style="padding:20px;color:var(--text3);font-size:12px">Laden...</div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- VISUAL EDITOR -->
-    <div id="page-editor" class="page editor-page">
+    <!-- ═══════════ VISUELE EDITOR ═══════════ -->
+    <div id="page-editor" class="editor-page">
+      <div class="section-tabs" id="sec-tabs"></div>
       <div class="editor-split">
-        <!-- Left: forms -->
-        <div class="editor-panel" id="editor-panel">
-          <div class="tab-bar" id="section-tabs"></div>
-          <div id="section-forms"></div>
+        <!-- Left panel -->
+        <div class="editor-panel">
+          <div class="editor-panel-body" id="editor-fields"></div>
         </div>
-        <!-- Right: preview -->
+        <!-- Preview -->
         <div class="preview-panel">
           <div class="preview-toolbar">
-            <span>Live preview — <a href="https://aiventitytool.netlify.app" target="_blank" style="color:var(--accent)">aiventitytool.netlify.app</a></span>
-            <button class="device-btn active" onclick="setDevice('100%',this)">🖥 Desktop</button>
-            <button class="device-btn" onclick="setDevice('768px',this)">📱 Tablet</button>
-            <button class="device-btn" onclick="setDevice('390px',this)">📲 Mobiel</button>
+            <div class="preview-info">Preview → <a href="https://aiventitytool.netlify.app" target="_blank" style="color:var(--accent)">aiventitytool.netlify.app</a></div>
+            <div class="device-group">
+              <button class="device-btn active" onclick="setDevice('100%',this)" title="Desktop">🖥</button>
+              <button class="device-btn" onclick="setDevice('768px',this)" title="Tablet">📱</button>
+              <button class="device-btn" onclick="setDevice('390px',this)" title="Mobiel">📲</button>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="reloadPreview()" title="Herladen">↺</button>
           </div>
-          <div style="flex:1;display:flex;align-items:stretch;background:#222;overflow:hidden">
-            <iframe id="preview-frame" class="preview-iframe" src="https://aiventitytool.netlify.app"></iframe>
+          <div style="flex:1;display:flex;align-items:stretch;justify-content:center;overflow:hidden">
+            <iframe id="preview" class="preview-iframe" src="https://aiventitytool.netlify.app"></iframe>
           </div>
         </div>
       </div>
       <div class="save-bar">
-        <button class="btn btn-primary" onclick="saveCurrentSection(this)">💾 Opslaan</button>
+        <button class="btn btn-primary" onclick="saveSection(this)" id="save-btn">💾 Opslaan</button>
         <button class="btn btn-success" onclick="publishSite(this)">🚀 Publiceer op Netlify</button>
-        <span id="save-status" style="font-size:12px;color:var(--text2)"></span>
+        <div class="auto-status">
+          <div class="status-dot" id="editor-dot"></div>
+          <span id="editor-status">Wijzigingen worden automatisch opgeslagen</span>
+        </div>
       </div>
     </div>
 
-    <!-- SETTINGS -->
-    <div id="page-settings" class="page content-area">
+    <!-- ═══════════ MEDIA ═══════════ -->
+    <div id="page-media" class="page page-area">
+      <div class="upload-zone" id="upload-zone" ondrop="onDrop(event)" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)">
+        <input type="file" multiple accept="image/*,video/*,.pdf,.svg,.gif" onchange="onFileSelect(event)">
+        <div class="upload-icon">☁️</div>
+        <div class="upload-text"><strong>Sleep bestanden hier</strong> of klik om te uploaden</div>
+        <div class="upload-hint">PNG, JPG, GIF, SVG, WebP, PDF, MP4 — max 10MB per bestand</div>
+      </div>
+      <div class="media-toolbar">
+        <input type="text" class="form-control media-search" placeholder="Zoeken in media..." id="media-search" oninput="filterMedia(this.value)">
+        <span id="media-count" style="font-size:12px;color:var(--text3);white-space:nowrap"></span>
+      </div>
+      <div id="media-grid" class="media-grid">
+        <div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🖼</div><p>Laden...</p></div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SEO ═══════════ -->
+    <div id="page-seo" class="page page-area">
       <div class="card">
         <div class="card-header">
-          <div><div class="card-title">Algemeen</div><div class="card-subtitle">Naam en tagline</div></div>
+          <div><div class="card-title">🔍 SEO &amp; Meta instellingen</div><div class="card-subtitle">Per pagina en globaal</div></div>
+          <span class="badge badge-blue">Per sectie</span>
         </div>
+        <div class="card-body">
+          <div class="tabs" id="seo-page-tabs"></div>
+          <div id="seo-fields"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">🔍 Google Preview</div></div>
+        <div class="card-body">
+          <div class="seo-preview">
+            <div class="seo-url" id="prev-url">https://aiventity.com</div>
+            <div class="seo-title" id="prev-title">Aiventity — Intelligent Agent Space</div>
+            <div class="seo-desc" id="prev-desc">Aiventity is the intelligent Agent Space.</div>
+          </div>
+        </div>
+      </div>
+      <div class="save-bar" style="position:sticky;bottom:0;margin:0 -28px;padding:12px 28px">
+        <button class="btn btn-primary" onclick="saveSeo(this)">💾 SEO opslaan</button>
+      </div>
+    </div>
+
+    <!-- ═══════════ THEME ═══════════ -->
+    <div id="page-theme" class="page page-area">
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">🎨 Kleuren</div><div class="card-subtitle">Pas de huisstijl aan</div></div></div>
+        <div class="card-body">
+          <div class="form-row cols-2">
+            <div class="form-group"><label class="form-label">Primaire kleur (blauw)</label>
+              <div class="color-row"><input type="color" id="th-primary_color" value="#007AFF"><input type="text" class="form-control" id="th-primary_color_hex" value="#007AFF" oninput="syncColor('primary_color',this.value)"></div></div>
+            <div class="form-group"><label class="form-label">Accent kleur (groen)</label>
+              <div class="color-row"><input type="color" id="th-accent_color" value="#10b981"><input type="text" class="form-control" id="th-accent_color_hex" value="#10b981" oninput="syncColor('accent_color',this.value)"></div></div>
+            <div class="form-group"><label class="form-label">Achtergrond kleur</label>
+              <div class="color-row"><input type="color" id="th-bg_color" value="#050505"><input type="text" class="form-control" id="th-bg_color_hex" value="#050505" oninput="syncColor('bg_color',this.value)"></div></div>
+            <div class="form-group"><label class="form-label">Tekst kleur</label>
+              <div class="color-row"><input type="color" id="th-text_color" value="#ffffff"><input type="text" class="form-control" id="th-text_color_hex" value="#ffffff" oninput="syncColor('text_color',this.value)"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">🔤 Typografie</div></div>
+        <div class="card-body">
+          <div class="form-row cols-2">
+            <div class="form-group"><label class="form-label">Heading font</label>
+              <select class="form-control" id="th-heading_font">
+                <option value="Space Grotesk">Space Grotesk</option>
+                <option value="Outfit">Outfit</option>
+                <option value="Inter">Inter</option>
+                <option value="Poppins">Poppins</option>
+                <option value="Montserrat">Montserrat</option>
+                <option value="Raleway">Raleway</option>
+                <option value="DM Sans">DM Sans</option>
+              </select></div>
+            <div class="form-group"><label class="form-label">Body font</label>
+              <select class="form-control" id="th-body_font">
+                <option value="Inter">Inter</option>
+                <option value="Roboto">Roboto</option>
+                <option value="Open Sans">Open Sans</option>
+                <option value="Lato">Lato</option>
+                <option value="Source Sans 3">Source Sans 3</option>
+                <option value="Nunito">Nunito</option>
+              </select></div>
+            <div class="form-group"><label class="form-label">Basis lettergrootte (px)</label>
+              <input type="number" class="form-control" id="th-base_font_size" value="16" min="12" max="24"></div>
+            <div class="form-group"><label class="form-label">Sectie-afstand (px)</label>
+              <input type="number" class="form-control" id="th-section_spacing" value="100" min="40" max="200"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">⬜ Borders &amp; Rounding</div></div>
+        <div class="card-body">
+          <div class="form-row cols-2">
+            <div class="form-group"><label class="form-label">Card border radius (px)</label>
+              <input type="number" class="form-control" id="th-card_radius" value="20" min="0" max="40"></div>
+            <div class="form-group"><label class="form-label">Button radius (px)</label>
+              <input type="number" class="form-control" id="th-button_radius" value="8" min="0" max="40"></div>
+          </div>
+        </div>
+      </div>
+      <div class="save-bar" style="position:sticky;bottom:0;margin:0 -28px;padding:12px 28px">
+        <button class="btn btn-primary" onclick="saveTheme(this)">💾 Thema opslaan</button>
+        <button class="btn btn-success" onclick="publishSite(this)">🚀 Publiceer wijzigingen</button>
+      </div>
+    </div>
+
+    <!-- ═══════════ SETTINGS ═══════════ -->
+    <div id="page-settings" class="page page-area">
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">Algemeen</div><div class="card-subtitle">Naam, tagline en contactgegevens</div></div></div>
         <div class="card-body">
           <div class="form-row cols-2">
             <div class="form-group"><label class="form-label">Website naam</label><input type="text" class="form-control" id="cfg-site_name" placeholder="Aiventity"></div>
             <div class="form-group"><label class="form-label">Tagline</label><input type="text" class="form-control" id="cfg-site_tagline" placeholder="Imagine. Automate. Execute."></div>
+            <div class="form-group"><label class="form-label">Bedrijfsnaam</label><input type="text" class="form-control" id="cfg-company_name" placeholder="Aiventity B.V."></div>
+            <div class="form-group"><label class="form-label">Contact e-mail</label><input type="email" class="form-control" id="cfg-contact_email" placeholder="hello@aiventity.com"></div>
+            <div class="form-group"><label class="form-label">KVK nummer</label><input type="text" class="form-control" id="cfg-kvk_number" placeholder="12345678"></div>
+            <div class="form-group"><label class="form-label">BTW nummer</label><input type="text" class="form-control" id="cfg-vat_number" placeholder="NL123456789B01"></div>
           </div>
-          <div class="form-group"><label class="form-label">Contact e-mail</label><input type="email" class="form-control" id="cfg-contact_email" placeholder="hello@aiventity.com"></div>
         </div>
       </div>
+
       <div class="card">
-        <div class="card-header"><div><div class="card-title">SEO &amp; Open Graph</div></div><span class="badge badge-blue">Meta tags</span></div>
+        <div class="card-header"><div><div class="card-title">SEO standaard</div><div class="card-subtitle">Globale meta-instellingen</div></div><span class="badge badge-blue">Globaal</span></div>
         <div class="card-body">
-          <div class="form-group"><label class="form-label">Meta Titel</label><input type="text" class="form-control" id="cfg-seo_meta_title" placeholder="Aiventity — Intelligent Agent Space"></div>
-          <div class="form-group"><label class="form-label">Meta Beschrijving</label><textarea class="form-control" id="cfg-seo_meta_description" rows="3"></textarea></div>
+          <div class="form-group"><label class="form-label">Meta titel <span>(max 60 tekens)</span></label><input type="text" class="form-control" id="cfg-seo_meta_title" placeholder="Aiventity — Intelligent Agent Space" maxlength="80"></div>
+          <div class="form-group"><label class="form-label">Meta beschrijving <span>(max 160 tekens)</span></label><textarea class="form-control" id="cfg-seo_meta_description" rows="3" maxlength="200"></textarea></div>
           <div class="form-row cols-2">
-            <div class="form-group"><label class="form-label">OG Afbeelding URL</label><input type="url" class="form-control" id="cfg-og_image_url"></div>
-            <div class="form-group"><label class="form-label">Canonical URL</label><input type="url" class="form-control" id="cfg-canonical_url"></div>
+            <div class="form-group"><label class="form-label">OG Afbeelding URL</label><input type="url" class="form-control" id="cfg-og_image_url" placeholder="https://..."></div>
+            <div class="form-group"><label class="form-label">Canonical URL</label><input type="url" class="form-control" id="cfg-canonical_url" placeholder="https://aiventity.com"></div>
           </div>
+          <div class="form-group"><label class="form-label">Favicon URL</label><input type="url" class="form-control" id="cfg-favicon_url" placeholder="https://...favicon.ico"></div>
         </div>
       </div>
+
       <div class="card">
         <div class="card-header"><div class="card-title">Social Media</div></div>
         <div class="card-body">
           <div class="form-row cols-2">
-            <div class="form-group"><label class="form-label">Twitter / X URL</label><input type="url" class="form-control" id="cfg-twitter_url"></div>
-            <div class="form-group"><label class="form-label">LinkedIn URL</label><input type="url" class="form-control" id="cfg-linkedin_url"></div>
-            <div class="form-group"><label class="form-label">Instagram URL</label><input type="url" class="form-control" id="cfg-instagram_url"></div>
-            <div class="form-group"><label class="form-label">GitHub URL</label><input type="url" class="form-control" id="cfg-github_url"></div>
+            <div class="form-group"><label class="form-label">Twitter / X</label><input type="url" class="form-control" id="cfg-twitter_url" placeholder="https://x.com/aiventity"></div>
+            <div class="form-group"><label class="form-label">LinkedIn</label><input type="url" class="form-control" id="cfg-linkedin_url" placeholder="https://linkedin.com/company/..."></div>
+            <div class="form-group"><label class="form-label">Instagram</label><input type="url" class="form-control" id="cfg-instagram_url"></div>
+            <div class="form-group"><label class="form-label">GitHub</label><input type="url" class="form-control" id="cfg-github_url"></div>
           </div>
         </div>
       </div>
+
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">Analytics &amp; Tracking</div></div></div>
+        <div class="card-body">
+          <div class="form-group"><label class="form-label">Google Analytics 4 ID</label><input type="text" class="form-control" id="cfg-google_analytics_id" placeholder="G-XXXXXXXXXX" style="max-width:240px"><div class="form-hint">Laat leeg om te deactiveren</div></div>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-header"><div><div class="card-title">🚀 Netlify Integratie</div></div><span class="badge badge-green">Publiceren</span></div>
         <div class="card-body">
           <div class="form-row cols-2">
-            <div class="form-group"><label class="form-label">Netlify Token</label><input type="password" class="form-control" id="cfg-netlify_token" placeholder="nfp_xxxxxxxx" autocomplete="new-password"></div>
+            <div class="form-group"><label class="form-label">Netlify Personal Token</label><input type="password" class="form-control" id="cfg-netlify_token" placeholder="nfp_..." autocomplete="new-password"><div class="form-hint"><a href="https://app.netlify.com/user/applications" target="_blank">Aanmaken →</a></div></div>
             <div class="form-group"><label class="form-label">Publieke Site ID</label><input type="text" class="form-control" id="cfg-netlify_site_id" placeholder="5559f234-..."></div>
           </div>
         </div>
       </div>
-      <div class="save-bar">
+
+      <div class="save-bar" style="position:sticky;bottom:0;margin:0 -28px;padding:12px 28px">
         <button class="btn btn-primary" onclick="saveSettings(this)">💾 Instellingen opslaan</button>
       </div>
     </div>
 
-    <!-- HISTORY -->
-    <div id="page-history" class="page content-area">
+    <!-- ═══════════ ACTIVITY LOG ═══════════ -->
+    <div id="page-activity" class="page page-area">
       <div class="card">
-        <div class="card-header"><div class="card-title">📋 Activiteitenlog</div></div>
-        <div class="card-body" id="history-list" style="padding:0">
-          <div style="padding:20px;color:var(--text2)">Laden...</div>
+        <div class="card-header">
+          <div><div class="card-title">📋 Activiteitenlog</div><div class="card-subtitle">Alle acties in het CMS</div></div>
+          <button class="btn btn-ghost btn-sm" onclick="loadActivity()">↺ Vernieuwen</button>
         </div>
+        <div id="activity-list" class="card-body"></div>
       </div>
     </div>
 
   </div><!-- /main -->
 </div><!-- /app -->
 
-<div id="toast-container"></div>
+<div id="toasts"></div>
+
+<!-- MODAL -->
+<div id="modal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
+      <button class="btn btn-danger" id="modal-confirm" onclick="modalConfirmCb()">Bevestigen</button>
+    </div>
+  </div>
+</div>
 
 <script>
-// ── State ────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
 const API = '/api';
 let token = localStorage.getItem('cms_token') || '';
 let contentData = {};
+let mediaData = [];
+let seoData = {};
+let themeData = {};
 let currentSection = 'hero';
+let currentPage = 'dashboard';
+let undoStack = [];
+let autoSaveTimer = null;
+let modalConfirmCb = () => {};
 
 const SECTIONS = [
-  { key:'hero',        label:'Hero' },
-  { key:'creativity',  label:'Creativity' },
-  { key:'integration', label:'Integration' },
-  { key:'execution',   label:'Execution' },
-  { key:'apply',       label:'Apply' },
-  { key:'footer',      label:'Footer' },
+  {key:'hero',        label:'Hero'},
+  {key:'creativity',  label:'Creativity'},
+  {key:'integration', label:'Integration'},
+  {key:'execution',   label:'Execution'},
+  {key:'apply',       label:'Apply'},
+  {key:'footer',      label:'Footer'},
 ];
 
+// Field definitions per section
 const FIELDS = {
-  hero:        [['heading_en','Titel (EN)'],['heading_nl','Titel (NL)'],['subheading_en','Subtitel (EN)'],['subheading_nl','Subtitel (NL)'],['cta_label_en','CTA Label (EN)'],['cta_label_nl','CTA Label (NL)']],
-  creativity:  [['heading_en','Titel (EN)'],['heading_nl','Titel (NL)'],['body_en','Tekst (EN)'],['body_nl','Tekst (NL)']],
-  integration: [['heading_en','Titel (EN)'],['heading_nl','Titel (NL)'],['body_en','Tekst (EN)'],['body_nl','Tekst (NL)']],
-  execution:   [['heading_en','Titel (EN)'],['heading_nl','Titel (NL)'],['body_en','Tekst (EN)'],['body_nl','Tekst (NL)']],
-  apply:       [['heading_en','Titel (EN)'],['heading_nl','Titel (NL)'],['body_en','Tekst (EN)'],['body_nl','Tekst (NL)'],['cta_label_en','CTA (EN)'],['cta_label_nl','CTA (NL)']],
-  footer:      [['tagline_en','Tagline (EN)'],['tagline_nl','Tagline (NL)'],['copyright_en','Copyright (EN)'],['copyright_nl','Copyright (NL)']],
+  hero: {
+    content: [
+      {f:'badge_en',      l:'Badge tekst (EN)',      wide:false},
+      {f:'badge_nl',      l:'Badge tekst (NL)',      wide:false},
+      {f:'h1_en',         l:'Regel 1 heading (EN)',  wide:false},
+      {f:'h1_nl',         l:'Regel 1 heading (NL)',  wide:false},
+      {f:'h2_en',         l:'Regel 2 heading (EN)',  wide:false},
+      {f:'h2_nl',         l:'Regel 2 heading (NL)',  wide:false},
+      {f:'h3_en',         l:'Regel 3 heading (EN)',  wide:false},
+      {f:'h3_nl',         l:'Regel 3 heading (NL)',  wide:false},
+      {f:'subheadline_en',l:'Subheadline (EN)',       wide:true},
+      {f:'subheadline_nl',l:'Subheadline (NL)',       wide:true},
+      {f:'body_en',       l:'Body tekst (EN)',        wide:true,  ta:true},
+      {f:'body_nl',       l:'Body tekst (NL)',        wide:true,  ta:true},
+      {f:'cta_primary_en',l:'CTA knop tekst (EN)',   wide:false},
+      {f:'cta_primary_nl',l:'CTA knop tekst (NL)',   wide:false},
+      {f:'cta_secondary_en',l:'Secundaire CTA (EN)', wide:false},
+      {f:'cta_secondary_nl',l:'Secundaire CTA (NL)', wide:false},
+      {f:'cta_href',      l:'CTA Link (URL)',         wide:true},
+    ]
+  },
+  creativity: {
+    content: [
+      {f:'label_en',  l:'Label (EN)',   wide:false},{f:'label_nl',  l:'Label (NL)',   wide:false},
+      {f:'title_en',  l:'Titel (EN)',   wide:false},{f:'title_nl',  l:'Titel (NL)',   wide:false},
+      {f:'subtitle_en',l:'Subtitel (EN)',wide:true,ta:true},{f:'subtitle_nl',l:'Subtitel (NL)',wide:true,ta:true},
+      {f:'c1_icon',l:'Kaart 1 Icoon',wide:false},{f:'c1_title_en',l:'Kaart 1 Titel (EN)',wide:false},{f:'c1_title_nl',l:'Kaart 1 Titel (NL)',wide:false},
+      {f:'c1_text_en',l:'Kaart 1 Tekst (EN)',wide:true,ta:true},{f:'c1_text_nl',l:'Kaart 1 Tekst (NL)',wide:true,ta:true},
+      {f:'c2_icon',l:'Kaart 2 Icoon',wide:false},{f:'c2_title_en',l:'Kaart 2 Titel (EN)',wide:false},{f:'c2_title_nl',l:'Kaart 2 Titel (NL)',wide:false},
+      {f:'c2_text_en',l:'Kaart 2 Tekst (EN)',wide:true,ta:true},{f:'c2_text_nl',l:'Kaart 2 Tekst (NL)',wide:true,ta:true},
+      {f:'c3_icon',l:'Kaart 3 Icoon',wide:false},{f:'c3_title_en',l:'Kaart 3 Titel (EN)',wide:false},{f:'c3_title_nl',l:'Kaart 3 Titel (NL)',wide:false},
+      {f:'c3_text_en',l:'Kaart 3 Tekst (EN)',wide:true,ta:true},{f:'c3_text_nl',l:'Kaart 3 Tekst (NL)',wide:true,ta:true},
+    ]
+  },
+  integration: {
+    content: [
+      {f:'label_en',l:'Label (EN)',wide:false},{f:'label_nl',l:'Label (NL)',wide:false},
+      {f:'title_en',l:'Titel (EN)',wide:false},{f:'title_nl',l:'Titel (NL)',wide:false},
+      {f:'body_en',l:'Tekst (EN)',wide:true,ta:true},{f:'body_nl',l:'Tekst (NL)',wide:true,ta:true},
+      {f:'pill1_en',l:'Pill 1 (EN)',wide:false},{f:'pill2_en',l:'Pill 2 (EN)',wide:false},
+      {f:'pill3_en',l:'Pill 3 (EN)',wide:false},{f:'pill4_en',l:'Pill 4 (EN)',wide:false},
+    ]
+  },
+  execution: {
+    content: [
+      {f:'label_en',l:'Label (EN)',wide:false},{f:'label_nl',l:'Label (NL)',wide:false},
+      {f:'title_en',l:'Titel (EN)',wide:false},{f:'title_nl',l:'Titel (NL)',wide:false},
+      {f:'body_en',l:'Tekst (EN)',wide:true,ta:true},{f:'body_nl',l:'Tekst (NL)',wide:true,ta:true},
+      {f:'c1_title_en',l:'Kaart 1 (EN)',wide:false},{f:'c1_title_nl',l:'Kaart 1 (NL)',wide:false},
+      {f:'c2_title_en',l:'Kaart 2 (EN)',wide:false},{f:'c2_title_nl',l:'Kaart 2 (NL)',wide:false},
+      {f:'c3_title_en',l:'Kaart 3 (EN)',wide:false},{f:'c3_title_nl',l:'Kaart 3 (NL)',wide:false},
+      {f:'c4_title_en',l:'Kaart 4 (EN)',wide:false},{f:'c4_title_nl',l:'Kaart 4 (NL)',wide:false},
+    ]
+  },
+  apply: {
+    content: [
+      {f:'label_en',l:'Label (EN)',wide:false},{f:'label_nl',l:'Label (NL)',wide:false},
+      {f:'title_en',l:'Titel (EN)',wide:false},{f:'title_nl',l:'Titel (NL)',wide:false},
+      {f:'body_en',l:'Tekst (EN)',wide:true,ta:true},{f:'body_nl',l:'Tekst (NL)',wide:true,ta:true},
+      {f:'cta_en',l:'CTA knop (EN)',wide:false},{f:'cta_nl',l:'CTA knop (NL)',wide:false},
+      {f:'cta_href',l:'CTA Link (URL)',wide:true},
+    ]
+  },
+  footer: {
+    content: [
+      {f:'tagline_en',l:'Tagline (EN)',wide:false},{f:'tagline_nl',l:'Tagline (NL)',wide:false},
+      {f:'copyright_en',l:'Copyright (EN)',wide:false},{f:'copyright_nl',l:'Copyright (NL)',wide:false},
+    ]
+  }
 };
 
-// ── Auth ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════════════════════
 async function doLogin() {
-  const pw = document.getElementById('login-pw').value;
+  const pw = document.getElementById('pw').value;
   const btn = document.getElementById('login-btn');
   const err = document.getElementById('login-err');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>';
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Laden...';
   err.style.display = 'none';
   try {
-    const r = await apiFetch('/login', 'POST', {password: pw}, true);
-    if (r.ok && r.token) {
-      token = r.token;
-      localStorage.setItem('cms_token', token);
+    const r = await apiFetch('/login','POST',{password:pw},true);
+    if(r.ok && r.token) {
+      token = r.token; localStorage.setItem('cms_token',token);
       showApp();
     } else {
-      err.textContent = r.error || 'Inloggen mislukt.';
-      err.style.display = 'block';
+      err.textContent = r.error || 'Inloggen mislukt'; err.style.display = 'block';
     }
   } catch(e) {
-    err.textContent = 'Verbindingsfout: ' + e.message;
-    err.style.display = 'block';
+    err.textContent = 'Verbindingsfout: ' + e.message; err.style.display = 'block';
   }
-  btn.disabled = false;
-  btn.textContent = 'Inloggen';
+  btn.disabled = false; btn.textContent = 'Inloggen →';
 }
+document.getElementById('pw').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
 
 function doLogout() {
-  token = '';
-  localStorage.removeItem('cms_token');
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('login-page').style.display = 'flex';
+  token=''; localStorage.removeItem('cms_token');
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-page').style.display='flex';
 }
 
-document.getElementById('login-pw').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
-});
-
-// ── API helper ────────────────────────────────────────────────────────────
-async function apiFetch(path, method='GET', body=null, noAuth=false) {
-  const opts = {
-    method,
-    headers: {'Content-Type':'application/json'},
-  };
-  if (!noAuth && token) opts.headers['Authorization'] = 'Bearer ' + token;
-  if (body) opts.body = JSON.stringify(body);
-  const r = await fetch(API + path, opts);
-  if (r.status === 401 && !noAuth) { doLogout(); return {}; }
-  return r.json();
+// ═══════════════════════════════════════════════════════════
+// API
+// ═══════════════════════════════════════════════════════════
+async function apiFetch(path,method='GET',body=null,noAuth=false) {
+  const opts={method,headers:{'Content-Type':'application/json'}};
+  if(!noAuth && token) opts.headers['Authorization']='Bearer '+token;
+  if(body) opts.body=JSON.stringify(body);
+  const r = await fetch(API+path,opts);
+  if(r.status===401 && !noAuth){ doLogout(); return {}; }
+  try{ return await r.json(); } catch{ return {}; }
 }
 
-// ── Toast ─────────────────────────────────────────────────────────────────
-function toast(msg, type='info') {
-  const el = document.createElement('div');
-  el.className = `toast toast-${type}`;
-  el.textContent = msg;
-  document.getElementById('toast-container').appendChild(el);
-  setTimeout(() => el.remove(), 4000);
+// ═══════════════════════════════════════════════════════════
+// TOAST & MODAL
+// ═══════════════════════════════════════════════════════════
+function toast(msg,type='info') {
+  const el=document.createElement('div');
+  el.className=`toast toast-${type}`;
+  el.textContent=msg;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(()=>el.remove(),4200);
+}
+function showModal(title,body,confirmCb,confirmLabel='Bevestigen') {
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-body').textContent=body;
+  document.getElementById('modal-confirm').textContent=confirmLabel;
+  modalConfirmCb=()=>{ closeModal(); confirmCb(); };
+  document.getElementById('modal').style.display='flex';
+}
+function closeModal(){ document.getElementById('modal').style.display='none'; }
+
+// ═══════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════
+const titles={dashboard:'Dashboard',editor:'Visuele Editor',media:'Media Bibliotheek',
+               seo:'SEO & Pagina\'s',theme:'Thema & Kleuren',settings:'Website Instellingen',activity:'Activiteitenlog'};
+
+function nav(page) {
+  document.querySelectorAll('.page,.editor-page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(n=>n.classList.remove('active'));
+  const el=document.getElementById('page-'+page);
+  if(el) el.classList.add('active');
+  document.querySelectorAll('.sb-item').forEach(n=>{
+    if(n.getAttribute('onclick')?.includes("'"+page+"'")) n.classList.add('active');
+  });
+  document.getElementById('tb-title').textContent=titles[page]||page;
+  currentPage=page;
+  if(page==='editor') initEditor();
+  if(page==='media') loadMedia();
+  if(page==='seo') loadSeo();
+  if(page==='theme') loadTheme();
+  if(page==='settings') loadSettings();
+  if(page==='activity') loadActivity();
+  if(page==='dashboard') loadDashboard();
 }
 
-// ── Init ──────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// INIT / APP
+// ═══════════════════════════════════════════════════════════
 async function init() {
-  if (token) {
-    // Quick check
-    const r = await apiFetch('/publish-status');
-    if (r && !r.error) {
-      showApp();
-      return;
-    }
-    token = '';
-    localStorage.removeItem('cms_token');
+  if(token) {
+    const r=await apiFetch('/publish-status');
+    if(r && !r.error){ showApp(); return; }
+    token=''; localStorage.removeItem('cms_token');
   }
-  document.getElementById('login-page').style.display = 'flex';
+  document.getElementById('login-page').style.display='flex';
 }
 
 async function showApp() {
-  document.getElementById('login-page').style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
-  // Load publish status
-  const ps = await apiFetch('/publish-status');
-  if (ps.last_published) {
-    document.getElementById('stat-published').textContent = ps.last_published;
-    const el = document.getElementById('publish-status');
-    if (el) el.textContent = '✅ ' + ps.last_published;
-  }
+  document.getElementById('login-page').style.display='none';
+  document.getElementById('app').style.display='block';
+  loadDashboard();
 }
 
-// ── Pages ─────────────────────────────────────────────────────────────────
-function showPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  // Activate nav item
-  document.querySelectorAll('.nav-item').forEach(n => {
-    if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + name + "'"))
-      n.classList.add('active');
-  });
-  const titles = {dashboard:'Dashboard',editor:'Visuele Editor',settings:'Website Instellingen',history:'Activiteitenlog'};
-  document.getElementById('page-title').textContent = titles[name] || name;
-  if (name === 'editor') initEditor();
-  if (name === 'settings') loadSettings();
-  if (name === 'history') loadHistory();
-}
-
-// ── Editor ────────────────────────────────────────────────────────────────
-async function initEditor() {
-  if (Object.keys(contentData).length === 0) {
-    contentData = await apiFetch('/content');
-  }
-  buildTabs();
-  showSection(currentSection);
-}
-
-function buildTabs() {
-  const bar = document.getElementById('section-tabs');
-  bar.innerHTML = SECTIONS.map(s =>
-    `<button class="tab-btn${s.key===currentSection?' active':''}" onclick="showSection('${s.key}')">${s.label}</button>`
-  ).join('');
-}
-
-function showSection(key) {
-  currentSection = key;
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => {
-    if (b.textContent === SECTIONS.find(s=>s.key===key)?.label) b.classList.add('active');
-  });
-  const sec = contentData[key] || {};
-  const fields = FIELDS[key] || [];
-  const html = fields.map(([f, label]) => {
-    const val = (sec[f] || '').replace(/"/g,'&quot;');
-    const isLong = f.includes('body') || f.includes('description');
-    const inp = isLong
-      ? `<textarea class="form-control" id="f-${f}" rows="3">${sec[f]||''}</textarea>`
-      : `<input type="text" class="form-control" id="f-${f}" value="${val}">`;
-    const lang = f.endsWith('_en') ? '<span class="lang-badge lang-en">EN</span>' : f.endsWith('_nl') ? '<span class="lang-badge lang-nl">NL</span>' : '';
-    return `<div class="form-group"><label class="form-label">${lang} ${label}</label>${inp}</div>`;
-  }).join('');
-  document.getElementById('section-forms').innerHTML = html || '<p style="color:var(--text2)">Geen velden voor deze sectie.</p>';
-}
-
-async function saveCurrentSection(btn) {
-  const key = currentSection;
-  const fields = FIELDS[key] || [];
-  const data = {};
-  fields.forEach(([f]) => {
-    const el = document.getElementById('f-' + f);
-    if (el) data[f] = el.value;
-  });
-  contentData[key] = {...(contentData[key]||{}), ...data};
-  const orig = btn.innerHTML;
-  btn.innerHTML = '<span class="spinner"></span>';
-  btn.disabled = true;
-  const r = await apiFetch('/content', 'POST', {[key]: data});
-  btn.innerHTML = orig;
-  btn.disabled = false;
-  if (r.ok) {
-    toast('✅ Opgeslagen!', 'success');
-    document.getElementById('save-status').textContent = 'Opgeslagen ' + new Date().toLocaleTimeString('nl');
-    // Reload preview
-    const frame = document.getElementById('preview-frame');
-    frame.src = frame.src;
-  } else {
-    toast('❌ ' + (r.error || 'Opslaan mislukt'), 'error');
-  }
-}
-
-function setDevice(width, btn) {
-  document.getElementById('preview-frame').style.maxWidth = width;
-  document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-// ── Publish ───────────────────────────────────────────────────────────────
-async function publishSite(btn) {
-  const orig = btn.innerHTML;
-  btn.innerHTML = '<span class="spinner"></span> Publiceren...';
-  btn.disabled = true;
-  try {
-    const r = await apiFetch('/publish', 'POST');
-    if (r.ok) {
-      toast(r.message || '✅ Gepubliceerd!', 'success');
-      const el = document.getElementById('publish-status');
-      if (el) el.textContent = '✅ Zojuist gepubliceerd';
-    } else {
-      toast('❌ ' + (r.error || 'Publiceren mislukt'), 'error');
-    }
-  } catch(e) {
-    toast('❌ Verbindingsfout: ' + e.message, 'error');
-  }
-  btn.innerHTML = orig;
-  btn.disabled = false;
-}
-
-// ── Settings ──────────────────────────────────────────────────────────────
-async function loadSettings() {
-  const cfg = await apiFetch('/config');
-  const keys = ['site_name','site_tagline','contact_email','seo_meta_title','seo_meta_description',
-                 'og_image_url','canonical_url','twitter_url','linkedin_url','instagram_url',
-                 'github_url','netlify_token','netlify_site_id'];
-  keys.forEach(k => {
-    const el = document.getElementById('cfg-' + k);
-    if (el && cfg[k] != null) el.value = cfg[k];
-  });
-}
-
-async function saveSettings(btn) {
-  const keys = ['site_name','site_tagline','contact_email','seo_meta_title','seo_meta_description',
-                 'og_image_url','canonical_url','twitter_url','linkedin_url','instagram_url',
-                 'github_url','netlify_token','netlify_site_id'];
-  const data = {};
-  keys.forEach(k => {
-    const el = document.getElementById('cfg-' + k);
-    if (el && el.value) data[k] = el.value;
-  });
-  const orig = btn.innerHTML;
-  btn.innerHTML = '<span class="spinner"></span>';
-  btn.disabled = true;
-  const r = await apiFetch('/config', 'POST', data);
-  btn.innerHTML = orig;
-  btn.disabled = false;
-  if (r.ok) toast('✅ Instellingen opgeslagen!', 'success');
-  else toast('❌ ' + (r.error || 'Opslaan mislukt'), 'error');
-}
-
-// ── History ───────────────────────────────────────────────────────────────
-async function loadHistory() {
-  const list = document.getElementById('history-list');
-  const data = await apiFetch('/history');
-  if (!Array.isArray(data) || data.length === 0) {
-    list.innerHTML = '<div style="padding:20px;color:var(--text2)">Geen geschiedenis gevonden.</div>';
-    return;
-  }
-  list.innerHTML = data.slice().reverse().map((h, i) => `
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border)">
-      <div>
-        <div style="font-size:13px;font-weight:500">${h.label||'Snapshot'}</div>
-        <div style="font-size:11px;color:var(--text2);margin-top:3px">${h.timestamp||''}</div>
+// ═══════════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════════
+async function loadDashboard() {
+  const ps=await apiFetch('/publish-status');
+  if(ps.last_published) document.getElementById('s-published').textContent=ps.last_published;
+  // Load recent activity
+  const acts=await apiFetch('/activity');
+  const el=document.getElementById('dash-activity');
+  if(!Array.isArray(acts)||acts.length===0){ el.innerHTML='<div style="padding:16px;color:var(--text3);font-size:12px">Geen activiteit</div>'; return; }
+  const icons={publish:'🚀',content_save:'✏️',settings_save:'⚙️',theme_save:'🎨',media_upload:'📁',media_delete:'🗑',seo_save:'🔍',restore:'↩'};
+  el.innerHTML=acts.slice(0,6).map(a=>`
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border)">
+      <span style="font-size:16px">${icons[a.action]||'•'}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12.5px;font-weight:500;color:var(--text)">${a.detail||a.action}</div>
+        <div style="font-size:11px;color:var(--text3)">${new Date(a.ts).toLocaleString('nl-NL')}</div>
       </div>
-      <button class="btn btn-ghost btn-sm" onclick="restoreSnapshot(${data.length-1-i})">↩ Herstel</button>
     </div>
   `).join('');
 }
 
-async function restoreSnapshot(idx) {
-  if (!confirm('Weet je zeker dat je dit snapshot wilt terugzetten?')) return;
-  const r = await apiFetch('/restore/' + idx, 'POST');
-  if (r.ok) { toast('✅ Hersteld!', 'success'); contentData = {}; }
-  else toast('❌ ' + (r.error || 'Herstel mislukt'), 'error');
+// ═══════════════════════════════════════════════════════════
+// VISUAL EDITOR
+// ═══════════════════════════════════════════════════════════
+async function initEditor() {
+  if(!Object.keys(contentData).length) {
+    setStatus('saving','Laden...');
+    contentData=await apiFetch('/content');
+    setStatus('ok','Opgeslagen');
+  }
+  buildSectionTabs();
+  showSection(currentSection);
 }
 
-// ── Keyboard shortcuts ────────────────────────────────────────────────────
-document.addEventListener('keydown', e => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-    e.preventDefault();
-    const editorVisible = document.getElementById('page-editor').classList.contains('active');
-    if (editorVisible) {
-      const btn = document.querySelector('#page-editor .save-bar .btn-primary');
-      if (btn) saveCurrentSection(btn);
+function buildSectionTabs() {
+  const bar=document.getElementById('sec-tabs');
+  bar.innerHTML=SECTIONS.map(s=>`<button class="section-tab${s.key===currentSection?' active':''}" onclick="showSection('${s.key}')">${s.label}</button>`).join('');
+}
+
+function showSection(key) {
+  currentSection=key;
+  document.querySelectorAll('.section-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.section-tab').forEach(b=>{if(b.textContent===SECTIONS.find(s=>s.key===key)?.label)b.classList.add('active');});
+  const sec=contentData[key]||{};
+  const def=FIELDS[key]||{content:[]};
+  const fields=def.content||[];
+  // Group EN/NL fields side by side
+  const rendered=[];
+  const paired=new Set();
+  for(const field of fields){
+    if(paired.has(field.f)) continue;
+    const isEN=field.f.endsWith('_en');
+    const isNL=field.f.endsWith('_nl');
+    const pairKey=field.f.replace(/_en$/,'').replace(/_nl$/,'');
+    const nlField=fields.find(x=>x.f===pairKey+'_nl');
+    if(isEN&&nlField){
+      paired.add(field.f); paired.add(pairKey+'_nl');
+      if(field.ta){
+        rendered.push(`
+          <div class="form-group">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div><div class="lang-tag lang-en">🇬🇧 EN</div><textarea class="form-control" id="f-${field.f}" rows="3" oninput="scheduleAutoSave()">${esc(sec[field.f]||'')}</textarea></div>
+              <div><div class="lang-tag lang-nl">🇳🇱 NL</div><textarea class="form-control" id="f-${pairKey}_nl" rows="3" oninput="scheduleAutoSave()">${esc(sec[pairKey+'_nl']||'')}</textarea></div>
+            </div>
+            <div class="form-hint">${field.l.replace(' (EN)','')}</div>
+          </div>`);
+      } else {
+        rendered.push(`
+          <div class="form-group">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div><div class="lang-tag lang-en">🇬🇧 EN</div><input type="text" class="form-control" id="f-${field.f}" value="${esc(sec[field.f]||'')}" oninput="scheduleAutoSave()"></div>
+              <div><div class="lang-tag lang-nl">🇳🇱 NL</div><input type="text" class="form-control" id="f-${pairKey}_nl" value="${esc(sec[pairKey+'_nl']||'')}" oninput="scheduleAutoSave()"></div>
+            </div>
+            <div class="form-hint">${field.l.replace(' (EN)','')}</div>
+          </div>`);
+      }
+    } else if(!isNL||!nlField){
+      const inp=field.ta
+        ?`<textarea class="form-control" id="f-${field.f}" rows="3" oninput="scheduleAutoSave()">${esc(sec[field.f]||'')}</textarea>`
+        :`<input type="text" class="form-control" id="f-${field.f}" value="${esc(sec[field.f]||'')}" oninput="scheduleAutoSave()">`;
+      rendered.push(`<div class="form-group"><label class="form-label">${field.l}</label>${inp}</div>`);
     }
+    paired.add(field.f);
+  }
+  document.getElementById('editor-fields').innerHTML=rendered.length?rendered.join(''):'<p style="color:var(--text3)">Geen velden voor deze sectie.</p>';
+}
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function scheduleAutoSave() {
+  setStatus('saving','Bezig met opslaan...');
+  if(autoSaveTimer) clearTimeout(autoSaveTimer);
+  autoSaveTimer=setTimeout(()=>saveSection(null,true),3000);
+}
+
+async function saveSection(btn, silent=false) {
+  const fields=FIELDS[currentSection]?.content||[];
+  const data={};
+  fields.forEach(({f})=>{ const el=document.getElementById('f-'+f); if(el) data[f]=el.value; });
+  // Save to undo stack
+  undoStack.push({section:currentSection, data:{...contentData[currentSection]}});
+  if(undoStack.length>30) undoStack.shift();
+  document.getElementById('undo-btn').disabled=false;
+  contentData[currentSection]={...(contentData[currentSection]||{}),...data};
+  if(btn){ btn.disabled=true; btn.innerHTML='<span class="spinner"></span>'; }
+  setStatus('saving','Opslaan...');
+  const r=await apiFetch('/content','POST',{[currentSection]:data});
+  if(btn){ btn.disabled=false; btn.innerHTML='💾 Opslaan'; }
+  if(r.ok){
+    setStatus('ok',silent?'Auto-opgeslagen':'Opgeslagen ✓');
+    if(!silent) toast('✅ Opgeslagen!','success');
+    reloadPreview();
+  } else {
+    setStatus('error','Opslaan mislukt');
+    toast('❌ '+(r.error||'Opslaan mislukt'),'error');
+  }
+}
+
+function undoAction() {
+  if(!undoStack.length) return;
+  const {section,data}=undoStack.pop();
+  if(!undoStack.length) document.getElementById('undo-btn').disabled=true;
+  contentData[section]=data;
+  if(section===currentSection) showSection(currentSection);
+  toast('↩ Ongedaan gemaakt','info');
+}
+
+function setStatus(state,text) {
+  const dot=document.getElementById('status-dot');
+  document.getElementById('status-text').textContent=text;
+  dot.className='status-dot'+(state==='saving'?' saving':state==='error'?' error':'');
+}
+
+function setDevice(w,btn) {
+  document.getElementById('preview').style.maxWidth=w;
+  document.querySelectorAll('.device-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function reloadPreview(){ const f=document.getElementById('preview'); f.src=f.src; }
+
+// ═══════════════════════════════════════════════════════════
+// PUBLISH
+// ═══════════════════════════════════════════════════════════
+async function publishSite(btn) {
+  const orig=btn.innerHTML; btn.innerHTML='<span class="spinner"></span> Publiceren...'; btn.disabled=true;
+  try {
+    const r=await apiFetch('/publish','POST');
+    if(r.ok){
+      toast(r.message||'✅ Gepubliceerd!','success');
+      const el=document.getElementById('s-published'); if(el&&r.last_published) el.textContent=r.last_published;
+      setStatus('ok','Live ✓');
+    } else { toast('❌ '+(r.error||'Mislukt'),'error'); }
+  } catch(e){ toast('❌ '+e.message,'error'); }
+  btn.innerHTML=orig; btn.disabled=false;
+}
+
+// ═══════════════════════════════════════════════════════════
+// MEDIA
+// ═══════════════════════════════════════════════════════════
+async function loadMedia() {
+  mediaData=await apiFetch('/media');
+  if(!Array.isArray(mediaData)) mediaData=[];
+  renderMedia(mediaData);
+}
+
+function renderMedia(items) {
+  const el=document.getElementById('media-grid');
+  document.getElementById('media-count').textContent=items.length+' bestanden';
+  if(!items.length){ el.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🖼</div><p>Nog geen media. Upload een bestand hierboven.</p></div>'; return; }
+  el.innerHTML=items.map(m=>{
+    const isImg=/\.(png|jpe?g|gif|svg|webp|ico)$/i.test(m.name);
+    const thumb=isImg?`<img src="${m.url}" alt="${m.name}" loading="lazy" onerror="this.parentNode.innerHTML='<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;font-size:28px&quot;>📄</div>'">`:'<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:28px">📄</div>';
+    const kb=m.size?Math.round(m.size/1024)+'KB':'—';
+    return `<div class="media-item" id="mi-${m.name}">
+      <div class="media-thumb">${thumb}</div>
+      <div class="media-info"><div class="media-name" title="${m.name}">${m.name}</div><div class="media-meta">${kb} • ${m.type||'bestand'}</div></div>
+      <div class="media-actions">
+        <button class="btn btn-ghost btn-sm" onclick="copyUrl('${m.url}')">Kopieer URL</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteMedia('${m.name}')">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterMedia(q) {
+  const filtered=q?mediaData.filter(m=>m.name.toLowerCase().includes(q.toLowerCase())):mediaData;
+  renderMedia(filtered);
+}
+
+function copyUrl(url) {
+  navigator.clipboard.writeText(url).then(()=>toast('✅ URL gekopieerd','success')).catch(()=>{ prompt('URL:',url); });
+}
+
+async function deleteMedia(name) {
+  showModal('Bestand verwijderen',`Weet je zeker dat je "${name}" wilt verwijderen?`,async()=>{
+    const r=await apiFetch(`/media/delete/${encodeURIComponent(name)}`,'POST');
+    if(r.ok){ toast('🗑 Verwijderd','info'); loadMedia(); }
+    else toast('❌ '+(r.error||'Verwijderen mislukt'),'error');
+  },'Verwijderen');
+}
+
+function onDragOver(e){ e.preventDefault(); document.getElementById('upload-zone').classList.add('drag-over'); }
+function onDragLeave(e){ document.getElementById('upload-zone').classList.remove('drag-over'); }
+function onDrop(e){ e.preventDefault(); document.getElementById('upload-zone').classList.remove('drag-over'); uploadFiles(e.dataTransfer.files); }
+function onFileSelect(e){ uploadFiles(e.target.files); }
+
+async function uploadFiles(files) {
+  if(!files?.length) return;
+  let uploaded=0;
+  for(const file of files) {
+    if(file.size>10*1024*1024){ toast(`❌ ${file.name} te groot (max 10MB)`,'error'); continue; }
+    toast(`⏳ Uploaden: ${file.name}`,'info');
+    const b64=await fileToBase64(file);
+    const r=await apiFetch('/media/upload','POST',{name:file.name,base64:b64,type:file.type,size:file.size});
+    if(r.ok){ uploaded++; toast(`✅ Geüpload: ${file.name}`,'success'); }
+    else toast(`❌ ${file.name}: ${r.error||'Mislukt'}`,'error');
+  }
+  if(uploaded) loadMedia();
+}
+
+function fileToBase64(file) {
+  return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); });
+}
+
+// ═══════════════════════════════════════════════════════════
+// SEO
+// ═══════════════════════════════════════════════════════════
+const SEO_PAGES=['global','hero','creativity','integration','execution','apply','footer'];
+const SEO_PAGE_LABELS={global:'Globaal',hero:'Hero',creativity:'Creativity',integration:'Integration',execution:'Execution',apply:'Apply',footer:'Footer'};
+
+async function loadSeo() {
+  seoData=await apiFetch('/seo');
+  if(typeof seoData!=='object'||Array.isArray(seoData)) seoData={};
+  buildSeoTabs();
+  showSeoPage('global');
+}
+
+function buildSeoTabs() {
+  const bar=document.getElementById('seo-page-tabs');
+  bar.innerHTML=SEO_PAGES.map(p=>`<button class="tab-btn${p==='global'?' active':''}" onclick="showSeoPage('${p}')">${SEO_PAGE_LABELS[p]}</button>`).join('');
+}
+
+function showSeoPage(page) {
+  document.querySelectorAll('#seo-page-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#seo-page-tabs .tab-btn').forEach(b=>{if(b.textContent===SEO_PAGE_LABELS[page])b.classList.add('active');});
+  const d=seoData[page]||{};
+  document.getElementById('seo-fields').innerHTML=`
+    <input type="hidden" id="seo-current-page" value="${page}">
+    <div class="form-group"><label class="form-label">Meta Titel <span>(max 60 tekens)</span></label>
+      <input type="text" class="form-control" id="seo-title" value="${esc(d.meta_title||'')}" maxlength="80" oninput="updateSeoPreview()">
+    </div>
+    <div class="form-group"><label class="form-label">Meta Beschrijving <span>(max 160 tekens)</span></label>
+      <textarea class="form-control" id="seo-desc" rows="3" maxlength="200" oninput="updateSeoPreview()">${esc(d.meta_description||'')}</textarea>
+    </div>
+    <div class="form-row cols-2">
+      <div class="form-group"><label class="form-label">OG Titel</label><input type="text" class="form-control" id="seo-og-title" value="${esc(d.og_title||'')}"></div>
+      <div class="form-group"><label class="form-label">OG Afbeelding URL</label><input type="url" class="form-control" id="seo-og-img" value="${esc(d.og_image||'')}"></div>
+    </div>
+    <div class="form-row cols-2">
+      <div class="form-group"><label class="form-label">Canonical URL</label><input type="url" class="form-control" id="seo-canonical" value="${esc(d.canonical||'')}"></div>
+      <div class="form-group"><label class="form-label">Robots</label>
+        <select class="form-control" id="seo-robots">
+          <option value="index,follow" ${d.robots==='index,follow'?'selected':''}>Index, Follow</option>
+          <option value="noindex,follow" ${d.robots==='noindex,follow'?'selected':''}>Noindex, Follow</option>
+          <option value="noindex,nofollow" ${d.robots==='noindex,nofollow'?'selected':''}>Noindex, Nofollow</option>
+        </select>
+      </div>
+    </div>`;
+  updateSeoPreview();
+}
+
+function updateSeoPreview() {
+  const t=document.getElementById('seo-title')?.value||'Aiventity';
+  const d=document.getElementById('seo-desc')?.value||'';
+  const c=document.getElementById('seo-canonical')?.value||'https://aiventity.com';
+  document.getElementById('prev-title').textContent=t;
+  document.getElementById('prev-desc').textContent=d;
+  document.getElementById('prev-url').textContent=c;
+}
+
+async function saveSeo(btn) {
+  const page=document.getElementById('seo-current-page')?.value||'global';
+  const data={[page]:{
+    meta_title:document.getElementById('seo-title')?.value||'',
+    meta_description:document.getElementById('seo-desc')?.value||'',
+    og_title:document.getElementById('seo-og-title')?.value||'',
+    og_image:document.getElementById('seo-og-img')?.value||'',
+    canonical:document.getElementById('seo-canonical')?.value||'',
+    robots:document.getElementById('seo-robots')?.value||'index,follow',
+  }};
+  const orig=btn.innerHTML; btn.innerHTML='<span class="spinner"></span>'; btn.disabled=true;
+  const r=await apiFetch('/seo','POST',data);
+  btn.innerHTML=orig; btn.disabled=false;
+  if(r.ok){ seoData={...seoData,...data}; toast('✅ SEO opgeslagen!','success'); }
+  else toast('❌ '+(r.error||'Mislukt'),'error');
+}
+
+// ═══════════════════════════════════════════════════════════
+// THEME
+// ═══════════════════════════════════════════════════════════
+async function loadTheme() {
+  themeData=await apiFetch('/theme');
+  if(typeof themeData!=='object'||Array.isArray(themeData)) themeData={};
+  const defaults={primary_color:'#007AFF',accent_color:'#10b981',bg_color:'#050505',text_color:'#ffffff',
+                  heading_font:'Space Grotesk',body_font:'Inter',base_font_size:'16',section_spacing:'100',card_radius:'20',button_radius:'8'};
+  Object.entries(defaults).forEach(([k,v])=>{
+    const val=themeData[k]||v;
+    const el=document.getElementById('th-'+k); if(el) el.value=val;
+    const hex=document.getElementById('th-'+k+'_hex'); if(hex) hex.value=val;
+  });
+}
+
+function syncColor(key,hex) {
+  const picker=document.getElementById('th-'+key);
+  if(picker&&hex.match(/^#[0-9a-fA-F]{6}$/)) picker.value=hex;
+}
+
+document.addEventListener('input',e=>{
+  if(e.target.type==='color'&&e.target.id.startsWith('th-')){
+    const key=e.target.id.slice(3);
+    const hex=document.getElementById('th-'+key+'_hex');
+    if(hex) hex.value=e.target.value;
   }
 });
 
-// ── Start ─────────────────────────────────────────────────────────────────
+async function saveTheme(btn) {
+  const keys=['primary_color','accent_color','bg_color','text_color','heading_font','body_font','base_font_size','section_spacing','card_radius','button_radius'];
+  const data={};
+  keys.forEach(k=>{ const el=document.getElementById('th-'+k); if(el) data[k]=el.value; });
+  const orig=btn.innerHTML; btn.innerHTML='<span class="spinner"></span>'; btn.disabled=true;
+  const r=await apiFetch('/theme','POST',data);
+  btn.innerHTML=orig; btn.disabled=false;
+  if(r.ok){ themeData=data; toast('✅ Thema opgeslagen!','success'); }
+  else toast('❌ '+(r.error||'Mislukt'),'error');
+}
+
+// ═══════════════════════════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════════════════════════
+async function loadSettings() {
+  const cfg=await apiFetch('/config');
+  if(typeof cfg!=='object') return;
+  const keys=['site_name','site_tagline','company_name','contact_email','kvk_number','vat_number',
+    'seo_meta_title','seo_meta_description','og_image_url','canonical_url','favicon_url',
+    'twitter_url','linkedin_url','instagram_url','github_url','google_analytics_id',
+    'netlify_token','netlify_site_id'];
+  keys.forEach(k=>{ const el=document.getElementById('cfg-'+k); if(el&&cfg[k]!=null) el.value=cfg[k]; });
+}
+
+async function saveSettings(btn) {
+  const keys=['site_name','site_tagline','company_name','contact_email','kvk_number','vat_number',
+    'seo_meta_title','seo_meta_description','og_image_url','canonical_url','favicon_url',
+    'twitter_url','linkedin_url','instagram_url','github_url','google_analytics_id',
+    'netlify_token','netlify_site_id'];
+  const data={};
+  keys.forEach(k=>{ const el=document.getElementById('cfg-'+k); if(el&&el.value) data[k]=el.value; });
+  const orig=btn.innerHTML; btn.innerHTML='<span class="spinner"></span>'; btn.disabled=true;
+  const r=await apiFetch('/config','POST',data);
+  btn.innerHTML=orig; btn.disabled=false;
+  if(r.ok) toast('✅ Instellingen opgeslagen!','success');
+  else toast('❌ '+(r.error||'Mislukt'),'error');
+}
+
+// ═══════════════════════════════════════════════════════════
+// ACTIVITY LOG
+// ═══════════════════════════════════════════════════════════
+const actIcons={publish:'🚀',content_save:'✏️',settings_save:'⚙️',theme_save:'🎨',seo_save:'🔍',
+                media_upload:'📁',media_delete:'🗑',restore:'↩'};
+const actColors={publish:'var(--green)',content_save:'var(--accent)',settings_save:'var(--text2)',
+                 theme_save:'var(--purple)',media_upload:'var(--yellow)',media_delete:'var(--red)',restore:'var(--yellow)'};
+
+async function loadActivity() {
+  const data=await apiFetch('/activity');
+  const el=document.getElementById('activity-list');
+  if(!Array.isArray(data)||!data.length){
+    el.innerHTML='<div class="empty-state"><div class="empty-icon">📋</div><p>Geen activiteiten gevonden</p></div>';
+    return;
+  }
+  el.innerHTML=data.map(a=>{
+    const ic=actIcons[a.action]||'•';
+    const col=actColors[a.action]||'var(--text2)';
+    const dt=a.ts?new Date(a.ts).toLocaleString('nl-NL',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'';
+    return `<div class="activity-item">
+      <div class="activity-icon" style="background:${col}22;color:${col}">${ic}</div>
+      <div class="activity-body">
+        <div class="activity-action">${a.detail||a.action}</div>
+        <div class="activity-time">${dt}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// KEYBOARD SHORTCUTS
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==='s'){
+    e.preventDefault();
+    if(currentPage==='editor'){ const b=document.getElementById('save-btn'); saveSection(b); }
+    else if(currentPage==='settings'){ const b=document.querySelector('#page-settings .btn-primary'); if(b) saveSettings(b); }
+    else if(currentPage==='seo'){ const b=document.querySelector('#page-seo .btn-primary'); if(b) saveSeo(b); }
+    else if(currentPage==='theme'){ const b=document.querySelector('#page-theme .btn-primary'); if(b) saveTheme(b); }
+  }
+  if((e.ctrlKey||e.metaKey)&&e.key==='z'){ e.preventDefault(); undoAction(); }
+  if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key==='P'){ e.preventDefault(); publishSite(document.getElementById('pub-btn')); }
+});
+
+// ═══════════════════════════════════════════════════════════
+// START
+// ═══════════════════════════════════════════════════════════
 init();
 </script>
 </body>
