@@ -15,9 +15,12 @@
   "theme": {
     "primary_color": "#0433ff",
     "accent_color": "#10b981",
-    "heading_font": "Space Grotesk",
-    "body_font": "Inter",
-    "nav_bg": "#070d1c"
+    "heading_font": "Inter",
+    "body_font": "Open Sans",
+    "nav_bg": "#070d1c",
+    "hero_h1_size": "clamp(1.75rem,4vw,2.5rem)",
+    "section_h2_size": "clamp(1.25rem,3vw,1.75rem)",
+    "body_font_size": "0.9375rem"
   },
   "last_published": "1-6-2026, 22:24:56"
 }
