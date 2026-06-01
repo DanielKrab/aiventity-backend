@@ -248,5 +248,10 @@
     "ts": "2026-06-01T20:13:46.360Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
+  },
+  {
+    "ts": "2026-06-01T20:13:54.108Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: integration"
   }
 ]
