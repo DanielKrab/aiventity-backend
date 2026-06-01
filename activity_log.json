@@ -128,5 +128,10 @@
     "ts": "2026-06-01T19:59:23.274Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
+  },
+  {
+    "ts": "2026-06-01T19:59:47.699Z",
+    "action": "media_upload",
+    "detail": "Bestand geüpload: monday-1.svg"
   }
 ]
