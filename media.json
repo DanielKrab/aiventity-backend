@@ -54,5 +54,12 @@
     "type": "image/jpeg",
     "size": 46053,
     "uploaded": "2026-06-02T10:34:59.723Z"
+  },
+  {
+    "name": "Screenshot_2026-06-02_at_13.08.37.png",
+    "url": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/Screenshot_2026-06-02_at_13.08.37.png",
+    "type": "image/png",
+    "size": 684682,
+    "uploaded": "2026-06-02T11:09:39.170Z"
   }
 ]
