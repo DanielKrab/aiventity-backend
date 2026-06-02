@@ -298,5 +298,10 @@
     "ts": "2026-06-02T09:52:27.797Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: footer"
+  },
+  {
+    "ts": "2026-06-02T09:52:40.551Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: apply"
   }
 ]
