@@ -343,5 +343,10 @@
     "ts": "2026-06-02T11:10:06.931Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: architecture"
+  },
+  {
+    "ts": "2026-06-02T11:30:52.305Z",
+    "action": "publish",
+    "detail": "Website gepubliceerd op Netlify"
   }
 ]
