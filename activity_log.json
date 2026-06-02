@@ -373,5 +373,10 @@
     "ts": "2026-06-02T12:48:30.843Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero"
+  },
+  {
+    "ts": "2026-06-02T12:49:31.215Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero"
   }
 ]
