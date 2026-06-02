@@ -129,5 +129,10 @@
     "copyright_nl": "Po",
     "copyright_en": "Po"
   },
-  "_snapshot": {}
+  "_snapshot": {},
+  "dna_slides": {
+    "slide1_img": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/airtable-database-spreadsheet-logo-application-software-slack-logo.jpg",
+    "slide2_img": "",
+    "slide3_img": ""
+  }
 }
