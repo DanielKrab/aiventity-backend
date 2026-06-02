@@ -438,5 +438,10 @@
     "ts": "2026-06-02T14:46:19.628Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
+  },
+  {
+    "ts": "2026-06-02T14:50:13.832Z",
+    "action": "publish",
+    "detail": "Website gepubliceerd op Netlify"
   }
 ]
