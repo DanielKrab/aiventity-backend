@@ -303,5 +303,10 @@
     "ts": "2026-06-02T09:52:40.551Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: apply"
+  },
+  {
+    "ts": "2026-06-02T10:35:00.564Z",
+    "action": "media_upload",
+    "detail": "Bestand geüpload: airtable-database-spreadsheet-logo-application-software-slack-logo.jpg"
   }
 ]
