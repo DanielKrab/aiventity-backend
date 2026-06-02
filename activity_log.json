@@ -418,5 +418,10 @@
     "ts": "2026-06-02T14:33:55.327Z",
     "action": "settings_save",
     "detail": "Website instellingen opgeslagen"
+  },
+  {
+    "ts": "2026-06-02T14:40:55.778Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: architecture"
   }
 ]
