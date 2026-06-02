@@ -398,5 +398,10 @@
     "ts": "2026-06-02T13:37:06.941Z",
     "action": "translate",
     "detail": "Auto-vertaling NL→EN uitgevoerd"
+  },
+  {
+    "ts": "2026-06-02T13:42:35.501Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero"
   }
 ]
