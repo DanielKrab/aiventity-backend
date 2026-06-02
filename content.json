@@ -151,6 +151,9 @@
     "c3_title_nl": "A2A-samenwerking",
     "c3_title_en": "A2A-samenwerking",
     "c3_text_nl": "Teams delegeren subtaken automatisch aan gespecialiseerde uitvoeringsgerichte digitale collega's.",
-    "c3_text_en": "Teams delegeren subtaken automatisch aan gespecialiseerde uitvoeringsgerichte digitale collega's."
+    "c3_text_en": "Teams delegeren subtaken automatisch aan gespecialiseerde uitvoeringsgerichte digitale collega's.",
+    "slide1_img": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/Screenshot_2026-06-02_at_13.08.37.png",
+    "slide2_img": "",
+    "slide3_img": ""
   }
 }
