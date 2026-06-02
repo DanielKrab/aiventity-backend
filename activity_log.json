@@ -453,5 +453,10 @@
     "ts": "2026-06-02T14:52:00.775Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: Screenshot_2026-06-02_at_16.51.48.png"
+  },
+  {
+    "ts": "2026-06-02T14:52:07.010Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: architecture"
   }
 ]
