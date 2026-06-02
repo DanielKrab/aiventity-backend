@@ -478,5 +478,10 @@
     "ts": "2026-06-02T17:11:59.116Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero"
+  },
+  {
+    "ts": "2026-06-02T17:12:02.172Z",
+    "action": "restore",
+    "detail": "Snapshot hersteld: index 6"
   }
 ]
