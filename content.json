@@ -104,18 +104,23 @@
     "c4_text_nl": "Wanneer de scope verandert of een leverancier afhaakt, herplant Aiventity de workflow, informeert stakeholders en houdt het project op koers — automatisch."
   },
   "apply": {
-    "label_en": "Early Access",
+    "label_en": "Vroeg Toegang",
     "label_nl": "Vroeg Toegang",
     "headline_part1_en": "Ready to run at the",
     "headline_part1_nl": "Klaar om te draaien op de",
     "headline_accent_en": "speed of thought?",
     "headline_accent_nl": "snelheid van gedachte?",
-    "body_en": "Aiventity is currently invite-only. Apply for early access and be among the first to run on autonomous agent intelligence.",
+    "body_en": "Aiventity is momenteel alleen op uitnodiging. Vraag vroeg toegang aan en behoor tot de eerste die op autonome agent-intelligentie draait.",
     "body_nl": "Aiventity is momenteel alleen op uitnodiging. Vraag vroeg toegang aan en behoor tot de eerste die op autonome agent-intelligentie draait.",
     "btn_en": "Apply Now",
     "btn_nl": "Aanmelden",
     "note_en": "No credit card required · Invitation within 48 hours",
-    "note_nl": "Geen creditcard vereist · Uitnodiging binnen 48 uur"
+    "note_nl": "Geen creditcard vereist · Uitnodiging binnen 48 uur",
+    "title_nl": "",
+    "title_en": "",
+    "cta_nl": "",
+    "cta_en": "",
+    "cta_href": ""
   },
   "footer": {
     "tagline_en": "Bedenk. Automatiseer. Voer uit.",
