@@ -293,5 +293,10 @@
     "ts": "2026-06-01T21:07:36.811Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
+  },
+  {
+    "ts": "2026-06-02T09:52:27.797Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: footer"
   }
 ]
