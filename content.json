@@ -118,9 +118,11 @@
     "note_nl": "Geen creditcard vereist · Uitnodiging binnen 48 uur"
   },
   "footer": {
-    "tagline_en": "Imagine. Automate. Execute.",
+    "tagline_en": "Bedenk. Automatiseer. Voer uit.",
     "tagline_nl": "Bedenk. Automatiseer. Voer uit.",
-    "copyright": "© 2026 Aiventity. All rights reserved."
+    "copyright": "© 2026 Aiventity. All rights reserved.",
+    "copyright_nl": "Po",
+    "copyright_en": "Po"
   },
   "_snapshot": {}
 }
