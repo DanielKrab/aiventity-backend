@@ -235,7 +235,7 @@ function buildFallback(s) {
 async function autoTranslateContent(content) {
   const out=JSON.parse(JSON.stringify(content));
 
-  // Verzamel ALLE NL velden — altijd opnieuw vertalen zodat gewijzigde NL ook EN updatet
+  // Alleen vertalen als EN veld leeg is — handmatig geschreven EN tekst nooit overschrijven
   const toTranslate=[];
   for(const section of Object.keys(out)){
     if(typeof out[section]!=="object"||Array.isArray(out[section])) continue;
@@ -244,6 +244,8 @@ async function autoTranslateContent(content) {
       const nlVal=out[section][key];
       if(!nlVal||typeof nlVal!=="string"||!nlVal.trim()) continue;
       const enKey=key.replace(/_nl$/,"_en");
+      const existingEn=out[section][enKey];
+      if(existingEn&&typeof existingEn==="string"&&existingEn.trim()) continue; // al ingevuld
       toTranslate.push({section,enKey,nlVal});
     }
   }
