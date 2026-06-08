@@ -13,12 +13,12 @@
   "netlify_site_id": "5559f234-9246-4edf-a2c5-778983c63285",
   "secret_key": "00e3323101f0141b53f24be521309c051da43d3947fad78ffe6fe29a7cf719d0",
   "theme": {
-    "primary_color": "#0433ff",
+    "primary_color": "#007aff",
     "accent_color": "#10b981",
     "heading_font": "Inter",
     "body_font": "Open Sans",
     "nav_bg": "#070d1c",
-    "hero_h1_size": "clamp(1.25rem,3vw,1.875rem)",
+    "hero_h1_size": "clamp(0.875rem,2vw,1.125rem)",
     "section_h2_size": "clamp(1.25rem,3vw,1.75rem)",
     "body_font_size": "0.8125rem"
   },
