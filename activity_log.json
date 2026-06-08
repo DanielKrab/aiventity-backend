@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-01T20:07:53.649Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: integration"
-  },
-  {
     "ts": "2026-06-01T20:08:12.921Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: Slack_icon_2019.svg.png"
@@ -996,6 +991,11 @@
   },
   {
     "ts": "2026-06-08T21:32:08.404Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: architecture"
+  },
+  {
+    "ts": "2026-06-08T21:32:13.055Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: architecture"
   }
