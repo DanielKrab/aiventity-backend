@@ -493,5 +493,10 @@
     "ts": "2026-06-08T10:09:29.305Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: whatsapp-logo-whatsapp-logo-transparent-whatsapp-icon-transparent-free-free-png.webp"
+  },
+  {
+    "ts": "2026-06-08T10:09:35.565Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: integration"
   }
 ]
