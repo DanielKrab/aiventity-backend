@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-01T20:10:05.165Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: integration"
-  },
-  {
     "ts": "2026-06-01T20:10:18.406Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: airtable-database-spreadsheet-logo-application-software-slack-logo.jpg"
@@ -996,6 +991,11 @@
   },
   {
     "ts": "2026-06-08T21:33:11.067Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: integration"
+  },
+  {
+    "ts": "2026-06-08T21:33:14.997Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
   }
