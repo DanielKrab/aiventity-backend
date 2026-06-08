@@ -818,5 +818,10 @@
     "ts": "2026-06-08T20:42:02.277Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
+  },
+  {
+    "ts": "2026-06-08T20:42:07.844Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: navigation"
   }
 ]
