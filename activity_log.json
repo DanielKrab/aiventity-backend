@@ -638,5 +638,10 @@
     "ts": "2026-06-08T18:42:57.914Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
+  },
+  {
+    "ts": "2026-06-08T18:43:00.125Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero"
   }
 ]
