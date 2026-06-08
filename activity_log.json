@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-01T19:52:08.126Z",
-    "action": "media_upload",
-    "detail": "Bestand geüpload: Salesforce.com_logo.svg.png"
-  },
-  {
     "ts": "2026-06-01T19:52:14.062Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
@@ -998,5 +993,10 @@
     "ts": "2026-06-08T21:03:45.567Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation"
+  },
+  {
+    "ts": "2026-06-08T21:03:48.058Z",
+    "action": "publish",
+    "detail": "Website gepubliceerd op Netlify"
   }
 ]
