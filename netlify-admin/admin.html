@@ -1830,7 +1830,7 @@ function renderNavEditor() {
         </label>
         <input type="range" min="14" max="120" value="${logoH}" id="nav-logo-h"
           style="width:100%;accent-color:var(--accent)"
-          oninput="document.getElementById('nav-h-val').textContent=this.value+'px';navSaveDebounced()">
+          oninput="document.getElementById('nav-h-val').textContent=this.value+'px';navLiveLogoH(this.value);navSaveDebounced()">
       </div>
 
       <!-- ── NAVIGATIEBALK ── -->
@@ -1843,7 +1843,7 @@ function renderNavEditor() {
         </label>
         <input type="range" min="30" max="100" value="${barH}" id="nav-bar-h"
           style="width:100%;accent-color:var(--accent)"
-          oninput="document.getElementById('nav-barh-val').textContent=this.value+'px';navSaveDebounced()">
+          oninput="document.getElementById('nav-barh-val').textContent=this.value+'px';navLiveBarH(this.value);navSaveDebounced()">
         <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px"><span>30px</span><span>100px</span></div>
       </div>
 
@@ -1854,7 +1854,7 @@ function renderNavEditor() {
         </label>
         <input type="range" min="0" max="90" value="${barAlphaSlider}" id="nav-bar-alpha"
           style="width:100%;accent-color:var(--accent)"
-          oninput="document.getElementById('nav-alpha-val').textContent=this.value+'%';navSaveDebounced()">
+          oninput="document.getElementById('nav-alpha-val').textContent=this.value+'%';navLiveAlpha(this.value);navSaveDebounced()">
         <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px"><span>Volledig transparant</span><span>Ondoorzichtig</span></div>
       </div>
 
@@ -1898,8 +1898,43 @@ function navUrlChange(){
   navSaveDebounced();
 }
 
+function navIframe(){ return document.getElementById('preview')?.contentWindow?.document; }
+
+function navLiveLogoH(v) {
+  const d=navIframe(); if(!d) return;
+  const img=d.getElementById('site-nav-logo');
+  if(img) img.style.height=v+'px';
+}
+
+function navLiveBarH(v) {
+  const d=navIframe(); if(!d) return;
+  const nav=d.querySelector('#nav nav');
+  if(nav) nav.style.height=v+'px';
+}
+
+function navLiveAlpha(v) {
+  const d=navIframe(); if(!d) return;
+  const hdr=d.getElementById('nav');
+  if(hdr) hdr.style.background='rgba(5,5,5,'+(v/100).toFixed(2)+')';
+}
+
 let _navSaveTimer=null;
-function navSaveDebounced(){ clearTimeout(_navSaveTimer); _navSaveTimer=setTimeout(saveNavSection,800); }
+function navSaveDebounced(){ clearTimeout(_navSaveTimer); _navSaveTimer=setTimeout(saveNavSectionQuiet,1200); }
+
+async function saveNavSectionQuiet(){
+  const url=(document.getElementById('nav-logo-url')||{}).value||'';
+  const h=(document.getElementById('nav-logo-h')||{}).value||'22';
+  const barHeight=(document.getElementById('nav-bar-h')||{}).value||'48';
+  const alphaSlider=+(document.getElementById('nav-bar-alpha')||{value:10}).value;
+  const alpha=(alphaSlider/100).toFixed(2);
+  if(!contentData.navigation) contentData.navigation={};
+  contentData.navigation.nav_logo=url;
+  contentData.navigation.nav_logo_height=h;
+  contentData.navigation.nav_bar_height=barHeight;
+  contentData.navigation.nav_bar_alpha=alpha;
+  await apiFetch('/content','POST',contentData);
+  // no toast, no reload — changes already visible live
+}
 
 async function saveNavSection(){
   const url=(document.getElementById('nav-logo-url')||{}).value||'';
