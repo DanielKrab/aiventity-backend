@@ -14,8 +14,9 @@ const GITHUB_TOKEN   = process.env.GITHUB_TOKEN   || "";
 const GITHUB_OWNER   = process.env.GITHUB_OWNER   || "DanielKrab";
 const GITHUB_REPO    = process.env.GITHUB_REPO    || "aiventity-backend";
 const GITHUB_BRANCH  = process.env.GITHUB_BRANCH  || "data";
-const NETLIFY_TOKEN  = process.env.NETLIFY_TOKEN  || "";
-const PUBLIC_SITE_ID = process.env.PUBLIC_SITE_ID || "5559f234-9246-4edf-a2c5-778983c63285";
+const NETLIFY_TOKEN    = process.env.NETLIFY_TOKEN    || "";
+const PUBLIC_SITE_ID   = process.env.PUBLIC_SITE_ID   || "5559f234-9246-4edf-a2c5-778983c63285";
+const ANTHROPIC_API_KEY= process.env.ANTHROPIC_API_KEY|| "";
 const TOKEN_TTL      = 7 * 24 * 3600;
 
 const CORS = {
@@ -127,42 +128,72 @@ function bad(m="Ongeldig verzoek") { return resp(400,{error:m}); }
 // ══════════════════════════════════════════════════════════════════════════
 const LOGO_URL=`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/static/logo.png`;
 
+function escHtml(s){
+  return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
 function evalJinja(expr,ctx) {
   if(expr.includes("~")) return expr.split("~").map(p=>evalJinja(p.trim(),ctx)).join("");
   const m=expr.match(/^(\w+)\.get\(['"]([^'"]+)['"]\s*(?:,\s*['"]([^'"]*)['"]\s*)?\)$/);
-  if(m){ const o=ctx[m[1]]||{}; return o[m[2]]!==undefined?String(o[m[2]]):m[3]||""; }
+  if(m){ const o=ctx[m[1]]||{}; let v=o[m[2]]; if((v===undefined||v===null||v==="")&&String(m[2]).endsWith("_en")){ v=o[m[2].replace(/_en$/,"_nl")]; } v=(v!==undefined&&v!==null&&v!=="")?String(v):m[3]||""; return escHtml(v); }
   const s=expr.match(/^['"]([^'"]*)['"]\s*$/); if(s) return s[1];
-  if(/^\w+$/.test(expr)&&expr in ctx) return String(ctx[expr]||"");
+  if(/^\w+$/.test(expr)&&expr in ctx) return escHtml(String(ctx[expr]||""));
   return "";
 }
 
 function buildThemeCSS(theme={}) {
+  // Only override accent colors — NEVER touch background/text (would break dark design)
   const p=theme.primary_color||"#007AFF";
   const a=theme.accent_color||"#10b981";
-  const bg=theme.bg_color||"#050505";
-  const tc=theme.text_color||"#ffffff";
-  const hf=theme.heading_font||"Space Grotesk";
-  const bf=theme.body_font||"Inter";
-  return `
-:root{--p:${p};--a:${a};--bg:${bg};--tc:${tc};}
-body{background-color:var(--bg)!important;color:var(--tc)!important;font-family:'${bf}',sans-serif!important;}
-h1,h2,h3,h4,h5,.font-heading,[class*="font-heading"]{font-family:'${hf}',sans-serif!important;}
-.btn-primary{background:var(--p)!important;border-color:var(--p)!important;}
-.btn-primary:hover{filter:brightness(1.15)!important;}
-.text-ai-blue,.text-ai-blue *{color:var(--p)!important;}
-h1 span:nth-child(2){color:var(--p)!important;}
-.gradient-text{background:linear-gradient(135deg,var(--tc) 30%,var(--p) 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;}
-.glass-blue{border-color:color-mix(in srgb,var(--p) 30%,transparent)!important;}
-.lbtn-on{background:var(--p)!important;}
-.ping-dot{background:var(--a)!important;}
-.tag-ok{color:var(--a)!important;}
-.feature-card:hover{border-color:color-mix(in srgb,var(--p) 40%,transparent)!important;box-shadow:0 20px 60px color-mix(in srgb,var(--p) 12%,transparent)!important;}
-`.trim();
+  const hf=(theme.heading_font||"Space Grotesk").replace(/'/g,"");
+  const bf=(theme.body_font||"Inter").replace(/'/g,"");
+  // Dynamically load any fonts not pre-loaded in the template
+  const preloaded=["Space Grotesk","Inter"];
+  const extraFonts=[...new Set([hf,bf])].filter(f=>!preloaded.includes(f));
+  let css="";
+  if(extraFonts.length){
+    const families=extraFonts.map(f=>`family=${encodeURIComponent(f)}:wght@400;500;600;700`).join("&");
+    css+=`@import url('https://fonts.googleapis.com/css2?${families}&display=swap');\n`;
+  }
+  css+=`
+:root{--p:${p};--a:${a};}
+.btn-primary{background:${p}!important;border-color:${p}!important;}
+.btn-primary:hover{filter:brightness(1.12)!important;}
+.text-ai-blue{color:${p}!important;}
+h1 .text-ai-blue,h1 span:nth-child(2){color:${p}!important;}
+a.btn-primary{color:#fff!important;}
+.glass-blue{border-color:${p}33!important;}
+.lbtn-on{background:${p}!important;}
+.ping-dot{background-color:${a}!important;}
+.tag-ok{color:${a}!important;}
+.feature-card:hover{border-color:${p}66!important;}
+h1,h2,h3,h4,h5,.font-heading{font-family:'${hf}',sans-serif!important;}
+body{font-family:'${bf}',sans-serif!important;}`.trim();
+  // Section background colors (only injected when explicitly set by user)
+  const sectionMap=[
+    ["nav_bg",       ".nav-blur{background:{c}!important;backdrop-filter:blur(20px)!important;}"],
+    ["hero_bg",      "#cms-hero{background:{c}!important;}"],
+    ["creativity_bg","#creativity{background:{c}!important;}"],
+    ["architecture_bg","#architecture{background:{c}!important;}"],
+    ["integration_bg","#integration{background:{c}!important;}"],
+    ["execution_bg", "#execution{background:{c}!important;}"],
+    ["apply_bg",     "#apply{background:{c}!important;}"],
+    ["footer_bg",    "#cms-footer{background:{c}!important;}"],
+  ];
+  sectionMap.forEach(([k,rule])=>{
+    if(theme[k]) css+="\n"+rule.replace("{c}",theme[k]);
+  });
+  // Font size overrides (only injected when explicitly set)
+  if(theme.hero_h1_size)    css+=`\n#cms-hero h1{font-size:${theme.hero_h1_size}!important;line-height:1.05!important;}`;
+  if(theme.section_h2_size) css+=`\n#creativity h2,#integration h2,#execution h2,#apply h2{font-size:${theme.section_h2_size}!important;}`;
+  if(theme.body_font_size)  css+=`\nbody p,body li{font-size:${theme.body_font_size}!important;}`;
+  return css;
 }
 
 function renderWebsite(content,cfg={},themeOverride=null) {
   const sections={h:content.hero||{},cr:content.creativity||{},ig:content.integration||{},
-                  ex:content.execution||{},ap:content.apply||{},ft:content.footer||{}};
+                  ar:content.architecture||{},
+                  ex:content.execution||{},ap:content.apply||{},ft:content.footer||{},
+                  ds:content.dna_slides||{}};
   const tmplPath=path.join(__dirname,"templates","website.html");
   let html;
   try { html=fs.readFileSync(tmplPath,"utf-8"); } catch { return buildFallback(sections); }
@@ -184,10 +215,75 @@ function renderWebsite(content,cfg={},themeOverride=null) {
       html=html.replace("</head>",`<link href="https://fonts.googleapis.com/css2?${fonts}&display=swap" rel="stylesheet"></head>`);
     }
   }
+  // Inject section order CSS
+  const secOrder=cfg&&cfg.section_order;
+  if(Array.isArray(secOrder)&&secOrder.length>1){
+    const idMap={hero:"cms-hero",creativity:"creativity",architecture:"architecture",
+                 integration:"integration",execution:"execution",apply:"apply",footer:"cms-footer"};
+    let ocss="body{display:flex;flex-direction:column;}\n#nav{order:0;}\n";
+    secOrder.forEach((key,i)=>{ const id=idMap[key]; if(id) ocss+=`#${id}{order:${i+1};}\n`; });
+    html=html.replace("</head>",`<style id="cms-order">${ocss}</style></head>`);
+  }
   return html;
 }
 function buildFallback(s) {
   return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Aiventity</title></head><body style="background:#050505;color:#fff;font-family:sans-serif;padding:40px"><h1>${s.h.h1_en||"Imagine."} ${s.h.h2_en||"Automate."} ${s.h.h3_en||"Execute."}</h1><p>${s.h.subheadline_en||""}</p></body></html>`;
+}
+
+// ── Auto-translation via Claude API (batch — één call voor alle velden) ──────
+async function autoTranslateContent(content) {
+  const out=JSON.parse(JSON.stringify(content));
+
+  // Verzamel ALLE NL velden — altijd opnieuw vertalen zodat gewijzigde NL ook EN updatet
+  const toTranslate=[];
+  for(const section of Object.keys(out)){
+    if(typeof out[section]!=="object"||Array.isArray(out[section])) continue;
+    for(const key of Object.keys(out[section])){
+      if(!key.endsWith("_nl")) continue;
+      const nlVal=out[section][key];
+      if(!nlVal||typeof nlVal!=="string"||!nlVal.trim()) continue;
+      const enKey=key.replace(/_nl$/,"_en");
+      toTranslate.push({section,enKey,nlVal});
+    }
+  }
+  if(!toTranslate.length) return out;
+
+  // Claude API batch (één call, beste kwaliteit)
+  if(ANTHROPIC_API_KEY){
+    try{
+      const numbered=toTranslate.map((t,i)=>`${i+1}|${t.nlVal}`).join("\n");
+      const prompt=`You are a professional translator for Aiventity, a B2B AI SaaS platform. Translate each Dutch marketing text to natural, confident English. Keep tone professional yet human. Do NOT translate proper nouns (Aiventity, MCP, Agent Space, Topics). Return ONLY the translations, one per line, in format: NUMBER|TRANSLATION\n\n${numbered}`;
+      const body=JSON.stringify({model:"claude-haiku-4-5",max_tokens:2048,messages:[{role:"user",content:prompt}]});
+      const resp=JSON.parse(await httpRequest("https://api.anthropic.com/v1/messages",{
+        method:"POST",headers:{"x-api-key":ANTHROPIC_API_KEY,"anthropic-version":"2023-06-01","content-type":"application/json"}
+      },body));
+      const lines=(resp.content[0].text||"").split("\n");
+      lines.forEach(line=>{
+        const m=line.match(/^(\d+)\|(.+)$/);
+        if(!m) return;
+        const idx=parseInt(m[1],10)-1;
+        if(toTranslate[idx]) out[toTranslate[idx].section][toTranslate[idx].enKey]=m[2].trim();
+      });
+      return out;
+    }catch(e){}
+  }
+
+  // Fallback: Google Translate — parallel in batches van 5
+  const gtx=async(item)=>{
+    try{
+      const url=`https://translate.googleapis.com/translate_a/single?client=gtx&sl=nl&tl=en&dt=t&q=${encodeURIComponent(item.nlVal.slice(0,500))}`;
+      const r=JSON.parse(await httpRequest(url,{method:"GET",headers:{"User-Agent":"Mozilla/5.0 (compatible)"}},null));
+      if(Array.isArray(r)&&Array.isArray(r[0])){
+        const t=r[0].map(s=>s[0]||"").join("").trim();
+        if(t) out[item.section][item.enKey]=t;
+      }
+    }catch(e){}
+  };
+  for(let i=0;i<toTranslate.length;i+=5){
+    await Promise.all(toTranslate.slice(i,i+5).map(gtx));
+    if(i+5<toTranslate.length) await new Promise(r=>setTimeout(r,150));
+  }
+  return out;
 }
 
 async function doPublish(body={}) {
@@ -196,7 +292,9 @@ async function doPublish(body={}) {
   const token=body.netlify_token||cfg.netlify_token||NETLIFY_TOKEN;
   const siteId=body.netlify_site_id||cfg.netlify_site_id||PUBLIC_SITE_ID;
   if(!token||!siteId) throw new Error("Netlify token of site ID ontbreekt");
-  const html=renderWebsite(content,cfg);
+  // Auto-translate NL → EN before rendering
+  const translatedContent=await autoTranslateContent(content);
+  const html=renderWebsite(translatedContent,cfg);
   const htmlBuf=Buffer.from(html,"utf-8");
   const htmlSha1=crypto.createHash("sha1").update(htmlBuf).digest("hex");
   const hdrsBuf=Buffer.from("/*\n  Content-Type: text/html; charset=utf-8\n  Cache-Control: public, max-age=0, must-revalidate\n  X-Frame-Options: SAMEORIGIN\n");
@@ -253,7 +351,7 @@ exports.handler = async (event) => {
     const {data:inbox,sha:iSha}=await ghGet("inbox.json");
     const arr=Array.isArray(inbox)?inbox:[];
     const id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-    const entry={id,name:b.name||b.naam||"",email,phone:b.phone||"",
+    const entry={id,name:b.name||b.naam||b.voornaam||"",lastname:b.lastname||b.achternaam||"",email,phone:b.phone||b.telefoon||"",
                  subject:b.subject||b.onderwerp||"Aanmelding/vraag",
                  message:message||"(geen bericht)",
                  ts:new Date().toISOString(),read:false};
@@ -327,7 +425,8 @@ exports.handler = async (event) => {
         await ghPut("content_history.json",arr.slice(-30),hSha,"CMS: save snapshot");
       }
       await logActivity("content_save",`Sectie opgeslagen: ${Object.keys(body).filter(k=>k!=='_snapshot').join(", ")}`);
-      return resp(200,{ok:true});
+      try { await doPublish({}); } catch(e) {}
+      return resp(200,{ok:true,auto_published:true});
     }
   }
 
@@ -340,6 +439,8 @@ exports.handler = async (event) => {
         "google_analytics_id","contact_email","favicon_url","netlify_token","netlify_site_id",
         "company_name","company_address","company_phone","kvk_number","vat_number"];
       for(const k of ok) if(body[k]!==undefined&&body[k]!=="") cfg[k]=body[k];
+      // Section order (array)
+      if(Array.isArray(body.section_order)&&body.section_order.length>0) cfg.section_order=body.section_order;
       await ghPut("config.json",cfg,sha,"CMS: save config");
       await logActivity("settings_save","Website instellingen opgeslagen");
       return resp(200,{ok:true});
@@ -437,6 +538,23 @@ exports.handler = async (event) => {
     const {action,detail}=body;
     if(action) await logActivity(action,detail||"");
     return resp(200,{ok:true});
+  }
+
+  // ── Translate NL → EN ────────────────────────────────────────────────────
+  if(p==="/api/translate"&&method==="POST") {
+    const {data:c,sha}=await ghGet("content.json");
+    const translated=await autoTranslateContent(c);
+    // Count how many EN fields were filled in
+    let count=0;
+    for(const sec of Object.values(translated)){
+      if(typeof sec!=="object"||Array.isArray(sec)) continue;
+      for(const [k,v] of Object.entries(sec)){
+        if(k.endsWith("_en")&&v&&v.trim()) count++;
+      }
+    }
+    await ghPut("content.json",translated,sha,"CMS: auto-vertaling NL→EN");
+    await logActivity("translate","Auto-vertaling NL→EN uitgevoerd");
+    return resp(200,{ok:true,count});
   }
 
   return resp(404,{error:"Route niet gevonden",path:p});
