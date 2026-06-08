@@ -768,5 +768,10 @@
     "ts": "2026-06-08T20:32:37.379Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
+  },
+  {
+    "ts": "2026-06-08T20:37:55.062Z",
+    "action": "media_upload",
+    "detail": "Bestand geüpload: Logo-Aiventity__1_.png"
   }
 ]
