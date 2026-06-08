@@ -64,6 +64,7 @@
 
     /* ── Nav ── */
     .nav-blur { background: rgba(5,5,5,0.35); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.04); }
+    img[src=""],img:not([src]) { display:none!important; }
 
     /* ── Logo float ── */
     @keyframes logoFloat { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
@@ -146,7 +147,7 @@
   <nav class="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
 
     <a id="nav-logo" href="#" class="flex items-center leading-none" style="text-decoration:none;">
-      {% if nav.get('nav_logo','') %}<img src="{{ nav.get('nav_logo','') }}" alt="Logo" style="height:22px;width:auto;object-fit:contain;display:block;opacity:0.85;" />{% else %}<img src="/logo-wordmark.png" alt="Logo" style="height:22px;width:auto;object-fit:contain;display:block;opacity:0.85;" />{% endif %}
+      <img src="{{ nav.get('nav_logo','') }}" alt="" id="site-nav-logo" style="height:{{ nav.get('nav_logo_height','22') }}px;width:auto;object-fit:contain;display:block;opacity:0.85;" />
     </a>
 
     <ul class="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide text-white/60">
@@ -950,7 +951,7 @@
   </div>
   <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/30 mb-6">
     <div class="flex items-center gap-2">
-      {% if nav.get('nav_logo','') %}<img src="{{ nav.get('nav_logo','') }}" alt="Logo" style="height:20px;width:auto;opacity:0.6;">{% else %}<img src="/logo-wordmark.png" alt="Logo" style="height:20px;width:auto;opacity:0.6;">{% endif %}
+      <img src="{{ nav.get('nav_logo','') }}" alt="" style="height:20px;width:auto;opacity:0.6;" />
       <span class="mx-2">·</span>
       <span data-en="{{ ft.get('tagline_en','') }}" data-nl="{{ ft.get('tagline_nl','') }}">{{ ft.get('tagline_en','') }}</span>
     </div>
