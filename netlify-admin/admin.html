@@ -424,6 +424,7 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
           <svg class="sb-folder-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
         <div class="sb-sub-nav open" id="sb-sub-marketing">
+          <button class="sb-sub-item" onclick="navToSection('navigation')"   data-sec="navigation">Navigatie</button>
           <button class="sb-sub-item" onclick="navToSection('hero')"         data-sec="hero">Hero</button>
           <button class="sb-sub-item" onclick="navToSection('creativity')"   data-sec="creativity">Creativity</button>
           <button class="sb-sub-item" onclick="navToSection('architecture')" data-sec="architecture">Architecture</button>
@@ -986,6 +987,7 @@ let modalConfirmCb = () => {};
 let previewLoaded = false;
 
 const SECTIONS = [
+  {key:'navigation',   label:'Navigatie'},
   {key:'hero',         label:'Hero'},
   {key:'creativity',   label:'Creativity'},
   {key:'architecture', label:'Architecture'},
@@ -997,6 +999,12 @@ const SECTIONS = [
 
 // Field definitions per section
 const FIELDS = {
+  navigation: {
+    content: [
+      {f:'_div_logo', l:'── Logo', wide:true, divider:true},
+      {f:'nav_logo', l:'Nav logo (afbeelding)', wide:true, logo:true, df:''},
+    ]
+  },
   hero: {
     content: [
       {f:'_div_tekst', l:'── Teksten', wide:true, divider:true},
@@ -1545,9 +1553,6 @@ async function postLivePreview(content,theme) {
   const loading=document.getElementById('preview-loading');
   const iframe=document.getElementById('preview');
   if(!iframe) return;
-  // Save scroll position before reload
-  let savedScrollY=0;
-  try { savedScrollY=iframe.contentWindow?.scrollY||0; } catch{}
   try {
     const r=await fetch(API+'/preview',{
       method:'POST',
@@ -1558,8 +1563,15 @@ async function postLivePreview(content,theme) {
     const html=injectPreviewBase(await r.text());
     iframe.onload=()=>{
       if(loading) loading.style.display='none';
-      // Restore scroll position — no more jump to top
-      try { iframe.contentWindow.scrollTo(0, savedScrollY); } catch{}
+      // Scroll to the section being edited — stay on current section, not top
+      const selector=SECTION_SCROLL_MAP[currentSection];
+      if(selector) {
+        try {
+          const doc=iframe.contentDocument||iframe.contentWindow?.document;
+          const el=doc&&doc.querySelector(selector);
+          if(el) el.scrollIntoView({behavior:'instant',block:'start'});
+        } catch{}
+      }
     };
     iframe.srcdoc=html;
   } catch{}
