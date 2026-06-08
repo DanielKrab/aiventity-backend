@@ -938,5 +938,10 @@
     "ts": "2026-06-08T20:51:23.135Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation"
+  },
+  {
+    "ts": "2026-06-08T20:51:27.950Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation"
   }
 ]
