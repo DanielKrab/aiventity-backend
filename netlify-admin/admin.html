@@ -1795,16 +1795,19 @@ function renderNavEditor() {
   const nav = contentData.navigation || {};
   const logoUrl = nav.nav_logo || '';
   const logoH = nav.nav_logo_height || '22';
+  const barPad = nav.nav_bar_padding || '4';
+  const barAlphaRaw = nav.nav_bar_alpha || '0.10';
+  const barAlpha = String(Math.round(parseFloat(barAlphaRaw) * 100));
   document.getElementById('editor-fields').innerHTML = `
     <div style="padding:4px 0 20px">
-      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:16px">Nav logo</div>
 
-      <!-- Drop zone -->
-      <div id="nav-drop-zone" style="border:2px dashed var(--border2);border-radius:12px;padding:36px 20px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative;margin-bottom:20px;background:var(--surface2)"
+      <!-- ── LOGO ── -->
+      <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px">Logo</div>
+
+      <div id="nav-drop-zone" style="border:2px dashed var(--border2);border-radius:12px;padding:36px 20px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative;margin-bottom:16px;background:var(--surface2)"
         ondragover="event.preventDefault();this.style.borderColor='var(--accent)';this.style.background='var(--accent-l)'"
         ondragleave="this.style.borderColor='var(--border2)';this.style.background='var(--surface2)'"
-        ondrop="navDropLogo(event)"
-        onclick="navPickLogo()">
+        ondrop="navDropLogo(event)" onclick="navPickLogo()">
         <input type="file" id="nav-logo-file" accept="image/*" style="display:none" onchange="navHandleFile(this.files[0])">
         ${logoUrl
           ? `<img src="${logoUrl}" id="nav-logo-preview" style="max-height:60px;max-width:220px;object-fit:contain;margin:0 auto 12px;display:block;border-radius:6px;">`
@@ -1813,24 +1816,46 @@ function renderNavEditor() {
         <div style="font-size:11px;color:var(--text3);margin-top:4px">of klik om te kiezen · PNG, SVG, WebP</div>
       </div>
 
-      <!-- URL fallback -->
-      <div style="margin-bottom:20px">
-        <label class="form-label">Logo URL (automatisch ingevuld na upload)</label>
+      <div style="margin-bottom:16px">
         <div style="display:flex;gap:6px">
           <input type="text" class="form-control" id="nav-logo-url" value="${logoUrl}" placeholder="https://..." oninput="navUrlChange()" style="flex:1">
           <button class="btn btn-ghost btn-sm" onclick="navPickLogo()" style="flex-shrink:0">📎 Upload</button>
         </div>
       </div>
 
-      <!-- Size slider -->
-      <div style="margin-bottom:24px">
+      <div style="margin-bottom:28px">
         <label class="form-label" style="display:flex;justify-content:space-between">
-          <span>Grootte</span>
+          <span>Logo grootte</span>
           <span id="nav-h-val" style="color:var(--accent);font-weight:600">${logoH}px</span>
         </label>
         <input type="range" min="14" max="120" value="${logoH}" id="nav-logo-h"
           style="width:100%;accent-color:var(--accent)"
           oninput="document.getElementById('nav-h-val').textContent=this.value+'px';navSaveDebounced()">
+      </div>
+
+      <!-- ── NAVIGATIEBALK ── -->
+      <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;border-top:1px solid var(--border);padding-top:18px">Navigatiebalk</div>
+
+      <div style="margin-bottom:22px">
+        <label class="form-label" style="display:flex;justify-content:space-between">
+          <span>Hoogte balk</span>
+          <span id="nav-pad-val" style="color:var(--accent);font-weight:600">${barPad == 1 ? 'Klein' : barPad == 4 ? 'Middel' : barPad == 7 ? 'Groot' : barPad}</span>
+        </label>
+        <input type="range" min="1" max="10" value="${barPad}" id="nav-bar-pad"
+          style="width:100%;accent-color:var(--accent)"
+          oninput="const l=['','Klein','','','Middel','','','Groot','','','XL'];document.getElementById('nav-pad-val').textContent=l[+this.value]||this.value;navSaveDebounced()">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px"><span>Klein</span><span>Groot</span></div>
+      </div>
+
+      <div style="margin-bottom:28px">
+        <label class="form-label" style="display:flex;justify-content:space-between">
+          <span>Transparantie balk</span>
+          <span id="nav-alpha-val" style="color:var(--accent);font-weight:600">${barAlpha}%</span>
+        </label>
+        <input type="range" min="0" max="90" value="${barAlpha}" id="nav-bar-alpha"
+          style="width:100%;accent-color:var(--accent)"
+          oninput="document.getElementById('nav-alpha-val').textContent=(+this.value)+'%';navSaveDebounced()">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px"><span>Volledig transparant</span><span>Ondoorzichtig</span></div>
       </div>
 
       <button class="btn btn-primary" style="width:100%" onclick="saveNavSection()">💾 Opslaan & preview</button>
@@ -1879,9 +1904,14 @@ function navSaveDebounced(){ clearTimeout(_navSaveTimer); _navSaveTimer=setTimeo
 async function saveNavSection(){
   const url=(document.getElementById('nav-logo-url')||{}).value||'';
   const h=(document.getElementById('nav-logo-h')||{}).value||'22';
+  const pad=(document.getElementById('nav-bar-pad')||{}).value||'4';
+  const alphaSlider=+(document.getElementById('nav-bar-alpha')||{value:80}).value;
+  const alpha=(alphaSlider/100).toFixed(2); // store as 0.00–0.90 decimal for rgba()
   if(!contentData.navigation) contentData.navigation={};
   contentData.navigation.nav_logo=url;
   contentData.navigation.nav_logo_height=h;
+  contentData.navigation.nav_bar_padding=pad;
+  contentData.navigation.nav_bar_alpha=alpha;
   const r=await apiFetch('/content','POST',contentData);
   if(r.ok){ toast('✅ Navigatie opgeslagen','success'); reloadPreview(); }
   else toast('❌ '+(r.error||'Opslaan mislukt'),'error');
