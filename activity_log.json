@@ -693,5 +693,10 @@
     "ts": "2026-06-08T18:49:43.144Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: ai_colleagues_screenshot.webp"
+  },
+  {
+    "ts": "2026-06-08T18:49:49.133Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: architecture"
   }
 ]
