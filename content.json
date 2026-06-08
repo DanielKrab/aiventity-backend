@@ -162,7 +162,7 @@
   "navigation": {
     "nav_logo": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/Logo-Aiventity__1_-Photoroom.png",
     "nav_logo_height": "79",
-    "nav_bar_padding": "10",
+    "nav_bar_padding": "4",
     "nav_bar_alpha": "0.08"
   }
 }
