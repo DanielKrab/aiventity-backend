@@ -1858,7 +1858,7 @@ function renderNavEditor() {
         <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px"><span>Volledig transparant</span><span>Ondoorzichtig</span></div>
       </div>
 
-      <button class="btn btn-primary" style="width:100%" onclick="saveNavSection()">💾 Opslaan & preview</button>
+      <button class="btn btn-primary" style="width:100%" onclick="saveNavSection()">💾 Opslaan</button>
     </div>`;
 }
 
@@ -1898,28 +1898,32 @@ function navUrlChange(){
   navSaveDebounced();
 }
 
-function navIframe(){ return document.getElementById('preview')?.contentWindow?.document; }
+function navIframeDoc(){ return document.getElementById('preview')?.contentWindow?.document; }
 
-function navLiveLogoH(v) {
-  const d=navIframe(); if(!d) return;
-  const img=d.getElementById('site-nav-logo');
-  if(img) img.style.height=v+'px';
+function navInjectLiveStyle(css) {
+  const d=navIframeDoc(); if(!d) return;
+  let s=d.getElementById('_nav_live');
+  if(!s){ s=d.createElement('style'); s.id='_nav_live'; (d.head||d.body).appendChild(s); }
+  s.textContent=css;
 }
 
-function navLiveBarH(v) {
-  const d=navIframe(); if(!d) return;
-  const nav=d.querySelector('#nav nav');
-  if(nav) nav.style.height=v+'px';
+function navApplyLive() {
+  const logoH=(document.getElementById('nav-logo-h')||{value:22}).value;
+  const barH=(document.getElementById('nav-bar-h')||{value:48}).value;
+  const alpha=((+(document.getElementById('nav-bar-alpha')||{value:10}).value)/100).toFixed(2);
+  navInjectLiveStyle(
+    `#site-nav-logo{height:${logoH}px!important}` +
+    `#nav nav{height:${barH}px!important}` +
+    `#nav{background:rgba(5,5,5,${alpha})!important;backdrop-filter:blur(16px)!important}`
+  );
 }
 
-function navLiveAlpha(v) {
-  const d=navIframe(); if(!d) return;
-  const hdr=d.getElementById('nav');
-  if(hdr) hdr.style.background='rgba(5,5,5,'+(v/100).toFixed(2)+')';
-}
+function navLiveLogoH(v){ navApplyLive(); }
+function navLiveBarH(v){ navApplyLive(); }
+function navLiveAlpha(v){ navApplyLive(); }
 
 let _navSaveTimer=null;
-function navSaveDebounced(){ clearTimeout(_navSaveTimer); _navSaveTimer=setTimeout(saveNavSectionQuiet,1200); }
+function navSaveDebounced(){ clearTimeout(_navSaveTimer); _navSaveTimer=setTimeout(saveNavSectionQuiet,1500); }
 
 async function saveNavSectionQuiet(){
   const url=(document.getElementById('nav-logo-url')||{}).value||'';
@@ -1933,7 +1937,6 @@ async function saveNavSectionQuiet(){
   contentData.navigation.nav_bar_height=barHeight;
   contentData.navigation.nav_bar_alpha=alpha;
   await apiFetch('/content','POST',contentData);
-  // no toast, no reload — changes already visible live
 }
 
 async function saveNavSection(){
@@ -1948,7 +1951,7 @@ async function saveNavSection(){
   contentData.navigation.nav_bar_height=barHeight;
   contentData.navigation.nav_bar_alpha=alpha;
   const r=await apiFetch('/content','POST',contentData);
-  if(r.ok){ toast('✅ Navigatie opgeslagen','success'); reloadPreview(); }
+  if(r.ok) toast('✅ Opgeslagen','success');
   else toast('❌ '+(r.error||'Opslaan mislukt'),'error');
 }
 
