@@ -1,0 +1,613 @@
+/**
+ * Aiventity CMS — Netlify Function (Node.js stdlib only)
+ * Full CMS backend: content, media, theme, SEO, activity log, publish
+ */
+const crypto = require("crypto");
+const https  = require("https");
+const fs     = require("fs");
+const path   = require("path");
+
+// ── Config ──────────────────────────────────────────────────────────────────
+const SECRET_KEY     = process.env.SECRET_KEY     || "changeme";
+const ADMIN_HASH     = process.env.ADMIN_HASH     || "";
+const GITHUB_TOKEN   = process.env.GITHUB_TOKEN   || "";
+const GITHUB_OWNER   = process.env.GITHUB_OWNER   || "DanielKrab";
+const GITHUB_REPO    = process.env.GITHUB_REPO    || "aiventity-backend";
+const GITHUB_BRANCH  = process.env.GITHUB_BRANCH  || "data";
+const NETLIFY_TOKEN    = process.env.NETLIFY_TOKEN    || "";
+const PUBLIC_SITE_ID   = process.env.PUBLIC_SITE_ID   || "5559f234-9246-4edf-a2c5-778983c63285";
+const ANTHROPIC_API_KEY= process.env.ANTHROPIC_API_KEY|| "";
+const TOKEN_TTL      = 7 * 24 * 3600;
+
+const CORS = {
+  "Access-Control-Allow-Origin" : "*",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════════════════════════════════
+function sign(p) { return crypto.createHmac("sha256",SECRET_KEY).update(p).digest("hex"); }
+function makeToken() { const e=String(Math.floor(Date.now()/1000)+TOKEN_TTL); return `${e}.${sign(e)}`; }
+function verifyToken(t) {
+  if(!t) return false;
+  const d=t.lastIndexOf("."); if(d<0) return false;
+  const exp=t.slice(0,d),sig=t.slice(d+1);
+  try{ if(!crypto.timingSafeEqual(Buffer.from(sign(exp)),Buffer.from(sig))) return false; }catch{ return false; }
+  return parseInt(exp,10)>Math.floor(Date.now()/1000);
+}
+function bearer(ev) { const a=(ev.headers||{}).authorization||(ev.headers||{}).Authorization||""; return a.startsWith("Bearer ")?a.slice(7):""; }
+function isAuth(ev) { return verifyToken(bearer(ev)); }
+function checkPw(pw) {
+  if(!ADMIN_HASH||!ADMIN_HASH.startsWith("pbkdf2:")) return false;
+  const [,salt,stored]=ADMIN_HASH.split(":");
+  const d=crypto.pbkdf2Sync(pw,salt,260000,32,"sha256").toString("hex");
+  try{ return crypto.timingSafeEqual(Buffer.from(d),Buffer.from(stored)); }catch{ return false; }
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// HTTP helper
+// ══════════════════════════════════════════════════════════════════════════
+function httpRequest(url,opts={},body=null,binary=false) {
+  return new Promise((res,rej)=>{
+    const u=new URL(url);
+    const o={hostname:u.hostname,path:u.pathname+u.search,method:opts.method||"GET",headers:opts.headers||{}};
+    const req=https.request(o,r=>{
+      const c=[]; r.on("data",x=>c.push(x)); r.on("end",()=>{
+        const buf=Buffer.concat(c);
+        if(r.statusCode>=400) rej(new Error(`HTTP ${r.statusCode}: ${buf.toString("utf-8").slice(0,300)}`));
+        else res(binary?buf:buf.toString("utf-8"));
+      });
+    });
+    req.on("error",rej);
+    if(body) req.write(Buffer.isBuffer(body)?body:typeof body==="string"?body:JSON.stringify(body));
+    req.end();
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// GitHub storage
+// ══════════════════════════════════════════════════════════════════════════
+const GH = { Authorization:`token ${GITHUB_TOKEN}`, Accept:"application/vnd.github.v3+json",
+              "Content-Type":"application/json", "User-Agent":"AiventityCMS/2.0" };
+
+async function ghGet(p) {
+  try {
+    const t=await httpRequest(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${p}?ref=${GITHUB_BRANCH}`,{headers:GH});
+    const i=JSON.parse(t);
+    if(Array.isArray(i)) return {data:i,sha:null}; // directory listing
+    const data=JSON.parse(Buffer.from(i.content,"base64").toString("utf-8"));
+    return {data,sha:i.sha};
+  } catch(e) { return {data:{},sha:null}; }
+}
+async function ghGetRaw(p) { // for non-JSON (media)
+  try {
+    const t=await httpRequest(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${p}?ref=${GITHUB_BRANCH}`,{headers:GH});
+    const i=JSON.parse(t);
+    return {content:i.content,sha:i.sha,encoding:i.encoding,size:i.size,name:i.name};
+  } catch { return null; }
+}
+async function ghPut(p,data,sha,msg="CMS update") {
+  const body={message:msg,content:Buffer.from(JSON.stringify(data,null,2)).toString("base64"),branch:GITHUB_BRANCH};
+  if(sha) body.sha=sha;
+  return httpRequest(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${p}`,{method:"PUT",headers:GH},body);
+}
+async function ghPutBinary(p,base64Content,sha,msg="CMS: upload media") {
+  const body={message:msg,content:base64Content,branch:GITHUB_BRANCH};
+  if(sha) body.sha=sha;
+  return httpRequest(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${p}`,{method:"PUT",headers:GH},body);
+}
+async function ghDelete(p,sha,msg="CMS: delete") {
+  const body=JSON.stringify({message:msg,sha,branch:GITHUB_BRANCH});
+  return httpRequest(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${p}`,{method:"DELETE",headers:GH},body);
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// Activity logging
+// ══════════════════════════════════════════════════════════════════════════
+async function logActivity(action,detail="") {
+  try {
+    const {data:log,sha}=await ghGet("activity_log.json");
+    const arr=Array.isArray(log)?log:[];
+    arr.push({ts:new Date().toISOString(),action,detail});
+    const trimmed=arr.slice(-200); // keep last 200
+    await ghPut("activity_log.json",trimmed,sha,"CMS: activity log");
+  } catch{}
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// Response helpers
+// ══════════════════════════════════════════════════════════════════════════
+function resp(s,b,x={}) { return {statusCode:s,headers:{...CORS,"Content-Type":"application/json",...x},body:JSON.stringify(b)}; }
+function unauth()     { return resp(401,{error:"Niet ingelogd"}); }
+function bad(m="Ongeldig verzoek") { return resp(400,{error:m}); }
+
+// ══════════════════════════════════════════════════════════════════════════
+// Render / Publish
+// ══════════════════════════════════════════════════════════════════════════
+const LOGO_URL=`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/static/logo.png`;
+const WORDMARK_URL=`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/static/logo-wordmark.png`;
+
+function escHtml(s){
+  return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+function evalJinja(expr,ctx) {
+  if(expr.includes("~")) return expr.split("~").map(p=>evalJinja(p.trim(),ctx)).join("");
+  const m=expr.match(/^(\w+)\.get\(['"]([^'"]+)['"]\s*(?:,\s*['"]([^'"]*)['"]\s*)?\)$/);
+  if(m){ const o=ctx[m[1]]||{}; let v=o[m[2]]; if((v===undefined||v===null||v==="")&&String(m[2]).endsWith("_en")){ v=o[m[2].replace(/_en$/,"_nl")]; } v=(v!==undefined&&v!==null&&v!=="")?String(v):m[3]||""; return escHtml(v); }
+  const s=expr.match(/^['"]([^'"]*)['"]\s*$/); if(s) return s[1];
+  if(/^\w+$/.test(expr)&&expr in ctx) return escHtml(String(ctx[expr]||""));
+  return "";
+}
+
+function buildThemeCSS(theme={}) {
+  // Only override accent colors — NEVER touch background/text (would break dark design)
+  const p=theme.primary_color||"#007AFF";
+  const a=theme.accent_color||"#10b981";
+  const hf=(theme.heading_font||"Space Grotesk").replace(/'/g,"");
+  const bf=(theme.body_font||"Inter").replace(/'/g,"");
+  // Dynamically load any fonts not pre-loaded in the template
+  const preloaded=["Space Grotesk","Inter"];
+  const extraFonts=[...new Set([hf,bf])].filter(f=>!preloaded.includes(f));
+  let css="";
+  if(extraFonts.length){
+    const families=extraFonts.map(f=>`family=${encodeURIComponent(f)}:wght@400;500;600;700`).join("&");
+    css+=`@import url('https://fonts.googleapis.com/css2?${families}&display=swap');\n`;
+  }
+  css+=`
+:root{--p:${p};--a:${a};}
+.btn-primary{background:${p}!important;border-color:${p}!important;}
+.btn-primary:hover{filter:brightness(1.12)!important;}
+.text-ai-blue{color:${p}!important;}
+h1 .text-ai-blue,h1 span:nth-child(2){color:${p}!important;}
+a.btn-primary{color:#fff!important;}
+.glass-blue{border-color:${p}33!important;}
+.lbtn-on{background:${p}!important;}
+.ping-dot{background-color:${a}!important;}
+.tag-ok{color:${a}!important;}
+.feature-card:hover{border-color:${p}66!important;}
+h1,h2,h3,h4,h5,.font-heading{font-family:'${hf}',sans-serif!important;}
+body{font-family:'${bf}',sans-serif!important;}`.trim();
+  // Section background colors (only injected when explicitly set by user)
+  const sectionMap=[
+    ["nav_bg",       ".nav-blur{background:{c}!important;backdrop-filter:blur(20px)!important;}"],
+    ["hero_bg",      "#cms-hero{background:{c}!important;}"],
+    ["creativity_bg","#creativity{background:{c}!important;}"],
+    ["architecture_bg","#architecture{background:{c}!important;}"],
+    ["integration_bg","#integration{background:{c}!important;}"],
+    ["execution_bg", "#execution{background:{c}!important;}"],
+    ["apply_bg",     "#apply{background:{c}!important;}"],
+    ["footer_bg",    "#cms-footer{background:{c}!important;}"],
+  ];
+  sectionMap.forEach(([k,rule])=>{
+    if(theme[k]) css+="\n"+rule.replace("{c}",theme[k]);
+  });
+  // Font size overrides (only injected when explicitly set)
+  if(theme.hero_h1_size)    css+=`\n#cms-hero h1{font-size:${theme.hero_h1_size}!important;line-height:1.05!important;}`;
+  if(theme.section_h2_size) css+=`\n#creativity h2,#integration h2,#execution h2,#apply h2{font-size:${theme.section_h2_size}!important;}`;
+  if(theme.body_font_size)  css+=`\nbody p,body li{font-size:${theme.body_font_size}!important;}`;
+  return css;
+}
+
+function renderWebsite(content,cfg={},themeOverride=null) {
+  const sections={h:content.hero||{},cr:content.creativity||{},ig:content.integration||{},
+                  ar:content.architecture||{},
+                  ex:content.execution||{},ap:content.apply||{},ft:content.footer||{},
+                  ds:content.dna_slides||{}};
+  const tmplPath=path.join(__dirname,"templates","website.html");
+  let html;
+  try { html=fs.readFileSync(tmplPath,"utf-8"); } catch { return buildFallback(sections); }
+  // Strip Jinja control flow, evaluate expressions
+  html=html.replace(/\{%.*?%\}/gs,"");
+  html=html.replace(/\{\{\s*(.+?)\s*\}\}/g,(_,e)=>{ try{return evalJinja(e.trim(),sections);}catch{return "";} });
+  // Fix logo URL — replace relative /logo.png with absolute CDN URL
+  html=html.replace(/src="\/logo\.png"/g,`src="${LOGO_URL}"`);
+  // Inject theme CSS
+  const theme=themeOverride||(cfg&&cfg.theme)||{};
+  if(Object.keys(theme).length>0) {
+    const css=buildThemeCSS(theme);
+    html=html.replace("</head>",`<style id="cms-theme">${css}</style></head>`);
+    // Also inject Google Fonts for custom fonts if needed
+    const hf=(theme.heading_font||"").replace(/\s/g,"+");
+    const bf=(theme.body_font||"").replace(/\s/g,"+");
+    if(hf||bf) {
+      const fonts=[hf,bf].filter(Boolean).map(f=>`family=${f}:wght@400;500;600;700`).join("&");
+      html=html.replace("</head>",`<link href="https://fonts.googleapis.com/css2?${fonts}&display=swap" rel="stylesheet"></head>`);
+    }
+  }
+  // Inject section order CSS
+  const secOrder=cfg&&cfg.section_order;
+  if(Array.isArray(secOrder)&&secOrder.length>1){
+    const idMap={hero:"cms-hero",creativity:"creativity",architecture:"architecture",
+                 integration:"integration",execution:"execution",apply:"apply",footer:"cms-footer"};
+    let ocss="body{display:flex;flex-direction:column;}\n#nav{order:0;}\n";
+    secOrder.forEach((key,i)=>{ const id=idMap[key]; if(id) ocss+=`#${id}{order:${i+1};}\n`; });
+    html=html.replace("</head>",`<style id="cms-order">${ocss}</style></head>`);
+  }
+  return html;
+}
+function buildFallback(s) {
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Aiventity</title></head><body style="background:#050505;color:#fff;font-family:sans-serif;padding:40px"><h1>${s.h.h1_en||"Imagine."} ${s.h.h2_en||"Automate."} ${s.h.h3_en||"Execute."}</h1><p>${s.h.subheadline_en||""}</p></body></html>`;
+}
+
+// ── Auto-translation via Claude API (batch — één call voor alle velden) ──────
+async function autoTranslateContent(content) {
+  const out=JSON.parse(JSON.stringify(content));
+
+  // Verzamel ALLE NL velden — altijd opnieuw vertalen zodat gewijzigde NL ook EN updatet
+  const toTranslate=[];
+  for(const section of Object.keys(out)){
+    if(typeof out[section]!=="object"||Array.isArray(out[section])) continue;
+    for(const key of Object.keys(out[section])){
+      if(!key.endsWith("_nl")) continue;
+      const nlVal=out[section][key];
+      if(!nlVal||typeof nlVal!=="string"||!nlVal.trim()) continue;
+      const enKey=key.replace(/_nl$/,"_en");
+      toTranslate.push({section,enKey,nlVal});
+    }
+  }
+  if(!toTranslate.length) return out;
+
+  // Claude API batch (één call, beste kwaliteit)
+  if(ANTHROPIC_API_KEY){
+    try{
+      const numbered=toTranslate.map((t,i)=>`${i+1}|${t.nlVal}`).join("\n");
+      const prompt=`You are a professional translator for Aiventity, a B2B AI SaaS platform. Translate each Dutch marketing text to natural, confident English. Keep tone professional yet human. Do NOT translate proper nouns (Aiventity, MCP, Agent Space, Topics). Return ONLY the translations, one per line, in format: NUMBER|TRANSLATION\n\n${numbered}`;
+      const body=JSON.stringify({model:"claude-haiku-4-5",max_tokens:2048,messages:[{role:"user",content:prompt}]});
+      const resp=JSON.parse(await httpRequest("https://api.anthropic.com/v1/messages",{
+        method:"POST",headers:{"x-api-key":ANTHROPIC_API_KEY,"anthropic-version":"2023-06-01","content-type":"application/json"}
+      },body));
+      const lines=(resp.content[0].text||"").split("\n");
+      lines.forEach(line=>{
+        const m=line.match(/^(\d+)\|(.+)$/);
+        if(!m) return;
+        const idx=parseInt(m[1],10)-1;
+        if(toTranslate[idx]) out[toTranslate[idx].section][toTranslate[idx].enKey]=m[2].trim();
+      });
+      return out;
+    }catch(e){}
+  }
+
+  // Fallback: Google Translate — parallel in batches van 5
+  const gtx=async(item)=>{
+    try{
+      const url=`https://translate.googleapis.com/translate_a/single?client=gtx&sl=nl&tl=en&dt=t&q=${encodeURIComponent(item.nlVal.slice(0,500))}`;
+      const r=JSON.parse(await httpRequest(url,{method:"GET",headers:{"User-Agent":"Mozilla/5.0 (compatible)"}},null));
+      if(Array.isArray(r)&&Array.isArray(r[0])){
+        const t=r[0].map(s=>s[0]||"").join("").trim();
+        if(t) out[item.section][item.enKey]=t;
+      }
+    }catch(e){}
+  };
+  for(let i=0;i<toTranslate.length;i+=5){
+    await Promise.all(toTranslate.slice(i,i+5).map(gtx));
+    if(i+5<toTranslate.length) await new Promise(r=>setTimeout(r,150));
+  }
+  return out;
+}
+
+async function embedToolLogosInHtml(html, content) {
+  // Collect unique logo URLs from integration section
+  const ig = content.integration || {};
+  const urlToB64 = {};
+  const urls = [];
+  for (let i = 1; i <= 8; i++) {
+    const url = ig[`tool${i}_logo`];
+    if (url && url.startsWith("http") && !urlToB64[url]) { urlToB64[url] = null; urls.push(url); }
+  }
+  // Download all logos in parallel
+  await Promise.all(urls.map(async url => {
+    try {
+      const buf = await httpRequest(url, {headers:{"User-Agent":"AiventityCMS/2.0"}}, null, true);
+      const ext = url.split("?")[0].split(".").pop().toLowerCase();
+      const mimeMap = {png:"image/png",jpg:"image/jpeg",jpeg:"image/jpeg",webp:"image/webp",svg:"image/svg+xml",gif:"image/gif"};
+      const mime = mimeMap[ext] || "image/png";
+      urlToB64[url] = `data:${mime};base64,${buf.toString("base64")}`;
+    } catch(e) {}
+  }));
+  // Replace each tool-tile's empty tool-media span with the logo img
+  let result = html;
+  result = result.replace(/(class="tool-tile[^"]*"[^>]*data-logo="([^"]*)"[^>]*>)\s*(<span class="tool-media shrink-0"><\/span>)/g, (m, before, logoUrl, span) => {
+    const b64 = logoUrl && urlToB64[logoUrl];
+    if (!b64) return m;
+    return `${before}<span class="tool-media shrink-0"><img src="${b64}" style="width:28px;height:28px;object-fit:contain;" alt=""></span>`;
+  });
+  return result;
+}
+
+async function doPublish(body={}) {
+  const {data:content}=await ghGet("content.json");
+  const {data:cfg,sha:cfgSha}=await ghGet("config.json");
+  const token=body.netlify_token||cfg.netlify_token||NETLIFY_TOKEN;
+  const siteId=body.netlify_site_id||cfg.netlify_site_id||PUBLIC_SITE_ID;
+  if(!token||!siteId) throw new Error("Netlify token of site ID ontbreekt");
+  // Auto-translate NL → EN before rendering
+  const translatedContent=await autoTranslateContent(content);
+  let html=renderWebsite(translatedContent,cfg);
+  // Embed tool logos + site logo as base64
+  html=await embedToolLogosInHtml(html, translatedContent);
+  html=html.replace(/src="\/logo\.png"/g,`src="${LOGO_URL}"`);
+  html=html.replace(/src="\/logo-wordmark\.png"/g,`src="${WORDMARK_URL}"`);
+  try {
+    const [logoBuf,wordmarkBuf]=await Promise.all([
+      httpRequest(LOGO_URL,{headers:{"User-Agent":"AiventityCMS/2.0"}},null,true),
+      httpRequest(WORDMARK_URL,{headers:{"User-Agent":"AiventityCMS/2.0"}},null,true).catch(()=>null),
+    ]);
+    const logoB64=`data:image/png;base64,${logoBuf.toString("base64")}`;
+    html=html.replace(new RegExp(`src="${LOGO_URL.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}"`),'src="'+logoB64+'"');
+    if(wordmarkBuf){
+      const wB64=`data:image/png;base64,${wordmarkBuf.toString("base64")}`;
+      html=html.replace(new RegExp(`src="${WORDMARK_URL.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}"`),'src="'+wB64+'"');
+    }
+  } catch{}
+  const htmlBuf=Buffer.from(html,"utf-8");
+  const htmlSha1=crypto.createHash("sha1").update(htmlBuf).digest("hex");
+  const hdrsBuf=Buffer.from("/*\n  Content-Type: text/html; charset=utf-8\n  Cache-Control: public, max-age=0, must-revalidate\n  X-Frame-Options: SAMEORIGIN\n");
+  const hdrsSha1=crypto.createHash("sha1").update(hdrsBuf).digest("hex");
+
+  const files={"/index.html":htmlSha1,"/_headers":hdrsSha1};
+  const manifest=JSON.stringify({files});
+  const nlH={Authorization:`Bearer ${token}`,"Content-Type":"application/json"};
+  const dep=JSON.parse(await httpRequest(`https://api.netlify.com/api/v1/sites/${siteId}/deploys`,{method:"POST",headers:nlH},manifest));
+  const did=dep.id; const required=dep.required||[];
+  const fm={
+    [htmlSha1]:{n:"index.html",b:htmlBuf,ct:"text/html; charset=utf-8"},
+    [hdrsSha1]:{n:"_headers",b:hdrsBuf,ct:"text/plain"},
+  };
+  for(const sha of required){ if(fm[sha]){ const {n,b,ct}=fm[sha]; await httpRequest(`https://api.netlify.com/api/v1/deploys/${did}/files/${n}`,{method:"PUT",headers:{Authorization:`Bearer ${token}`,"Content-Type":ct}},b); } }
+  cfg.last_published=new Date().toLocaleString("nl-NL",{timeZone:"Europe/Amsterdam"});
+  await ghPut("config.json",cfg,cfgSha,"CMS: publish timestamp");
+  await logActivity("publish","Website gepubliceerd op Netlify");
+  return cfg.last_published;
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// MAIN HANDLER
+// ══════════════════════════════════════════════════════════════════════════
+exports.handler = async (event) => {
+  const method=(event.httpMethod||"GET").toUpperCase();
+  const rawPath=event.path||"/";
+  const p=rawPath.replace(/^\/?\.netlify\/functions\/api/,"").replace(/\/$/,"")||"/";
+
+  if(method==="OPTIONS") return {statusCode:204,headers:CORS,body:""};
+
+  // ── Public ──────────────────────────────────────────────────────────────
+  if(p==="/api/login"&&method==="POST") {
+    let b; try{b=JSON.parse(event.body||"{}");}catch{return bad();}
+    if(!ADMIN_HASH) return resp(500,{error:"ADMIN_HASH not set"});
+    if(checkPw(b.password||"")) return resp(200,{ok:true,token:makeToken()});
+    return resp(401,{error:"Ongeldig wachtwoord"});
+  }
+
+  // ── Contact form (public) ─────────────────────────────────────────────────
+  if(p==="/api/contact"&&method==="POST") {
+    let b; try{b=JSON.parse(event.body||"{}");}catch{return bad();}
+    const email=b.email||b.mail||""; const message=b.message||b.bericht||b.msg||"";
+    if(!email) return bad("E-mailadres is verplicht");
+    const {data:inbox,sha:iSha}=await ghGet("inbox.json");
+    const arr=Array.isArray(inbox)?inbox:[];
+    const id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    const entry={id,name:b.name||b.naam||b.voornaam||"",lastname:b.lastname||b.achternaam||"",email,phone:b.phone||b.telefoon||"",
+                 subject:b.subject||b.onderwerp||"Aanmelding/vraag",
+                 message:message||"(geen bericht)",
+                 ts:new Date().toISOString(),read:false};
+    arr.unshift(entry);
+    await ghPut("inbox.json",arr.slice(0,500),iSha,"CMS: new submission");
+    // Optional email via Resend
+    const RESEND=process.env.RESEND_API_KEY||"";
+    const NOTIFY=process.env.NOTIFY_EMAIL||"danielcloud@hotmail.nl";
+    if(RESEND) {
+      try {
+        await httpRequest("https://api.resend.com/emails",{method:"POST",
+          headers:{"Authorization":`Bearer ${RESEND}`,"Content-Type":"application/json"}},
+          {from:"noreply@aiventity.com",to:[NOTIFY],
+           subject:`[Aiventity] Nieuw bericht van ${entry.name||email}`,
+           html:`<p><b>Van:</b> ${entry.name||""} &lt;${email}&gt;</p><p><b>Onderwerp:</b> ${entry.subject}</p><hr><p>${entry.message.replace(/\n/g,'<br>')}</p><p><small>Ontvangen: ${new Date().toLocaleString('nl-NL')}</small></p>`});
+      } catch{}
+    }
+    return resp(200,{ok:true,message:"Bericht ontvangen! We nemen snel contact op."});
+  }
+
+  if(!isAuth(event)) return unauth();
+
+  let body={}; try{body=JSON.parse(event.body||"{}");}catch{}
+
+  // ── Preview (returns HTML) ────────────────────────────────────────────────
+  if(p==="/api/preview") {
+    if(method==="GET") {
+      // Full preview: load saved content+theme from GitHub, embed logos
+      const {data:content}=await ghGet("content.json");
+      const {data:cfg}=await ghGet("config.json");
+      let html=renderWebsite(content,cfg);
+      html=await embedToolLogosInHtml(html,content);
+      return {statusCode:200,headers:{...CORS,"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store"},body:html};
+    }
+    if(method==="POST") {
+      // Live preview: render with provided data + embed logos
+      const content=body.content||{};
+      const themeOverride=body.theme||null;
+      let html=renderWebsite(content,{},themeOverride);
+      html=await embedToolLogosInHtml(html,content);
+      return {statusCode:200,headers:{...CORS,"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store"},body:html};
+    }
+  }
+
+  // ── Inbox ─────────────────────────────────────────────────────────────────
+  if(p==="/api/inbox") {
+    if(method==="GET"){ const {data}=await ghGet("inbox.json"); return resp(200,Array.isArray(data)?data:[]); }
+  }
+  if(p.match(/^\/api\/inbox\/[^/]+\/(read|delete)$/)&&method==="POST") {
+    const parts=p.split("/"); const id=parts[3]; const action=parts[4];
+    const {data:inbox,sha:iSha}=await ghGet("inbox.json");
+    let arr=Array.isArray(inbox)?inbox:[];
+    if(action==="read") arr=arr.map(m=>m.id===id?{...m,read:true}:m);
+    else if(action==="delete") arr=arr.filter(m=>m.id!==id);
+    await ghPut("inbox.json",arr,iSha,`CMS: inbox ${action}`);
+    if(action==="delete") await logActivity("inbox_delete",`Bericht verwijderd: ${id}`);
+    return resp(200,{ok:true});
+  }
+
+  // ── Content ─────────────────────────────────────────────────────────────
+  if(p==="/api/content") {
+    if(method==="GET"){ const {data}=await ghGet("content.json"); return resp(200,data); }
+    if(method==="POST"){
+      const {data:c,sha}=await ghGet("content.json");
+      for(const [s,f] of Object.entries(body)) { const sec=Object.keys(body)[0]; c[s]={...(c[s]||{}),...f}; }
+      // Auto-translate NL → EN and merge back before saving
+      try {
+        const translated=await autoTranslateContent(c);
+        // Merge translated EN fields back into c
+        for(const sec of Object.keys(translated)){
+          if(typeof translated[sec]==="object"&&!Array.isArray(translated[sec])){
+            for(const key of Object.keys(translated[sec])){
+              if(key.endsWith("_en")) c[sec]=c[sec]||{}, c[sec][key]=translated[sec][key];
+            }
+          }
+        }
+      } catch(e){}
+      // Re-fetch sha in case it changed during translation (race condition safety)
+      const {sha:sha2}=await ghGet("content.json");
+      await ghPut("content.json",c,sha2,"CMS: save content + EN translations");
+      // Save history snapshot if requested
+      if(body._snapshot) {
+        const {data:h,sha:hSha}=await ghGet("content_history.json");
+        const arr=Array.isArray(h)?h:[];
+        arr.push({label:`Opgeslagen: ${Object.keys(body).filter(k=>k!=='_snapshot').join(', ')}`,
+                  timestamp:new Date().toISOString(),data:c});
+        await ghPut("content_history.json",arr.slice(-30),hSha,"CMS: save snapshot");
+      }
+      await logActivity("content_save",`Sectie opgeslagen: ${Object.keys(body).filter(k=>k!=='_snapshot').join(", ")}`);
+      return resp(200,{ok:true});
+    }
+  }
+
+  // ── Config ──────────────────────────────────────────────────────────────
+  if(p==="/api/config") {
+    if(method==="GET"){ const {data:cfg}=await ghGet("config.json"); delete cfg.admin_password_hash; delete cfg.secret_key; return resp(200,cfg); }
+    if(method==="POST"){
+      const {data:cfg,sha}=await ghGet("config.json");
+      const ok=["site_name","site_tagline","twitter_url","linkedin_url","instagram_url","github_url",
+        "google_analytics_id","contact_email","favicon_url","netlify_token","netlify_site_id",
+        "company_name","company_address","company_phone","kvk_number","vat_number"];
+      for(const k of ok) if(body[k]!==undefined&&body[k]!=="") cfg[k]=body[k];
+      // Section order (array)
+      if(Array.isArray(body.section_order)&&body.section_order.length>0) cfg.section_order=body.section_order;
+      await ghPut("config.json",cfg,sha,"CMS: save config");
+      await logActivity("settings_save","Website instellingen opgeslagen");
+      return resp(200,{ok:true});
+    }
+  }
+
+  // ── Theme ────────────────────────────────────────────────────────────────
+  if(p==="/api/theme") {
+    if(method==="GET"){ const {data:cfg}=await ghGet("config.json"); return resp(200,cfg.theme||{}); }
+    if(method==="POST"){
+      const {data:cfg,sha}=await ghGet("config.json");
+      cfg.theme={...(cfg.theme||{}),...body};
+      await ghPut("config.json",cfg,sha,"CMS: save theme");
+      await logActivity("theme_save","Thema-instellingen opgeslagen");
+      return resp(200,{ok:true});
+    }
+  }
+
+  // ── Media list ──────────────────────────────────────────────────────────
+  if(p==="/api/media"&&method==="GET") {
+    const {data}=await ghGet("media.json");
+    return resp(200,Array.isArray(data)?data:[]);
+  }
+
+  // ── Media upload ────────────────────────────────────────────────────────
+  if(p==="/api/media/upload"&&method==="POST") {
+    const {name,base64,type,size}=body;
+    if(!name||!base64) return bad("Naam en base64 data vereist");
+    // Store file in GitHub data branch
+    const safeName=name.replace(/[^a-zA-Z0-9._-]/g,"_");
+    const filePath=`media/${safeName}`;
+    const existing=await ghGetRaw(filePath);
+    const b64=base64.includes(",")? base64.split(",")[1]:base64;
+    await ghPutBinary(filePath,b64,existing?.sha||null,`CMS: upload ${safeName}`);
+    // Update media index
+    const {data:mediaList,sha:mSha}=await ghGet("media.json");
+    const arr=Array.isArray(mediaList)?mediaList:[];
+    const rawUrl=`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/media/${safeName}`;
+    const entry={name:safeName,url:rawUrl,type:type||"image",size:size||0,uploaded:new Date().toISOString()};
+    const idx=arr.findIndex(m=>m.name===safeName);
+    if(idx>=0) arr[idx]=entry; else arr.push(entry);
+    await ghPut("media.json",arr,mSha,"CMS: update media index");
+    await logActivity("media_upload",`Bestand geüpload: ${safeName}`);
+    return resp(200,{ok:true,url:rawUrl,entry});
+  }
+
+  // ── Media delete ────────────────────────────────────────────────────────
+  if(p.startsWith("/api/media/delete/")&&method==="POST") {
+    const name=decodeURIComponent(p.replace("/api/media/delete/",""));
+    const safeName=name.replace(/[^a-zA-Z0-9._-]/g,"_");
+    const filePath=`media/${safeName}`;
+    const existing=await ghGetRaw(filePath);
+    if(existing?.sha) await ghDelete(filePath,existing.sha,`CMS: delete ${safeName}`);
+    const {data:mediaList,sha:mSha}=await ghGet("media.json");
+    const arr=(Array.isArray(mediaList)?mediaList:[]).filter(m=>m.name!==safeName);
+    await ghPut("media.json",arr,mSha,"CMS: remove from media index");
+    await logActivity("media_delete",`Bestand verwijderd: ${safeName}`);
+    return resp(200,{ok:true});
+  }
+
+  // ── Publish ─────────────────────────────────────────────────────────────
+  if(p==="/api/publish"&&method==="POST") {
+    try { const ts=await doPublish(body); return resp(200,{ok:true,message:"✅ Website gepubliceerd!",last_published:ts}); }
+    catch(e) { return resp(500,{error:`Publiceren mislukt: ${e.message}`}); }
+  }
+  if(p==="/api/publish-status"&&method==="GET") {
+    const {data:cfg}=await ghGet("config.json");
+    return resp(200,{last_published:cfg.last_published||null});
+  }
+
+  // ── History ─────────────────────────────────────────────────────────────
+  if(p==="/api/history"&&method==="GET") {
+    const {data}=await ghGet("content_history.json");
+    return resp(200,Array.isArray(data)?data.slice(-30):[]);
+  }
+  if(p.match(/^\/api\/restore\/\d+$/)&&method==="POST") {
+    const idx=parseInt(p.split("/").pop(),10);
+    const {data:h,sha:hSha}=await ghGet("content_history.json");
+    if(!Array.isArray(h)||idx>=h.length) return bad("Snapshot niet gevonden");
+    const {data:content,sha:cSha}=await ghGet("content.json");
+    const backup={label:"Auto-backup voor herstel",timestamp:new Date().toISOString(),data:content};
+    await ghPut("content.json",h[idx].data,cSha,"CMS: restore snapshot");
+    const newH=[...h,backup].slice(-30);
+    await ghPut("content_history.json",newH,hSha,"CMS: history after restore");
+    await logActivity("restore",`Snapshot hersteld: index ${idx}`);
+    return resp(200,{ok:true});
+  }
+
+  // ── Activity log ─────────────────────────────────────────────────────────
+  if(p==="/api/activity"&&method==="GET") {
+    const {data}=await ghGet("activity_log.json");
+    return resp(200,Array.isArray(data)?data.slice(-100).reverse():[]);
+  }
+  if(p==="/api/activity"&&method==="POST") {
+    const {action,detail}=body;
+    if(action) await logActivity(action,detail||"");
+    return resp(200,{ok:true});
+  }
+
+  // ── Translate NL → EN ────────────────────────────────────────────────────
+  if(p==="/api/translate"&&method==="POST") {
+    const {data:c,sha}=await ghGet("content.json");
+    const translated=await autoTranslateContent(c);
+    // Count how many EN fields were filled in
+    let count=0;
+    for(const sec of Object.values(translated)){
+      if(typeof sec!=="object"||Array.isArray(sec)) continue;
+      for(const [k,v] of Object.entries(sec)){
+        if(k.endsWith("_en")&&v&&v.trim()) count++;
+      }
+    }
+    await ghPut("content.json",translated,sha,"CMS: auto-vertaling NL→EN");
+    await logActivity("translate","Auto-vertaling NL→EN uitgevoerd");
+    return resp(200,{ok:true,count});
+  }
+
+  return resp(404,{error:"Route niet gevonden",path:p});
+};
