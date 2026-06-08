@@ -1795,9 +1795,9 @@ function renderNavEditor() {
   const nav = contentData.navigation || {};
   const logoUrl = nav.nav_logo || '';
   const logoH = nav.nav_logo_height || '22';
-  const barPad = nav.nav_bar_padding || '4';
+  const barH = nav.nav_bar_height || '48';
   const barAlphaRaw = nav.nav_bar_alpha || '0.10';
-  const barAlpha = String(Math.round(parseFloat(barAlphaRaw) * 100));
+  const barAlphaSlider = String(Math.round(parseFloat(barAlphaRaw) * 100));
   document.getElementById('editor-fields').innerHTML = `
     <div style="padding:4px 0 20px">
 
@@ -1839,22 +1839,22 @@ function renderNavEditor() {
       <div style="margin-bottom:22px">
         <label class="form-label" style="display:flex;justify-content:space-between">
           <span>Hoogte balk</span>
-          <span id="nav-pad-val" style="color:var(--accent);font-weight:600">${barPad == 1 ? 'Klein' : barPad == 4 ? 'Middel' : barPad == 7 ? 'Groot' : barPad}</span>
+          <span id="nav-barh-val" style="color:var(--accent);font-weight:600">${barH}px</span>
         </label>
-        <input type="range" min="1" max="10" value="${barPad}" id="nav-bar-pad"
+        <input type="range" min="30" max="100" value="${barH}" id="nav-bar-h"
           style="width:100%;accent-color:var(--accent)"
-          oninput="const l=['','Klein','','','Middel','','','Groot','','','XL'];document.getElementById('nav-pad-val').textContent=l[+this.value]||this.value;navSaveDebounced()">
-        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px"><span>Klein</span><span>Groot</span></div>
+          oninput="document.getElementById('nav-barh-val').textContent=this.value+'px';navSaveDebounced()">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px"><span>30px</span><span>100px</span></div>
       </div>
 
       <div style="margin-bottom:28px">
         <label class="form-label" style="display:flex;justify-content:space-between">
           <span>Transparantie balk</span>
-          <span id="nav-alpha-val" style="color:var(--accent);font-weight:600">${barAlpha}%</span>
+          <span id="nav-alpha-val" style="color:var(--accent);font-weight:600">${barAlphaSlider}%</span>
         </label>
-        <input type="range" min="0" max="90" value="${barAlpha}" id="nav-bar-alpha"
+        <input type="range" min="0" max="90" value="${barAlphaSlider}" id="nav-bar-alpha"
           style="width:100%;accent-color:var(--accent)"
-          oninput="document.getElementById('nav-alpha-val').textContent=(+this.value)+'%';navSaveDebounced()">
+          oninput="document.getElementById('nav-alpha-val').textContent=this.value+'%';navSaveDebounced()">
         <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px"><span>Volledig transparant</span><span>Ondoorzichtig</span></div>
       </div>
 
@@ -1904,13 +1904,13 @@ function navSaveDebounced(){ clearTimeout(_navSaveTimer); _navSaveTimer=setTimeo
 async function saveNavSection(){
   const url=(document.getElementById('nav-logo-url')||{}).value||'';
   const h=(document.getElementById('nav-logo-h')||{}).value||'22';
-  const pad=(document.getElementById('nav-bar-pad')||{}).value||'4';
-  const alphaSlider=+(document.getElementById('nav-bar-alpha')||{value:80}).value;
-  const alpha=(alphaSlider/100).toFixed(2); // store as 0.00–0.90 decimal for rgba()
+  const barHeight=(document.getElementById('nav-bar-h')||{}).value||'48';
+  const alphaSlider=+(document.getElementById('nav-bar-alpha')||{value:10}).value;
+  const alpha=(alphaSlider/100).toFixed(2);
   if(!contentData.navigation) contentData.navigation={};
   contentData.navigation.nav_logo=url;
   contentData.navigation.nav_logo_height=h;
-  contentData.navigation.nav_bar_padding=pad;
+  contentData.navigation.nav_bar_height=barHeight;
   contentData.navigation.nav_bar_alpha=alpha;
   const r=await apiFetch('/content','POST',contentData);
   if(r.ok){ toast('✅ Navigatie opgeslagen','success'); reloadPreview(); }
