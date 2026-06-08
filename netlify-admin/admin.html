@@ -1828,7 +1828,7 @@ function renderNavEditor() {
           <span>Grootte</span>
           <span id="nav-h-val" style="color:var(--accent);font-weight:600">${logoH}px</span>
         </label>
-        <input type="range" min="14" max="60" value="${logoH}" id="nav-logo-h"
+        <input type="range" min="14" max="120" value="${logoH}" id="nav-logo-h"
           style="width:100%;accent-color:var(--accent)"
           oninput="document.getElementById('nav-h-val').textContent=this.value+'px';navSaveDebounced()">
       </div>
