@@ -54,7 +54,7 @@
     "mcep_title_nl": "MCP Protocol",
     "mcep_text_en": "Model Context Protocol is the backbone of Aiventity's integrations. It maintains live, bidirectional context between your agent and every connected tool — so when a budget changes in a spreadsheet, your timeline and vendor list update automatically.",
     "mcep_text_nl": "Model Context Protocol is de ruggengraat van Aiventity's integraties. Het onderhoudt live, bidirectionele context tussen uw agent en elk verbonden tool — zodat wanneer een budget verandert in een spreadsheet, uw tijdlijn en leverancierslijst automatisch bijwerken.",
-    "tool1_name": "Salesforce",
+    "tool1_name": "Whatssap",
     "tool1_icon": "📋",
     "tool1_logo": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/whatsapp-logo-whatsapp-logo-transparent-whatsapp-icon-transparent-free-free-png.webp",
     "tool2_name": "Google Drive",
