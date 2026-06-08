@@ -194,15 +194,15 @@ function renderWebsite(content,cfg={},themeOverride=null) {
   const sections={h:content.hero||{},cr:content.creativity||{},ig:content.integration||{},
                   ar:content.architecture||{},
                   ex:content.execution||{},ap:content.apply||{},ft:content.footer||{},
-                  ds:content.dna_slides||{}};
+                  ds:content.dna_slides||{},nav:content.navigation||{}};
   const tmplPath=path.join(__dirname,"templates","website.html");
   let html;
   try { html=fs.readFileSync(tmplPath,"utf-8"); } catch { return buildFallback(sections); }
   // Strip Jinja control flow, evaluate expressions
   html=html.replace(/\{%.*?%\}/gs,"");
   html=html.replace(/\{\{\s*(.+?)\s*\}\}/g,(_,e)=>{ try{return evalJinja(e.trim(),sections);}catch{return "";} });
-  // Fix logo URL — replace relative /logo.png with absolute CDN URL
   html=html.replace(/src="\/logo\.png"/g,`src="${LOGO_URL}"`);
+  html=html.replace(/src="\/logo-wordmark\.png"/g,`src="${WORDMARK_URL}"`);
   // Inject theme CSS
   const theme=themeOverride||(cfg&&cfg.theme)||{};
   if(Object.keys(theme).length>0) {
