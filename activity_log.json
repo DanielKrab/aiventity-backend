@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-01T20:17:01.355Z",
-    "action": "publish",
-    "detail": "Website gepubliceerd op Netlify"
-  },
-  {
     "ts": "2026-06-01T20:24:57.672Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
@@ -998,5 +993,10 @@
     "ts": "2026-06-08T21:40:26.571Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
+  },
+  {
+    "ts": "2026-06-08T21:40:38.901Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: integration"
   }
 ]
