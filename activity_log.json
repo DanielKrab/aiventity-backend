@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-01T19:59:47.699Z",
-    "action": "media_upload",
-    "detail": "Bestand geüpload: monday-1.svg"
-  },
-  {
     "ts": "2026-06-01T19:59:53.616Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
@@ -996,6 +991,11 @@
   },
   {
     "ts": "2026-06-08T21:04:32.208Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation"
+  },
+  {
+    "ts": "2026-06-08T21:04:36.964Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation"
   }
