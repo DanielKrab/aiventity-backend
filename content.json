@@ -137,17 +137,17 @@
   },
   "architecture": {
     "title_nl": "Het cognitieve fundament",
-    "title_en": "The cognitive foundation",
+    "title_en": "Het cognitieve fundament",
     "subtitle_nl": "Een gestructureerde omgeving waar werk, context en uitvoering samensmelten.",
-    "subtitle_en": "A structured environment where work, context and execution merge.",
-    "c1_title_nl": "als cognitieve containers",
-    "c1_title_en": "Topics as cognitive containers",
-    "c1_text_nl": "",
+    "subtitle_en": "Een gestructureerde omgeving waar werk, context en uitvoering samensmelten.",
+    "c1_title_nl": "asls cognitieve containers",
+    "c1_title_en": "asls cognitieve containers",
+    "c1_text_nl": "Elk onderwerp is een afgeschermde werkomgeving met real-time vector ingestion en gefilterde RAG.",
     "c1_text_en": "Elk onderwerp is een afgeschermde werkomgeving met real-time vector ingestion en gefilterde RAG.",
     "c2_title_nl": "en the platforum De universele adapter (MCP)",
     "c2_title_en": "en the platforum De universele adapter (MCP)",
     "c2_text_nl": "Aiventity fungeert als MCP-host en geeft digitale collega's geautoriseerde toegang tot externe systemen.",
-    "c2_text_en": "Topics fungeert als MCP-host en geeft digitale collega's geautoriseerde toegang tot externe systemen.",
+    "c2_text_en": "Aiventity fungeert als MCP-host en geeft digitale collega's geautoriseerde toegang tot externe systemen.",
     "c3_title_nl": "A2A-samenwerking",
     "c3_title_en": "A2A-samenwerking",
     "c3_text_nl": "Teams delegeren subtaken automatisch aan gespecialiseerde uitvoeringsgerichte digitale collega's.",
@@ -155,6 +155,7 @@
     "slide1_img": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/Screenshot_2026-06-02_at_16.51.48.png",
     "slide2_img": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/Screenshot_2026-06-02_at_16.51.14.png",
     "slide3_img": "",
-    "label_nl": "02 — ARCHITECTUUR"
+    "label_nl": "02 — ARCHITECTUUR",
+    "label_en": "02 — ARCHITECTUUR"
   }
 }
