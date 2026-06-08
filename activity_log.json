@@ -753,5 +753,10 @@
     "ts": "2026-06-08T19:59:36.036Z",
     "action": "theme_save",
     "detail": "Thema-instellingen opgeslagen"
+  },
+  {
+    "ts": "2026-06-08T19:59:45.303Z",
+    "action": "publish",
+    "detail": "Website gepubliceerd op Netlify"
   }
 ]
