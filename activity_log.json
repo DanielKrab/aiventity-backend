@@ -488,5 +488,10 @@
     "ts": "2026-06-02T18:09:57.930Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
+  },
+  {
+    "ts": "2026-06-08T10:09:29.305Z",
+    "action": "media_upload",
+    "detail": "Bestand geüpload: whatsapp-logo-whatsapp-logo-transparent-whatsapp-icon-transparent-free-free-png.webp"
   }
 ]
