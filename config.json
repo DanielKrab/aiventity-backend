@@ -18,7 +18,7 @@
     "heading_font": "Inter",
     "body_font": "Open Sans",
     "nav_bg": "#070d1c",
-    "hero_h1_size": "clamp(0.875rem,2vw,1.125rem)",
+    "hero_h1_size": "clamp(1.5rem,3.5vw,2.25rem)",
     "section_h2_size": "clamp(1.25rem,3vw,1.75rem)",
     "body_font_size": "0.8125rem"
   },
