@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-01T17:36:38.572Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: hero"
-  },
-  {
     "ts": "2026-06-01T18:14:38.315Z",
     "action": "theme_save",
     "detail": "Thema-instellingen opgeslagen"
@@ -996,6 +991,11 @@
   },
   {
     "ts": "2026-06-08T21:03:12.497Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation"
+  },
+  {
+    "ts": "2026-06-08T21:03:17.199Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation"
   }
