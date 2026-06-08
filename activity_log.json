@@ -783,5 +783,10 @@
     "ts": "2026-06-08T20:38:17.447Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: Logo-Aiventity__1_-Photoroom.png"
+  },
+  {
+    "ts": "2026-06-08T20:38:22.219Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation"
   }
 ]
