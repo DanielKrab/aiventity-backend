@@ -260,7 +260,9 @@ exports.handler = async (event) => {
         await ghPut("content_history.json",arr.slice(-30),hSha,"CMS: save snapshot");
       }
       await logActivity("content_save",`Sectie opgeslagen: ${Object.keys(body).filter(k=>k!=='_snapshot').join(", ")}`);
-      return resp(200,{ok:true});
+      // Auto-publish na opslaan zodat mobiel en desktop altijd gelijk zijn
+      try { await doPublish({}); } catch(e) { /* publicatie mislukt, geen blocker */ }
+      return resp(200,{ok:true,auto_published:true});
     }
   }
 
@@ -288,7 +290,8 @@ exports.handler = async (event) => {
       cfg.theme={...(cfg.theme||{}),...body};
       await ghPut("config.json",cfg,sha,"CMS: save theme");
       await logActivity("theme_save","Thema-instellingen opgeslagen");
-      return resp(200,{ok:true});
+      try { await doPublish({}); } catch(e) {}
+      return resp(200,{ok:true,auto_published:true});
     }
   }
 
