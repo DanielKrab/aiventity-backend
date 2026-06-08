@@ -89,6 +89,23 @@
     .js-ready .reveal { opacity: 0; transform: translateY(40px); }
     .js-ready .reveal.visible { opacity: 1; transform: translateY(0); }
 
+    /* ── DNA mockup: mobiel schalen ── */
+    @media (max-width: 767px) {
+      #dna-outer {
+        transform: none !important;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.07) !important;
+      }
+      #dna-track {
+        transform: scale(0.52);
+        transform-origin: top left;
+        width: calc(100% / 0.52) !important;
+      }
+      #dna-outer > div:nth-child(2) {
+        height: 190px;
+        overflow: hidden;
+      }
+    }
+
     /* ── Feature card hover ── */
     .feature-card { transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; }
     .feature-card:hover { transform: translateY(-4px); border-color: rgba(0,122,255,0.4); box-shadow: 0 20px 60px rgba(0,122,255,0.12); }
@@ -485,8 +502,12 @@
     entries.forEach(function(e) {
       if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.05 });
   document.querySelectorAll('.reveal').forEach(function(el) { revObs.observe(el); });
+  // Fallback: als viewport hoogte 0 is of IntersectionObserver niet triggert
+  setTimeout(function() {
+    document.querySelectorAll('.reveal:not(.visible)').forEach(function(el) { el.classList.add('visible'); });
+  }, 600);
 
   /* ── Start console when hero is visible ─────── */
   var heroSection = document.getElementById('cms-hero');

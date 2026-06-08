@@ -1,5 +1,6 @@
 {% set h  = content.get('hero', {}) %}
 {% set cr = content.get('creativity', {}) %}
+{% set ar = content.get('architecture', {}) %}
 {% set ig = content.get('integration', {}) %}
 {% set ex = content.get('execution', {}) %}
 {% set ap = content.get('apply', {}) %}
@@ -84,10 +85,27 @@
     .cursor-blink { display: inline-block; width: 7px; height: 12px; background: #007AFF; animation: blink 1s step-end infinite; vertical-align: text-bottom; }
     @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
 
-    /* ── Scroll reveal ── */
+    /* ── Scroll reveal — alleen off-screen elementen worden geanimeerd ── */
     .reveal { transition: opacity 0.7s ease, transform 0.7s ease; }
-    .js-ready .reveal { opacity: 0; transform: translateY(40px); }
-    .js-ready .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal.will-animate { opacity: 0; transform: translateY(30px); }
+    .reveal.will-animate.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── DNA mockup: mobiel schalen ── */
+    @media (max-width: 767px) {
+      #dna-outer {
+        transform: none !important;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.07) !important;
+      }
+      #dna-track {
+        transform: scale(0.52);
+        transform-origin: top left;
+        width: calc(100% / 0.52) !important;
+      }
+      #dna-outer > div:nth-child(2) {
+        height: 190px;
+        overflow: hidden;
+      }
+    }
 
     /* ── Feature card hover ── */
     .feature-card { transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; }
@@ -123,11 +141,6 @@
 
 <body class="hero-bg noise relative">
 
-<!-- Flask Admin Bar -->
-<div class="ve-bar" style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(0,0,0,0.9);border-top:1px solid rgba(0,122,255,0.3);padding:10px 20px;display:flex;gap:12px;align-items:center;">
-  <span style="font-family:monospace;font-size:11px;color:rgba(255,255,255,0.4);">ADMIN</span>
-  <a href="{{ url_for('dashboard') }}" style="font-size:12px;color:#007AFF;text-decoration:none;padding:4px 10px;border:1px solid rgba(0,122,255,0.3);border-radius:4px;">Dashboard →</a>
-</div>
 
 <!-- ══ NAV ══════════════════════════════════════════════════════════════ -->
 <header id="nav" class="fixed top-0 left-0 right-0 z-50 nav-blur">
@@ -139,9 +152,10 @@
     </a>
 
     <ul class="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide text-white/60">
-      <li><a href="#creativity"  class="hover:text-white transition-colors duration-200 uppercase tracking-widest text-xs" data-en="Creativity"  data-nl="Creativiteit">Creativity</a></li>
-      <li><a href="#integration" class="hover:text-white transition-colors duration-200 uppercase tracking-widest text-xs" data-en="Integration" data-nl="Integratie">Integration</a></li>
-      <li><a href="#execution"   class="hover:text-white transition-colors duration-200 uppercase tracking-widest text-xs" data-en="Execution"   data-nl="Uitvoering">Execution</a></li>
+      <li><a href="#creativity"    class="hover:text-white transition-colors duration-200 uppercase tracking-widest text-xs" data-en="Creativity"    data-nl="Creativiteit">Creativity</a></li>
+      <li><a href="#architecture" class="hover:text-white transition-colors duration-200 uppercase tracking-widest text-xs" data-en="Architecture" data-nl="Architectuur">Architecture</a></li>
+      <li><a href="#integration"  class="hover:text-white transition-colors duration-200 uppercase tracking-widest text-xs" data-en="Integration"  data-nl="Integratie">Integration</a></li>
+      <li><a href="#execution"    class="hover:text-white transition-colors duration-200 uppercase tracking-widest text-xs" data-en="Execution"    data-nl="Uitvoering">Execution</a></li>
     </ul>
 
     <div class="flex items-center gap-3">
@@ -158,9 +172,10 @@
   </nav>
 
   <div id="mobile-menu" class="md:hidden glass border-t border-white/5 px-6 py-4 space-y-3">
-    <a href="#creativity"  onclick="toggleMenu()" class="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-widest" data-en="Creativity"  data-nl="Creativiteit">Creativity</a>
-    <a href="#integration" onclick="toggleMenu()" class="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-widest" data-en="Integration" data-nl="Integratie">Integration</a>
-    <a href="#execution"   onclick="toggleMenu()" class="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-widest" data-en="Execution"   data-nl="Uitvoering">Execution</a>
+    <a href="#creativity"    onclick="toggleMenu()" class="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-widest" data-en="Creativity"    data-nl="Creativiteit">Creativity</a>
+    <a href="#architecture" onclick="toggleMenu()" class="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-widest" data-en="Architecture" data-nl="Architectuur">Architecture</a>
+    <a href="#integration"  onclick="toggleMenu()" class="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-widest" data-en="Integration"  data-nl="Integratie">Integration</a>
+    <a href="#execution"    onclick="toggleMenu()" class="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-widest" data-en="Execution"    data-nl="Uitvoering">Execution</a>
     <div class="flex items-center gap-2 py-1">
       <button id="lbtn-en-m" onclick="setLang('en')" class="lbtn lbtn-on">EN</button>
       <button id="lbtn-nl-m" onclick="setLang('nl')" class="lbtn lbtn-off" style="border:1px solid rgba(255,255,255,0.1);">NL</button>
@@ -266,17 +281,395 @@
        data-en="{{ cr.get('subtitle_en','') }}" data-nl="{{ cr.get('subtitle_nl','') }}">{{ cr.get('subtitle_en','') }}</p>
   </div>
   <div class="grid md:grid-cols-3 gap-6">
-    {% for num, delay in [('1','0s'),('2','0.1s'),('3','0.2s')] %}
-    <div class="glass feature-card rounded-2xl p-7 reveal" style="transition-delay:{{ delay }}">
+    <div class="glass feature-card rounded-2xl p-7 reveal" style="transition-delay:0s">
       <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center mb-5">
-        <span class="text-xl">{{ cr.get('c' ~ num ~ '_icon', '✦') }}</span>
+        <span class="text-xl">{{ cr.get('c1_icon', '✦') }}</span>
       </div>
       <h3 class="font-heading font-semibold text-lg mb-2"
-          data-en="{{ cr.get('c' ~ num ~ '_title_en','') }}" data-nl="{{ cr.get('c' ~ num ~ '_title_nl','') }}">{{ cr.get('c' ~ num ~ '_title_en','') }}</h3>
+          data-en="{{ cr.get('c1_title_en','') }}" data-nl="{{ cr.get('c1_title_nl','') }}">{{ cr.get('c1_title_en','') }}</h3>
       <p class="text-white/45 text-sm leading-relaxed"
-         data-en="{{ cr.get('c' ~ num ~ '_text_en','') }}" data-nl="{{ cr.get('c' ~ num ~ '_text_nl','') }}">{{ cr.get('c' ~ num ~ '_text_en','') }}</p>
+         data-en="{{ cr.get('c1_text_en','') }}" data-nl="{{ cr.get('c1_text_nl','') }}">{{ cr.get('c1_text_en','') }}</p>
     </div>
-    {% endfor %}
+    <div class="glass feature-card rounded-2xl p-7 reveal" style="transition-delay:0.1s">
+      <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center mb-5">
+        <span class="text-xl">{{ cr.get('c2_icon', '✦') }}</span>
+      </div>
+      <h3 class="font-heading font-semibold text-lg mb-2"
+          data-en="{{ cr.get('c2_title_en','') }}" data-nl="{{ cr.get('c2_title_nl','') }}">{{ cr.get('c2_title_en','') }}</h3>
+      <p class="text-white/45 text-sm leading-relaxed"
+         data-en="{{ cr.get('c2_text_en','') }}" data-nl="{{ cr.get('c2_text_nl','') }}">{{ cr.get('c2_text_en','') }}</p>
+    </div>
+    <div class="glass feature-card rounded-2xl p-7 reveal" style="transition-delay:0.2s">
+      <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center mb-5">
+        <span class="text-xl">{{ cr.get('c3_icon', '✦') }}</span>
+      </div>
+      <h3 class="font-heading font-semibold text-lg mb-2"
+          data-en="{{ cr.get('c3_title_en','') }}" data-nl="{{ cr.get('c3_title_nl','') }}">{{ cr.get('c3_title_en','') }}</h3>
+      <p class="text-white/45 text-sm leading-relaxed"
+         data-en="{{ cr.get('c3_text_en','') }}" data-nl="{{ cr.get('c3_text_nl','') }}">{{ cr.get('c3_text_en','') }}</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider max-w-7xl mx-auto px-6"></div>
+
+<!-- ══ ARCHITECTUUR ══════════════════════════════════════════════════════ -->
+<section id="architecture" class="py-28 px-6 max-w-7xl mx-auto">
+  <div class="text-center mb-16 reveal">
+    <span class="text-xs font-heading font-semibold text-ai-blue uppercase tracking-widest mb-4 block"
+          data-en="{{ ar.get('label_en','02 — ARCHITECTURE') }}" data-nl="{{ ar.get('label_nl','02 — ARCHITECTUUR') }}">{{ ar.get('label_en','02 — ARCHITECTURE') }}</span>
+    <h2 class="font-heading text-4xl md:text-5xl font-bold gradient-text mb-4"
+        data-en="{{ ar.get('title_en', 'The cognitive foundation') }}"
+        data-nl="{{ ar.get('title_nl', 'Het cognitieve fundament') }}">{{ ar.get('title_en', 'The cognitive foundation') }}</h2>
+    <p class="text-white/50 max-w-2xl mx-auto"
+       data-en="{{ ar.get('subtitle_en', 'A structured environment where work, context and execution merge.') }}"
+       data-nl="{{ ar.get('subtitle_nl', 'Een gestructureerde omgeving waar werk, context en uitvoering samensmelten.') }}">{{ ar.get('subtitle_en', 'A structured environment where work, context and execution merge.') }}</p>
+  </div>
+  <div class="grid md:grid-cols-3 gap-6">
+
+    <!-- Card 1 -->
+    <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0s">
+      <div class="w-12 h-12 rounded-xl mb-6 flex items-center justify-center" style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.25)">
+        <i data-lucide="layers" class="w-5 h-5" style="color:#10b981"></i>
+      </div>
+      <h3 class="font-heading font-bold text-xl mb-3"
+          data-en="{{ ar.get('c1_title_en', 'Topics as cognitive containers') }}"
+          data-nl="{{ ar.get('c1_title_nl', 'Topics als cognitieve containers') }}">{{ ar.get('c1_title_en', 'Topics as cognitive containers') }}</h3>
+      <p class="text-white/45 text-sm leading-relaxed mb-5"
+         data-en="{{ ar.get('c1_text_en', 'Each topic is a shielded workspace with real-time vector ingestion and filtered RAG.') }}"
+         data-nl="{{ ar.get('c1_text_nl', 'Elk onderwerp is een afgeschermde werkomgeving met real-time vector ingestion en gefilterde RAG.') }}">{{ ar.get('c1_text_en', 'Each topic is a shielded workspace with real-time vector ingestion and filtered RAG.') }}</p>
+      <ul class="space-y-2.5">
+        <li class="flex items-center gap-2.5 text-sm text-white/55">
+          <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0" style="color:#10b981"></i>
+          <span data-en="Strict domain separation" data-nl="Strikte scheiding van domeinen">Strict domain separation</span>
+        </li>
+        <li class="flex items-center gap-2.5 text-sm text-white/55">
+          <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0" style="color:#10b981"></i>
+          <span data-en="Real-time vector ingestion" data-nl="Real-time vector ingestion">Real-time vector ingestion</span>
+        </li>
+        <li class="flex items-center gap-2.5 text-sm text-white/55">
+          <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0" style="color:#10b981"></i>
+          <span data-en="Elimination of hallucinations" data-nl="Eliminatie van hallucinaties">Elimination of hallucinations</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0.1s">
+      <div class="w-12 h-12 rounded-xl mb-6 flex items-center justify-center" style="background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.25)">
+        <i data-lucide="plug-zap" class="w-5 h-5" style="color:#f59e0b"></i>
+      </div>
+      <h3 class="font-heading font-bold text-xl mb-3"
+          data-en="{{ ar.get('c2_title_en', 'The universal adapter (MCP)') }}"
+          data-nl="{{ ar.get('c2_title_nl', 'De universele adapter (MCP)') }}">{{ ar.get('c2_title_en', 'The universal adapter (MCP)') }}</h3>
+      <p class="text-white/45 text-sm leading-relaxed mb-5"
+         data-en="{{ ar.get('c2_text_en', 'Topics acts as an MCP host, giving digital colleagues direct authorized access to external systems.') }}"
+         data-nl="{{ ar.get('c2_text_nl', 'Topics fungeert als een MCP-host, waardoor digitale collega\'s direct geautoriseerde toegang krijgen tot externe systemen.') }}">{{ ar.get('c2_text_en', 'Topics acts as an MCP host, giving digital colleagues direct authorized access to external systems.') }}</p>
+      <ul class="space-y-2.5">
+        <li class="flex items-center gap-2.5 text-sm text-white/55">
+          <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0" style="color:#f59e0b"></i>
+          <span data-en="No integration bottleneck" data-nl="Geen integratieflessenhals">No integration bottleneck</span>
+        </li>
+        <li class="flex items-center gap-2.5 text-sm text-white/55">
+          <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0" style="color:#f59e0b"></i>
+          <span data-en="Native access to CRM, ERP and Jira" data-nl="Native toegang tot CRM, EPD en Jira">Native access to CRM, ERP and Jira</span>
+        </li>
+        <li class="flex items-center gap-2.5 text-sm text-white/55">
+          <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0" style="color:#f59e0b"></i>
+          <span data-en="Safe sandboxed execution" data-nl="Veilige sandboxed execution">Safe sandboxed execution</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0.2s">
+      <div class="w-12 h-12 rounded-xl mb-6 flex items-center justify-center" style="background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.25)">
+        <i data-lucide="git-branch" class="w-5 h-5" style="color:#818cf8"></i>
+      </div>
+      <h3 class="font-heading font-bold text-xl mb-3"
+          data-en="{{ ar.get('c3_title_en', 'A2A collaboration') }}"
+          data-nl="{{ ar.get('c3_title_nl', 'A2A-samenwerking') }}">{{ ar.get('c3_title_en', 'A2A collaboration') }}</h3>
+      <p class="text-white/45 text-sm leading-relaxed mb-5"
+         data-en="{{ ar.get('c3_text_en', 'Teams automatically delegate subtasks to specialized executing digital colleagues.') }}"
+         data-nl="{{ ar.get('c3_text_nl', 'Teams delegeren deeltaken automatisch naar gespecialiseerde uitvoerende digitale collega\'s.') }}">{{ ar.get('c3_text_en', 'Teams automatically delegate subtasks to specialized executing digital colleagues.') }}</p>
+      <ul class="space-y-2.5">
+        <li class="flex items-center gap-2.5 text-sm text-white/55">
+          <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0" style="color:#818cf8"></i>
+          <span data-en="Autonomous multi-step plans" data-nl="Autonome meerstappenplannen">Autonomous multi-step plans</span>
+        </li>
+        <li class="flex items-center gap-2.5 text-sm text-white/55">
+          <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0" style="color:#818cf8"></i>
+          <span data-en="Specialized skill sets" data-nl="Gespecialiseerde vaardighedensets">Specialized skill sets</span>
+        </li>
+        <li class="flex items-center gap-2.5 text-sm text-white/55">
+          <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0" style="color:#818cf8"></i>
+          <span data-en="Dynamic routing to the right agent" data-nl="Dynamische routing naar de juiste agent">Dynamic routing to the right agent</span>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider max-w-7xl mx-auto px-6"></div>
+
+<!-- ══ DNA VAN DE DIGITALE COLLEGA ═══════════════════════════════════════ -->
+<section id="dna" class="py-28 px-6 max-w-7xl mx-auto">
+  <div class="grid md:grid-cols-2 gap-14 items-center">
+
+    <!-- Left: numbered steps -->
+    <div class="reveal">
+      <span class="text-xs font-heading font-semibold text-ai-blue uppercase tracking-widest mb-4 block"
+            data-en="THE PLATFORM" data-nl="HET PLATFORM">THE PLATFORM</span>
+      <h2 class="font-heading text-3xl md:text-4xl font-bold mb-4"
+          data-en="The DNA of the digital colleague"
+          data-nl="Het DNA van de digitale collega">The DNA of the digital colleague</h2>
+      <p class="text-white/50 mb-10"
+         data-en="Configuration replaces coding. Behaviour is defined via natural language."
+         data-nl="Configuratie vervangt codering. Het gedrag wordt bepaald via natuurlijke taal.">Configuration replaces coding. Behaviour is defined via natural language.</p>
+      <div class="space-y-7">
+        <div class="flex items-start gap-5">
+          <div class="w-9 h-9 rounded-full shrink-0 flex items-center justify-center font-heading font-bold text-sm" style="background:rgba(0,122,255,0.15);border:1.5px solid rgba(0,122,255,0.35);color:#60a5fa">1</div>
+          <div>
+            <h4 class="font-heading font-bold mb-1" data-en="The identity" data-nl="De identiteit">The identity</h4>
+            <p class="text-white/45 text-sm leading-relaxed" data-en="Who is the digital colleague and what is their mandate?" data-nl="Wie is de digitale collega en wat is zijn mandaat?">Who is the digital colleague and what is their mandate?</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-5">
+          <div class="w-9 h-9 rounded-full shrink-0 flex items-center justify-center font-heading font-bold text-sm" style="background:rgba(0,122,255,0.15);border:1.5px solid rgba(0,122,255,0.35);color:#60a5fa">2</div>
+          <div>
+            <h4 class="font-heading font-bold mb-1" data-en="The work style" data-nl="De werkstijl">The work style</h4>
+            <p class="text-white/45 text-sm leading-relaxed" data-en="Declared instructions and behavioural rules." data-nl="Gedeclareerde instructies en gedragsregels.">Declared instructions and behavioural rules.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-5">
+          <div class="w-9 h-9 rounded-full shrink-0 flex items-center justify-center font-heading font-bold text-sm" style="background:rgba(0,122,255,0.15);border:1.5px solid rgba(0,122,255,0.35);color:#60a5fa">3</div>
+          <div>
+            <h4 class="font-heading font-bold mb-1" data-en="The engine" data-nl="De motor">The engine</h4>
+            <p class="text-white/45 text-sm leading-relaxed" data-en="Which skills and events activate it?" data-nl="Welke vaardigheden en gebeurtenissen activeren hem?">Which skills and events activate it?</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-5">
+          <div class="w-9 h-9 rounded-full shrink-0 flex items-center justify-center font-heading font-bold text-sm" style="background:rgba(0,122,255,0.15);border:1.5px solid rgba(0,122,255,0.35);color:#60a5fa">4</div>
+          <div>
+            <h4 class="font-heading font-bold mb-1" data-en="The reach" data-nl="De reikwijdte">The reach</h4>
+            <p class="text-white/45 text-sm leading-relaxed" data-en="External systems the digital colleague may use." data-nl="Externe systemen die de digitale collega mag gebruiken.">External systems the digital colleague may use.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: swipeable platform mockup carousel -->
+    <div class="reveal" style="perspective:1200px">
+      <div id="dna-outer" style="transform:rotateY(-4deg) rotateX(2deg);border-radius:16px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(255,255,255,0.07)">
+        <!-- Browser chrome -->
+        <div style="background:#0e1b3d;padding:10px 14px;display:flex;align-items:center;gap:8px">
+          <div style="display:flex;gap:5px">
+            <div style="width:10px;height:10px;border-radius:50%;background:#ff5f57"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#febc2e"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#28c840"></div>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:5px;padding:3px 10px;font-size:10px;color:rgba(255,255,255,0.3);text-align:center">app.aiventity.com</div>
+        </div>
+        <!-- Slides track -->
+        <div id="dna-track" style="display:flex;transition:transform 0.4s cubic-bezier(.4,0,.2,1);will-change:transform;background:#0e1b3d">
+
+          <!-- ─── SLIDE 1: Virtual Colleague detail ─── -->
+          <div id="dna-s1" data-img="{{ ar.get('slide1_img', '') }}" style="flex:0 0 100%;display:flex;min-height:340px;font-size:11px">
+            <!-- Sidebar -->
+            <div style="width:155px;background:#060c18;border-right:1px solid rgba(255,255,255,0.06);padding:14px 0;flex-shrink:0">
+              <div style="padding:0 12px 12px;font-size:13px;font-weight:700;color:#fff;font-family:'Space Grotesk',sans-serif">Aiventity</div>
+              <div style="padding:4px 8px;margin:0 6px;border-radius:6px;color:rgba(255,255,255,0.35);font-size:10px">Organization mgmt</div>
+              <div style="padding:5px 12px;color:rgba(255,255,255,0.35);font-size:10px;margin-top:2px">Shortcuts</div>
+              <div style="padding:5px 12px;color:rgba(255,255,255,0.35);font-size:10px">Users</div>
+              <div style="padding:5px 12px;color:rgba(255,255,255,0.35);font-size:10px">Roles</div>
+              <div style="padding:6px 12px;background:rgba(0,122,255,0.18);border-radius:6px;margin:2px 8px;color:#60a5fa;font-size:10px;font-weight:600;display:flex;align-items:center;gap:5px"><span style="font-size:12px">🤖</span> Virtual Colleagues</div>
+              <div style="padding:5px 12px;color:rgba(255,255,255,0.25);font-size:10px;padding-left:22px;margin-top:2px">VC labels</div>
+              <div style="padding:5px 12px;color:rgba(255,255,255,0.25);font-size:10px;padding-left:22px">Skills library</div>
+              <div style="padding:5px 12px;color:rgba(255,255,255,0.25);font-size:10px;padding-left:22px">MCP servers</div>
+            </div>
+            <!-- Main -->
+            <div style="flex:1;padding:16px;overflow:hidden">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+                <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=RickyAgent&backgroundColor=b6e3f4" style="width:36px;height:36px;border-radius:50%;flex-shrink:0;background:#b6e3f4">
+                <div><div style="font-weight:700;font-size:14px;color:#fff;font-family:'Space Grotesk',sans-serif">Ricky</div><div style="font-size:9px;color:rgba(255,255,255,0.4)">Real-Time Inventory Agent</div></div>
+                <div style="margin-left:auto;display:flex;gap:6px">
+                  <div style="background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);border-radius:99px;padding:2px 8px;font-size:9px;color:#a5b4fc">⚙ Flash</div>
+                  <div style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:99px;padding:2px 8px;font-size:9px;color:#6ee7b7;font-weight:600">Actief</div>
+                </div>
+              </div>
+              <div style="display:flex;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:12px">
+                <div style="padding:5px 10px;font-size:9.5px;color:#60a5fa;border-bottom:2px solid #60a5fa;font-weight:600">Topics <span style="background:rgba(0,122,255,0.2);border-radius:99px;padding:1px 5px">7</span></div>
+                <div style="padding:5px 10px;font-size:9.5px;color:rgba(255,255,255,0.3)">Triggers</div>
+                <div style="padding:5px 10px;font-size:9.5px;color:rgba(255,255,255,0.3)">Skills <span style="background:rgba(255,255,255,0.08);border-radius:99px;padding:1px 5px">2</span></div>
+                <div style="padding:5px 10px;font-size:9.5px;color:rgba(255,255,255,0.3)">MCP tools <span style="background:rgba(255,255,255,0.08);border-radius:99px;padding:1px 5px">59</span></div>
+              </div>
+              <div style="background:rgba(255,255,255,0.02);border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,0.06)">
+                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:6px 10px;border-bottom:1px solid rgba(255,255,255,0.06);font-size:9px;font-weight:600;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.05em"><span>Naam</span><span>Rol</span><span>Zichtbaarheid</span><span>Reacties</span></div>
+                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,0.04);align-items:center"><span style="color:rgba(255,255,255,0.75);font-size:9.5px">📥 Mijn inbox</span><span style="color:rgba(255,255,255,0.35);font-size:9px">Beheerder</span><span style="background:rgba(100,116,139,0.2);border-radius:4px;padding:1px 6px;font-size:8.5px;color:rgba(255,255,255,0.4);display:inline-block">Hidden</span><span style="background:rgba(16,185,129,0.18);border-radius:4px;padding:1px 6px;font-size:8.5px;color:#6ee7b7;display:inline-block">Yes</span></div>
+                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,0.04);align-items:center"><span style="color:rgba(255,255,255,0.75);font-size:9.5px">🖥 Helpdesk</span><span style="color:rgba(255,255,255,0.35);font-size:9px">—</span><span style="background:rgba(16,185,129,0.15);border-radius:4px;padding:1px 6px;font-size:8.5px;color:#6ee7b7;display:inline-block">Public</span><span style="background:rgba(16,185,129,0.18);border-radius:4px;padding:1px 6px;font-size:8.5px;color:#6ee7b7;display:inline-block">Yes</span></div>
+                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,0.04);align-items:center"><span style="color:rgba(255,255,255,0.75);font-size:9.5px">🏪 De kantine</span><span style="color:rgba(255,255,255,0.35);font-size:9px">Lid</span><span style="background:rgba(168,85,247,0.15);border-radius:4px;padding:1px 6px;font-size:8.5px;color:#c084fc;display:inline-block">Private</span><span style="background:rgba(16,185,129,0.18);border-radius:4px;padding:1px 6px;font-size:8.5px;color:#6ee7b7;display:inline-block">Yes</span></div>
+                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,0.04);align-items:center"><span style="color:rgba(255,255,255,0.75);font-size:9.5px">📸 Instagram posts</span><span style="color:rgba(255,255,255,0.35);font-size:9px">Lid</span><span style="background:rgba(16,185,129,0.15);border-radius:4px;padding:1px 6px;font-size:8.5px;color:#6ee7b7;display:inline-block">Public</span><span style="background:rgba(16,185,129,0.18);border-radius:4px;padding:1px 6px;font-size:8.5px;color:#6ee7b7;display:inline-block">Yes</span></div>
+                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:7px 10px;align-items:center"><span style="color:rgba(255,255,255,0.75);font-size:9.5px">🏭 Productie</span><span style="color:rgba(255,255,255,0.35);font-size:9px">Moderator</span><span style="background:rgba(168,85,247,0.15);border-radius:4px;padding:1px 6px;font-size:8.5px;color:#c084fc;display:inline-block">Private</span><span style="background:rgba(16,185,129,0.18);border-radius:4px;padding:1px 6px;font-size:8.5px;color:#6ee7b7;display:inline-block">Yes</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ─── SLIDE 2: AI Colleagues (platform replica) ─── -->
+          <div id="dna-s2" data-img="{{ ar.get('slide2_img', '') }}" style="flex:0 0 100%;min-height:340px;display:flex;flex-direction:column;overflow:hidden">
+            <!-- Nav — exact match to screenshot, Daniel Krab removed -->
+            <div style="background:#0e1b3d;padding:9px 14px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+              <span style="font-size:13px;font-weight:700;color:#fff;font-family:'Space Grotesk',sans-serif;letter-spacing:-0.3px">Aiventity</span>
+              <div style="flex:1;display:flex;justify-content:center;gap:3px">
+                <div style="border:1px solid rgba(255,255,255,0.15);border-radius:99px;padding:3px 9px;font-size:8px;color:rgba(255,255,255,0.6)">👤 My Topics</div>
+                <div style="border:1px solid rgba(255,255,255,0.15);border-radius:99px;padding:3px 9px;font-size:8px;color:rgba(255,255,255,0.6)">🔍 Discover</div>
+                <div style="background:#1e40af;border-radius:99px;padding:3px 10px;font-size:8px;color:#fff;font-weight:600">⚡ AI Colleagues</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="font-size:12px">🇬🇧</span>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <div style="width:21px;height:21px;border-radius:50%;background:#6366f1;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff">D</div>
+              </div>
+            </div>
+            <!-- Page body -->
+            <div style="flex:1;background:#eef2f7;padding:10px 10px;overflow-y:auto">
+              <div style="background:#fff;border-radius:12px;padding:12px 10px;box-shadow:0 1px 4px rgba(0,0,0,0.07)">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+                  <div style="font-size:14px;font-weight:700;color:#1e3a8a;font-family:'Space Grotesk',sans-serif">AI Colleagues</div>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                </div>
+                <div style="font-size:8.5px;font-weight:600;color:#1e3a8a;margin-bottom:1px">Internal</div>
+                <div style="font-size:7.5px;color:#64748b;margin-bottom:9px">Use internal virtual colleagues for support within the organization.</div>
+                <!-- 4-column grid — all 16 agents -->
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px">
+
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px 7px;text-align:center">
+                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=AafjeB&backgroundColor=fde8ef" style="width:34px;height:34px;border-radius:50%;margin:0 auto 4px;display:block;background:#fde8ef">
+                    <div style="font-size:7.5px;font-weight:600;color:#1e293b;margin-bottom:1px">Aafje B</div>
+                    <div style="font-size:6.5px;color:#94a3b8;margin-bottom:5px;line-height:1.2">Business Controller Agent</div>
+                    <div style="font-size:6.5px;color:#3b82f6;display:flex;align-items:center;justify-content:center;gap:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Start conversation</div>
+                  </div>
+
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px 7px;text-align:center">
+                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=AidenSpec&backgroundColor=e0d9f7" style="width:34px;height:34px;border-radius:50%;margin:0 auto 4px;display:block;background:#e0d9f7">
+                    <div style="font-size:7.5px;font-weight:600;color:#1e293b;margin-bottom:1px">Aiden</div>
+                    <div style="font-size:6.5px;color:#94a3b8;margin-bottom:5px;line-height:1.2">Implementatie Specialist Agent</div>
+                    <div style="font-size:6.5px;color:#3b82f6;display:flex;align-items:center;justify-content:center;gap:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Start conversation</div>
+                  </div>
+
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px 7px;text-align:center">
+                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=BramBrand&backgroundColor=dbeafe" style="width:34px;height:34px;border-radius:50%;margin:0 auto 4px;display:block;background:#dbeafe">
+                    <div style="font-size:7.5px;font-weight:600;color:#1e293b;margin-bottom:1px">Bram</div>
+                    <div style="font-size:6.5px;color:#94a3b8;margin-bottom:5px;line-height:1.2">Brand Experience Agent</div>
+                    <div style="font-size:6.5px;color:#3b82f6;display:flex;align-items:center;justify-content:center;gap:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Start conversation</div>
+                  </div>
+
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px 7px;text-align:center">
+                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=CallieMeet&backgroundColor=fef3c7" style="width:34px;height:34px;border-radius:50%;margin:0 auto 4px;display:block;background:#fef3c7">
+                    <div style="font-size:7.5px;font-weight:600;color:#1e293b;margin-bottom:1px">Callie</div>
+                    <div style="font-size:6.5px;color:#94a3b8;margin-bottom:5px;line-height:1.2">Meeting Agent</div>
+                    <div style="font-size:6.5px;color:#3b82f6;display:flex;align-items:center;justify-content:center;gap:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Start conversation</div>
+                  </div>
+
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px 7px;text-align:center">
+                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=DavidLog&backgroundColor=d1fae5" style="width:34px;height:34px;border-radius:50%;margin:0 auto 4px;display:block;background:#d1fae5">
+                    <div style="font-size:7.5px;font-weight:600;color:#1e293b;margin-bottom:1px">David</div>
+                    <div style="font-size:6.5px;color:#94a3b8;margin-bottom:5px;line-height:1.2">Logistic Agent</div>
+                    <div style="font-size:6.5px;color:#3b82f6;display:flex;align-items:center;justify-content:center;gap:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Start conversation</div>
+                  </div>
+
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px 7px;text-align:center">
+                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=ElenaCreate&backgroundColor=fce7f3" style="width:34px;height:34px;border-radius:50%;margin:0 auto 4px;display:block;background:#fce7f3">
+                    <div style="font-size:7.5px;font-weight:600;color:#1e293b;margin-bottom:1px">Elena</div>
+                    <div style="font-size:6.5px;color:#94a3b8;margin-bottom:5px;line-height:1.2">Creative Director</div>
+                    <div style="font-size:6.5px;color:#3b82f6;display:flex;align-items:center;justify-content:center;gap:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Start conversation</div>
+                  </div>
+
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px 7px;text-align:center">
+                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=ErikSource&backgroundColor=dbeafe" style="width:34px;height:34px;border-radius:50%;margin:0 auto 4px;display:block;background:#dbeafe">
+                    <div style="font-size:7.5px;font-weight:600;color:#1e293b;margin-bottom:1px">Erik</div>
+                    <div style="font-size:6.5px;color:#94a3b8;margin-bottom:5px;line-height:1.2">Sourcing Agent</div>
+                    <div style="font-size:6.5px;color:#3b82f6;display:flex;align-items:center;justify-content:center;gap:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Start conversation</div>
+                  </div>
+
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px 7px;text-align:center">
+                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=FritzEvent&backgroundColor=e0d9f7" style="width:34px;height:34px;border-radius:50%;margin:0 auto 4px;display:block;background:#e0d9f7">
+                    <div style="font-size:7.5px;font-weight:600;color:#1e293b;margin-bottom:1px">Fritz</div>
+                    <div style="font-size:6.5px;color:#94a3b8;margin-bottom:5px;line-height:1.2">Event Controller Agent</div>
+                    <div style="font-size:6.5px;color:#3b82f6;display:flex;align-items:center;justify-content:center;gap:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Start conversation</div>
+                  </div>
+
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px 7px;text-align:center">
+                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=GuidoSoc&backgroundColor=f1f5f9" style="width:34px;height:34px;border-radius:50%;margin:0 auto 4px;display:block;background:#f1f5f9">
+                    <div style="font-size:7.5px;font-weight:600;color:#1e293b;margin-bottom:1px">Guido</div>
+                    <div style="font-size:6.5px;color:#94a3b8;margin-bottom:5px;line-height:1.2">Social Support Agent</div>
+                    <div style="font-size:6.5px;color:#3b82f6;display:flex;align-items:center;justify-content:center;gap:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Start conversation</div>
+                  </div>
+
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px 7px;text-align:center">
+                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Kimberley&backgroundColor=fde8ef" style="width:34px;height:34px;border-radius:50%;margin:0 auto 4px;display:block;background:#fde8ef">
+                    <div style="font-size:7.5px;font-weight:600;color:#1e293b;margin-bottom:1px">Kimberley</div>
+                    <div style="font-size:6.5px;color:#94a3b8;margin-bottom:5px;line-height:1.2">Executive Assistent Agent</div>
+                    <div style="font-size:6.5px;color:#3b82f6;display:flex;align-items:center;justify-content:center;gap:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Start conversation</div>
+                  </div>
+
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px 7px;text-align:center">
+                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=LotjeVenue&backgroundColor=d1fae5" style="width:34px;height:34px;border-radius:50%;margin:0 auto 4px;display:block;background:#d1fae5">
+                    <div style="font-size:7.5px;font-weight:600;color:#1e293b;margin-bottom:1px">Lotje</div>
+                    <div style="font-size:6.5px;color:#94a3b8;margin-bottom:5px;line-height:1.2">Venue Scout Agent</div>
+                    <div style="font-size:6.5px;color:#3b82f6;display:flex;align-items:center;justify-content:center;gap:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Start conversation</div>
+                  </div>
+
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px 7px;text-align:center">
+                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=LuigiCrew&backgroundColor=fef3c7" style="width:34px;height:34px;border-radius:50%;margin:0 auto 4px;display:block;background:#fef3c7">
+                    <div style="font-size:7.5px;font-weight:600;color:#1e293b;margin-bottom:1px">Luigi</div>
+                    <div style="font-size:6.5px;color:#94a3b8;margin-bottom:5px;line-height:1.2">Crew Agent</div>
+                    <div style="font-size:6.5px;color:#3b82f6;display:flex;align-items:center;justify-content:center;gap:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Start conversation</div>
+                  </div>
+
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px 7px;text-align:center">
+                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=LynnMail&backgroundColor=fde8ef" style="width:34px;height:34px;border-radius:50%;margin:0 auto 4px;display:block;background:#fde8ef">
+                    <div style="font-size:7.5px;font-weight:600;color:#1e293b;margin-bottom:1px">Lynn</div>
+                    <div style="font-size:6.5px;color:#94a3b8;margin-bottom:5px;line-height:1.2">Mail Monitoring Agent</div>
+                    <div style="font-size:6.5px;color:#3b82f6;display:flex;align-items:center;justify-content:center;gap:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Start conversation</div>
+                  </div>
+
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px 7px;text-align:center">
+                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=MarlonWrite&backgroundColor=dbeafe" style="width:34px;height:34px;border-radius:50%;margin:0 auto 4px;display:block;background:#dbeafe">
+                    <div style="font-size:7.5px;font-weight:600;color:#1e293b;margin-bottom:1px">Marlon</div>
+                    <div style="font-size:6.5px;color:#94a3b8;margin-bottom:5px;line-height:1.2">Content Writer Agent</div>
+                    <div style="font-size:6.5px;color:#3b82f6;display:flex;align-items:center;justify-content:center;gap:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Start conversation</div>
+                  </div>
+
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px 7px;text-align:center">
+                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=NoahCorp&backgroundColor=e0f2fe" style="width:34px;height:34px;border-radius:50%;margin:0 auto 4px;display:block;background:#e0f2fe">
+                    <div style="font-size:7.5px;font-weight:600;color:#1e293b;margin-bottom:1px">Noah</div>
+                    <div style="font-size:6.5px;color:#94a3b8;margin-bottom:5px;line-height:1.2">Corporate Concept Agent</div>
+                    <div style="font-size:6.5px;color:#3b82f6;display:flex;align-items:center;justify-content:center;gap:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Start conversation</div>
+                  </div>
+
+                  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px 7px;text-align:center">
+                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=PeterProd&backgroundColor=f1f5f9" style="width:34px;height:34px;border-radius:50%;margin:0 auto 4px;display:block;background:#f1f5f9">
+                    <div style="font-size:7.5px;font-weight:600;color:#1e293b;margin-bottom:1px">Peter</div>
+                    <div style="font-size:6.5px;color:#94a3b8;margin-bottom:5px;line-height:1.2">Pre-Production Agent</div>
+                    <div style="font-size:6.5px;color:#3b82f6;display:flex;align-items:center;justify-content:center;gap:2px"><svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Start conversation</div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ─── SLIDE 3: optioneel ─── -->
+          <div id="dna-s3" data-img="{{ ar.get('slide3_img', '') }}" style="flex:0 0 100%;min-height:340px;display:flex;align-items:center;justify-content:center;background:#000;overflow:hidden"></div>
+
+        </div><!-- /track -->
+      </div><!-- /outer -->
+
+      <!-- Dot navigation (dots injected by initDnaCarousel) -->
+      <div id="dna-dots" style="display:flex;justify-content:center;align-items:center;gap:6px;margin-top:14px"></div>
+    </div>
+
   </div>
 </section>
 
@@ -293,17 +686,30 @@
        data-en="{{ ig.get('subtitle_en','') }}" data-nl="{{ ig.get('subtitle_nl','') }}">{{ ig.get('subtitle_en','') }}</p>
   </div>
 
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 reveal">
-    <div class="glass-blue rounded-xl p-4 flex items-center gap-3 feature-card"><i data-lucide="kanban"       class="w-5 h-5 text-ai-blue shrink-0"></i><span class="text-sm font-medium">Monday.com</span></div>
-    <div class="glass-blue rounded-xl p-4 flex items-center gap-3 feature-card"><i data-lucide="image"        class="w-5 h-5 text-ai-blue shrink-0"></i><span class="text-sm font-medium">Pinterest</span></div>
-    <div class="glass-blue rounded-xl p-4 flex items-center gap-3 feature-card"><i data-lucide="slack"        class="w-5 h-5 text-ai-blue shrink-0"></i><span class="text-sm font-medium">Slack</span></div>
-    <div class="glass-blue rounded-xl p-4 flex items-center gap-3 feature-card"><i data-lucide="table-2"      class="w-5 h-5 text-ai-blue shrink-0"></i><span class="text-sm font-medium">Google Sheets</span></div>
-    <div class="glass-blue rounded-xl p-4 flex items-center gap-3 feature-card"><i data-lucide="calendar"     class="w-5 h-5 text-ai-blue shrink-0"></i><span class="text-sm font-medium">Google Calendar</span></div>
-    <div class="glass-blue rounded-xl p-4 flex items-center gap-3 feature-card"><i data-lucide="file-text"    class="w-5 h-5 text-ai-blue shrink-0"></i><span class="text-sm font-medium">Notion</span></div>
-    <div class="glass-blue rounded-xl p-4 flex items-center gap-3 feature-card"><i data-lucide="shopping-bag" class="w-5 h-5 text-ai-blue shrink-0"></i><span class="text-sm font-medium">Airtable</span></div>
-    <div class="glass rounded-xl p-4 flex items-center gap-3 feature-card" style="border-style:dashed">
-      <i data-lucide="plus-circle" class="w-5 h-5 text-white/30 shrink-0"></i>
-      <span class="text-sm font-medium text-white/30" data-en="Your Tool" data-nl="Uw Tool">Your Tool</span>
+  <div id="tools-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 reveal">
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool1_logo','') }}" data-icon="{{ ig.get('tool1_icon','📋') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool1_name','Monday.com') }}</span>
+    </div>
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool2_logo','') }}" data-icon="{{ ig.get('tool2_icon','📌') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool2_name','Pinterest') }}</span>
+    </div>
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool3_logo','') }}" data-icon="{{ ig.get('tool3_icon','💬') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool3_name','Slack') }}</span>
+    </div>
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool4_logo','') }}" data-icon="{{ ig.get('tool4_icon','📊') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool4_name','Google Sheets') }}</span>
+    </div>
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool5_logo','') }}" data-icon="{{ ig.get('tool5_icon','📅') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool5_name','Google Calendar') }}</span>
+    </div>
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool6_logo','') }}" data-icon="{{ ig.get('tool6_icon','📝') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool6_name','Notion') }}</span>
+    </div>
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool7_logo','') }}" data-icon="{{ ig.get('tool7_icon','🗃️') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool7_name','Airtable') }}</span>
+    </div>
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool8_logo','') }}" data-icon="{{ ig.get('tool8_icon','') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool8_name','') }}</span>
     </div>
   </div>
 
@@ -323,7 +729,6 @@
 <div class="divider max-w-7xl mx-auto px-6"></div>
 
 <!-- ══ EXECUTION ════════════════════════════════════════════════════════ -->
-{% set ex_icons = ['bot', 'shield-check', 'bar-chart-2', 'refresh-cw'] %}
 <section id="execution" class="py-28 px-6 max-w-7xl mx-auto">
   <div class="text-center mb-16 reveal">
     <span class="text-xs font-heading font-semibold text-ai-blue uppercase tracking-widest mb-4 block"
@@ -332,23 +737,183 @@
         data-en="{{ ex.get('title_en','') }}" data-nl="{{ ex.get('title_nl','') }}">{{ ex.get('title_en','') }}</h2>
     <p class="text-white/50 max-w-xl mx-auto"
        data-en="{{ ex.get('subtitle_en','') }}" data-nl="{{ ex.get('subtitle_nl','') }}">{{ ex.get('subtitle_en','') }}</p>
+    <!-- Multi-agent badge -->
+    <div class="inline-flex items-center gap-3 mt-6 px-4 py-2.5 rounded-xl" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)">
+      <div class="flex items-center shrink-0">
+        <div style="width:30px;height:30px;border-radius:50%;background:rgba(99,102,241,0.2);border:1.5px solid rgba(99,102,241,0.4);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#a5b4fc;position:relative;z-index:3">A1</div>
+        <div style="width:30px;height:30px;border-radius:50%;background:rgba(16,185,129,0.2);border:1.5px solid rgba(16,185,129,0.4);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#6ee7b7;position:relative;z-index:2;margin-left:-9px">A2</div>
+        <div style="width:30px;height:30px;border-radius:50%;background:rgba(245,158,11,0.2);border:1.5px solid rgba(245,158,11,0.4);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fcd34d;position:relative;z-index:1;margin-left:-9px">A3</div>
+      </div>
+      <div style="text-align:left">
+        <div style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.88);font-family:'Space Grotesk',sans-serif;line-height:1.3"
+             data-en="Multi-agent orchestration" data-nl="Multi-agent orkestratie">Multi-agent orchestration</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.35);font-family:'Inter',sans-serif;line-height:1.3"
+             data-en="Ready to deploy in your workflows" data-nl="Direct inzetbaar in uw workflows">Ready to deploy in your workflows</div>
+      </div>
+    </div>
   </div>
   <div class="grid md:grid-cols-2 gap-6">
-    {% for num, delay, icon in [('1','0s','bot'),('2','0.1s','shield-check'),('3','0s','bar-chart-2'),('4','0.1s','refresh-cw')] %}
-    <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:{{ delay }}">
+    <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0s">
       <div class="flex items-start gap-5">
         <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center shrink-0">
-          <i data-lucide="{{ icon }}" class="w-5 h-5 text-ai-blue"></i>
+          <i data-lucide="bot" class="w-5 h-5 text-ai-blue"></i>
         </div>
         <div>
           <h3 class="font-heading font-semibold text-lg mb-2"
-              data-en="{{ ex.get('c' ~ num ~ '_title_en','') }}" data-nl="{{ ex.get('c' ~ num ~ '_title_nl','') }}">{{ ex.get('c' ~ num ~ '_title_en','') }}</h3>
+              data-en="{{ ex.get('c1_title_en','') }}" data-nl="{{ ex.get('c1_title_nl','') }}">{{ ex.get('c1_title_en','') }}</h3>
           <p class="text-white/45 text-sm leading-relaxed"
-             data-en="{{ ex.get('c' ~ num ~ '_text_en','') }}" data-nl="{{ ex.get('c' ~ num ~ '_text_nl','') }}">{{ ex.get('c' ~ num ~ '_text_en','') }}</p>
+             data-en="{{ ex.get('c1_text_en','') }}" data-nl="{{ ex.get('c1_text_nl','') }}">{{ ex.get('c1_text_en','') }}</p>
         </div>
       </div>
     </div>
-    {% endfor %}
+    <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0.1s">
+      <div class="flex items-start gap-5">
+        <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center shrink-0">
+          <i data-lucide="shield-check" class="w-5 h-5 text-ai-blue"></i>
+        </div>
+        <div>
+          <h3 class="font-heading font-semibold text-lg mb-2"
+              data-en="{{ ex.get('c2_title_en','') }}" data-nl="{{ ex.get('c2_title_nl','') }}">{{ ex.get('c2_title_en','') }}</h3>
+          <p class="text-white/45 text-sm leading-relaxed"
+             data-en="{{ ex.get('c2_text_en','') }}" data-nl="{{ ex.get('c2_text_nl','') }}">{{ ex.get('c2_text_en','') }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0s">
+      <div class="flex items-start gap-5">
+        <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center shrink-0">
+          <i data-lucide="bar-chart-2" class="w-5 h-5 text-ai-blue"></i>
+        </div>
+        <div>
+          <h3 class="font-heading font-semibold text-lg mb-2"
+              data-en="{{ ex.get('c3_title_en','') }}" data-nl="{{ ex.get('c3_title_nl','') }}">{{ ex.get('c3_title_en','') }}</h3>
+          <p class="text-white/45 text-sm leading-relaxed"
+             data-en="{{ ex.get('c3_text_en','') }}" data-nl="{{ ex.get('c3_text_nl','') }}">{{ ex.get('c3_text_en','') }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0.1s">
+      <div class="flex items-start gap-5">
+        <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center shrink-0">
+          <i data-lucide="refresh-cw" class="w-5 h-5 text-ai-blue"></i>
+        </div>
+        <div>
+          <h3 class="font-heading font-semibold text-lg mb-2"
+              data-en="{{ ex.get('c4_title_en','') }}" data-nl="{{ ex.get('c4_title_nl','') }}">{{ ex.get('c4_title_en','') }}</h3>
+          <p class="text-white/45 text-sm leading-relaxed"
+             data-en="{{ ex.get('c4_text_en','') }}" data-nl="{{ ex.get('c4_text_nl','') }}">{{ ex.get('c4_text_en','') }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider max-w-7xl mx-auto px-6"></div>
+
+<!-- ══ HUMAN IN THE LOOP ══════════════════════════════════════════════ -->
+<section class="py-28 px-6 max-w-7xl mx-auto">
+  <div class="grid md:grid-cols-2 gap-14 items-center">
+
+    <!-- Left: bullet points -->
+    <div class="reveal">
+      <span class="text-xs font-heading font-semibold text-ai-blue uppercase tracking-widest mb-4 block">HUMAN IN THE LOOP</span>
+      <h2 class="font-heading text-3xl md:text-4xl font-bold mb-4"
+          data-en="Seamless collaboration: Human-in-the-Loop"
+          data-nl="Naadloze samenwerking: Human-in-the-Loop">Seamless collaboration: Human-in-the-Loop</h2>
+      <p class="text-white/50 mb-8"
+         data-en="You give the signal, the machine executes."
+         data-nl="De mens geeft het startsein, de machine voert uit.">You give the signal, the machine executes.</p>
+      <div class="space-y-6">
+        <div class="flex items-start gap-4">
+          <div class="w-9 h-9 rounded-xl bg-ai-blue/15 flex items-center justify-center shrink-0 mt-0.5">
+            <i data-lucide="mouse-pointer-click" class="w-4 h-4 text-ai-blue"></i>
+          </div>
+          <div>
+            <h4 class="font-heading font-semibold mb-1"
+                data-en="Natural control" data-nl="Natuurlijke besturing">Natural control</h4>
+            <p class="text-white/45 text-sm leading-relaxed"
+               data-en="Guided by simple signals, like assigning a label."
+               data-nl="Aansturing via simpele signalen, zoals het toewijzen van een label.">Guided by simple signals, like assigning a label.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-9 h-9 rounded-xl bg-ai-blue/15 flex items-center justify-center shrink-0 mt-0.5">
+            <i data-lucide="pause-circle" class="w-4 h-4 text-ai-blue"></i>
+          </div>
+          <div>
+            <h4 class="font-heading font-semibold mb-1"
+                data-en="Workflow interventions" data-nl="Workflowinterventies">Workflow interventions</h4>
+            <p class="text-white/45 text-sm leading-relaxed"
+               data-en="Process automatically pauses when human validation is required."
+               data-nl="Proces pauzeert automatisch wanneer menselijke validatie vereist is.">Process automatically pauses when human validation is required.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-9 h-9 rounded-xl bg-ai-blue/15 flex items-center justify-center shrink-0 mt-0.5">
+            <i data-lucide="shield-check" class="w-4 h-4 text-ai-blue"></i>
+          </div>
+          <div>
+            <h4 class="font-heading font-semibold mb-1"
+                data-en="Preventing agent drift" data-nl="Voorkomen van agent drift">Preventing agent drift</h4>
+            <p class="text-white/45 text-sm leading-relaxed"
+               data-en="Human approval acts as a circuit breaker to prevent errors."
+               data-nl="Menselijke goedkeuring fungeert als stroomonderbreker om fouten te voorkomen.">Human approval acts as a circuit breaker to prevent errors.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: transformation card -->
+    <div class="glass rounded-2xl p-8 reveal">
+      <h3 class="font-heading font-semibold text-lg mb-1"
+          data-en="The transformation of knowledge work"
+          data-nl="De transformatie van kenniswerk">The transformation of knowledge work</h3>
+      <p class="text-white/40 text-sm mb-7"
+         data-en="From creator to orchestrator."
+         data-nl="Van creator naar orchestrator.">From creator to orchestrator.</p>
+
+      <!-- Before -->
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-xs text-white/35 uppercase tracking-wider" data-en="Before" data-nl="Vroeger">Before</span>
+        <span class="text-xs text-white/35" data-en="80% execution / 20% strategy" data-nl="80% uitvoering / 20% strategie">80% execution / 20% strategy</span>
+      </div>
+      <div class="flex overflow-hidden mb-5" style="height:9px;border-radius:999px;gap:3px">
+        <div style="width:80%;background:rgba(148,163,184,0.28);border-radius:999px 0 0 999px"></div>
+        <div style="width:20%;background:#f97316;border-radius:0 999px 999px 0"></div>
+      </div>
+
+      <!-- Arrow -->
+      <div class="flex justify-center mb-5">
+        <div class="w-7 h-7 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.05)">
+          <i data-lucide="arrow-down" class="w-3.5 h-3.5 text-white/30"></i>
+        </div>
+      </div>
+
+      <!-- With Aiventity -->
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-xs font-semibold text-ai-blue uppercase tracking-wider" data-en="With Aiventity" data-nl="Met Aiventity">With Aiventity</span>
+        <span class="text-xs text-white/35" data-en="20% direction / 80% strategy" data-nl="20% regie / 80% strategie">20% direction / 80% strategy</span>
+      </div>
+      <div class="flex overflow-hidden mb-8" style="height:9px;border-radius:999px;gap:3px">
+        <div style="width:20%;background:#10b981;border-radius:999px 0 0 999px"></div>
+        <div style="width:80%;background:#f97316;border-radius:0 999px 999px 0"></div>
+      </div>
+
+      <!-- Insights -->
+      <div class="space-y-4 pt-6" style="border-top:1px solid rgba(255,255,255,0.07)">
+        <p class="text-sm text-white/45 leading-relaxed">
+          <span class="text-white/75 font-semibold">Cognitive Offloading: </span><span
+            data-en="Repetitive information synthesis is delegated. Focus on strategy."
+            data-nl="Repetitieve informatiesynthese wordt gedelegeerd. Focus op strategie.">Repetitive information synthesis is delegated. Focus on strategy.</span>
+        </p>
+        <p class="text-sm text-white/45 leading-relaxed">
+          <span class="text-white/75 font-semibold">Ambient Intelligence: </span><span
+            data-en="From reactive prompts to digital colleagues that observe passively and act proactively."
+            data-nl="Van reactieve prompts naar digitale collega's die passief observeren en proactief handelen.">From reactive prompts to digital colleagues that observe passively and act proactively.</span>
+        </p>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -386,6 +951,12 @@
 
 <!-- ══ FOOTER ════════════════════════════════════════════════════════════ -->
 <footer id="cms-footer" class="border-t border-white/[0.06] py-10 px-6">
+  <div class="max-w-7xl mx-auto mb-8 flex flex-wrap justify-center gap-x-8 gap-y-2">
+    <a href="#creativity"    class="text-xs uppercase tracking-widest text-white/30 hover:text-white/60 transition-colors" data-en="Creativity"    data-nl="Creativiteit">Creativity</a>
+    <a href="#architecture"  class="text-xs uppercase tracking-widest text-white/30 hover:text-white/60 transition-colors" data-en="Architecture"  data-nl="Architectuur">Architecture</a>
+    <a href="#integration"   class="text-xs uppercase tracking-widest text-white/30 hover:text-white/60 transition-colors" data-en="Integration"   data-nl="Integratie">Integration</a>
+    <a href="#execution"     class="text-xs uppercase tracking-widest text-white/30 hover:text-white/60 transition-colors" data-en="Execution"     data-nl="Uitvoering">Execution</a>
+  </div>
   <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/30 mb-6">
     <div class="flex items-center gap-2">
       <img src="/logo.png" alt="Aiventity" style="height:20px;width:auto;opacity:0.7;">
@@ -400,10 +971,13 @@
     </div>
     <p>{{ ft.get('copyright','') }}</p>
   </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.04);padding-top:14px;text-align:center">
+    <span style="font-size:10px;color:rgba(255,255,255,0.18);letter-spacing:0.1em;font-family:'Inter',sans-serif;text-transform:uppercase">Powered by Topics</span>
+  </div>
 </footer>
 
 <script>
-  document.body.classList.add('js-ready');
+  // Geen js-ready meer — elementen zijn altijd zichtbaar, animatie alleen onder de vouw
   if (typeof lucide !== 'undefined') lucide.createIcons();
 
   /* ── Language toggle ─────────────────────────── */
@@ -411,9 +985,16 @@
 
   function setLang(lang) {
     currentLang = lang;
-    document.querySelectorAll('[data-' + lang + ']').forEach(function(el) {
+    try { localStorage.setItem('aiv_lang', lang); } catch(e){}
+    document.querySelectorAll('[data-nl]').forEach(function(el) {
       var txt = el.getAttribute('data-' + lang);
-      if (txt !== null) el.textContent = txt;
+      if (txt && txt.trim()) {
+        el.textContent = txt;
+      } else if (lang === 'en') {
+        // EN ontbreekt — toon NL als fallback zodat er altijd tekst staat
+        var nl = el.getAttribute('data-nl');
+        if (nl && nl.trim()) el.textContent = nl;
+      }
     });
     document.documentElement.lang = lang;
     updateLangBtns();
@@ -433,9 +1014,94 @@
     });
   }
 
+  // Auto-detect language: saved preference → browser language → default EN
+  (function() {
+    var saved = '';
+    try { saved = localStorage.getItem('aiv_lang') || ''; } catch(e){}
+    var browser = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+    var detected = saved || (browser.startsWith('nl') ? 'nl' : 'en');
+    if (detected !== 'en') setLang(detected);
+  })();
+
   function toggleMenu() {
     document.getElementById('mobile-menu').classList.toggle('open');
   }
+
+  /* ── DNA mockup slider ──────────────────────── */
+  var dnaIndex = 0;
+  var dnaTotalSlides = 2;
+
+  function dnaSlide(idx) {
+    dnaIndex = Math.max(0, Math.min(dnaTotalSlides - 1, idx));
+    var track = document.getElementById('dna-track');
+    if (track) track.style.transform = 'translateX(-' + (dnaIndex * 100) + '%)';
+    for (var i = 0; i < dnaTotalSlides; i++) {
+      var dot = document.getElementById('dna-dot-' + i);
+      if (!dot) continue;
+      dot.style.width      = i === dnaIndex ? '20px' : '6px';
+      dot.style.background = i === dnaIndex ? '#007AFF' : 'rgba(255,255,255,0.25)';
+    }
+  }
+
+  function initDnaCarousel() {
+    // Replace slide contents with uploaded images if available
+    var ids = ['dna-s1', 'dna-s2', 'dna-s3'];
+    var found = 0;
+    ids.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      var url = el.getAttribute('data-img');
+      if (url && url.trim() && url.trim() !== '') {
+        // Replace mockup with real screenshot
+        el.style.background = 'transparent';
+        el.style.overflow = 'hidden';
+        el.style.display = 'block';
+        el.style.minHeight = '340px';
+        el.innerHTML = '<img src="' + url.trim() + '" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;min-height:340px;border-radius:0;vertical-align:top" loading="lazy">';
+      }
+      found++;
+    });
+
+    // Handle optional slide 3 (add to track if image is set)
+    var s3 = document.getElementById('dna-s3');
+    if (s3 && s3.getAttribute('data-img') && s3.getAttribute('data-img').trim()) {
+      dnaTotalSlides = 3;
+    } else {
+      dnaTotalSlides = 2;
+      if (s3) s3.style.display = 'none';
+    }
+
+    // Build dots dynamically
+    var dotsEl = document.getElementById('dna-dots');
+    if (dotsEl) {
+      dotsEl.innerHTML = '';
+      for (var i = 0; i < dnaTotalSlides; i++) {
+        var btn = document.createElement('button');
+        btn.id = 'dna-dot-' + i;
+        btn.style.cssText = 'width:' + (i === 0 ? '20px' : '6px') + ';height:6px;border-radius:99px;background:' + (i === 0 ? '#007AFF' : 'rgba(255,255,255,0.25)') + ';border:none;cursor:pointer;transition:all .3s;padding:0';
+        (function(idx){ btn.addEventListener('click', function(){ dnaSlide(idx); }); })(i);
+        dotsEl.appendChild(btn);
+      }
+    }
+
+    // Touch / swipe support
+    var track = document.getElementById('dna-track');
+    if (!track) return;
+    var startX = 0;
+    track.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, {passive:true});
+    track.addEventListener('touchend',   function(e) {
+      var diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) dnaSlide(diff > 0 ? dnaIndex + 1 : dnaIndex - 1);
+    }, {passive:true});
+    var dragging = false, dragStartX = 0;
+    track.addEventListener('mousedown', function(e) { dragging = true; dragStartX = e.clientX; });
+    window.addEventListener('mouseup',  function(e) {
+      if (!dragging) return; dragging = false;
+      var diff = dragStartX - e.clientX;
+      if (Math.abs(diff) > 40) dnaSlide(diff > 0 ? dnaIndex + 1 : dnaIndex - 1);
+    });
+  }
+  initDnaCarousel();
 
   /* ── Console animation ──────────────────────── */
   var CONSOLE = {
@@ -480,13 +1146,21 @@
     }
   }
 
-  /* ── Scroll reveal ───────────────────────────── */
-  var revObs = new IntersectionObserver(function(entries) {
+  /* ── Scroll reveal — alleen off-screen elementen animeren ───── */
+  var vh = window.innerHeight || 0;
+  var revObs = window.IntersectionObserver ? new IntersectionObserver(function(entries) {
     entries.forEach(function(e) {
       if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); }
     });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(function(el) { revObs.observe(el); });
+  }, { threshold: 0.05 }) : null;
+
+  document.querySelectorAll('.reveal').forEach(function(el) {
+    if (vh > 0 && el.getBoundingClientRect().top > vh) {
+      // Alleen elementen onder de vouw animeren — in-viewport elementen altijd zichtbaar
+      el.classList.add('will-animate');
+      if (revObs) revObs.observe(el);
+    }
+  });
 
   /* ── Start console when hero is visible ─────── */
   var heroSection = document.getElementById('cms-hero');
@@ -517,6 +1191,34 @@
     document.getElementById('apply-form').classList.add('hidden');
     document.getElementById('apply-success').classList.remove('hidden');
   }
+
+  /* ── Tool grid: logo image or emoji + hide empty ── */
+  document.querySelectorAll('#tools-grid .tool-tile').forEach(function(tile) {
+    var nameEl = tile.querySelector('.tool-name');
+    var mediaEl = tile.querySelector('.tool-media');
+    var logo = tile.dataset.logo;
+    var icon = tile.dataset.icon;
+
+    if (!nameEl || !nameEl.textContent.trim()) {
+      tile.style.display = 'none';
+      return;
+    }
+
+    if (logo) {
+      var img = document.createElement('img');
+      img.src = logo;
+      img.alt = nameEl.textContent.trim();
+      img.style.cssText = 'height:28px;width:28px;object-fit:contain;border-radius:4px;';
+      img.onerror = function() {
+        this.remove();
+        if (mediaEl && icon) mediaEl.textContent = icon;
+      };
+      if (mediaEl) mediaEl.appendChild(img);
+    } else if (icon && mediaEl) {
+      mediaEl.style.fontSize = '1.4rem';
+      mediaEl.textContent = icon;
+    }
+  });
 </script>
 </body>
 </html>
