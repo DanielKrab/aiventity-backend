@@ -62,6 +62,102 @@ img{max-width:100%;display:block}
 .sb-item svg{flex-shrink:0;width:16px;height:16px;opacity:.7}
 .sb-item.active svg{opacity:1}
 .sb-item .badge-count{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;min-width:18px;text-align:center}
+/* Sidebar folder + sub-items */
+.sb-folder{margin-bottom:1px}
+.sb-folder-hdr{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:var(--r-sm);color:var(--text2);cursor:pointer;transition:all var(--transition);font-size:13px;font-weight:500;border:none;background:none;width:100%;text-align:left}
+.sb-folder-hdr:hover{background:var(--surface2);color:var(--text)}
+.sb-folder-hdr.open{color:var(--text)}
+.sb-folder-hdr svg.icon{flex-shrink:0;width:16px;height:16px;opacity:.7}
+.sb-folder-hdr.open svg.icon{opacity:1}
+.sb-folder-chevron{margin-left:auto;flex-shrink:0;width:13px;height:13px;opacity:.45;transition:transform var(--transition)}
+.sb-folder-hdr.open .sb-folder-chevron{transform:rotate(90deg);opacity:.7}
+.sb-sub-nav{display:none;padding:3px 0 4px 12px}
+.sb-sub-nav.open{display:block}
+.sb-sub-item{display:flex;align-items:center;padding:5px 10px;border-radius:var(--r-sm);color:var(--text3);cursor:pointer;transition:all var(--transition);font-size:12px;font-weight:500;margin-bottom:1px;border:none;border-left:2px solid var(--border);background:none;width:100%;text-align:left}
+.sb-sub-item:hover{background:var(--surface2);color:var(--text);border-left-color:var(--border2)}
+.sb-sub-item.active{background:var(--accent-l);color:var(--accent);border-left-color:var(--accent);font-weight:600}
+/* ═══════════════════════════════════════════════════════════
+   THEME EDITOR — Shopify-style
+═══════════════════════════════════════════════════════════ */
+.th-left-nav{width:182px;min-width:160px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.th-nav-head{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.12em;padding:14px 14px 6px}
+.th-nav-btn{display:flex;align-items:center;gap:9px;padding:9px 14px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border:none;border-left:3px solid transparent;background:none;width:100%;text-align:left;transition:all .15s;border-right:none;border-top:none;border-bottom:none}
+.th-nav-btn:hover{background:var(--surface2);color:var(--text)}
+.th-nav-btn.active{background:var(--accent-l);color:var(--accent);border-left-color:var(--accent)}
+.th-nav-btn svg{width:15px;height:15px;flex-shrink:0;opacity:.65}
+.th-nav-btn.active svg{opacity:1}
+.th-panels-wrap{width:316px;min-width:290px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid var(--border);background:var(--surface)}
+.th-panel{display:none;flex-direction:column;flex:1;overflow:hidden}
+.th-panel.active{display:flex}
+.th-panel-scroll{flex:1;overflow-y:auto;padding:18px 16px}
+.th-section-title{font-size:9.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin:0 0 12px}
+.th-section-title+.th-section-title{margin-top:20px}
+.th-save-bar{padding:11px 16px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;gap:10px}
+/* Shopify-style color card */
+.th-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px}
+.th-card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.th-card-title{font-size:12px;font-weight:700;color:var(--text)}
+.th-card-sub{font-size:10.5px;color:var(--text3);margin-bottom:10px;line-height:1.5}
+/* Color picker */
+.cp-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.cp-swatch{width:42px;height:42px;border-radius:9px;border:2px solid var(--border2);cursor:pointer;flex-shrink:0;position:relative;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.35);transition:border-color .15s}
+.cp-swatch:hover{border-color:var(--accent)}
+.cp-swatch input[type=color]{position:absolute;inset:-6px;width:calc(100%+12px);height:calc(100%+12px);opacity:0;cursor:pointer;border:none;padding:0}
+.cp-hex{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:8px 10px;color:var(--text);font-size:12.5px;font-family:'SF Mono','Consolas',monospace;letter-spacing:.03em}
+.cp-hex:focus{outline:none;border-color:var(--accent)}
+/* Alpha row */
+.cp-alpha-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.cp-alpha-lbl{font-size:10.5px;color:var(--text3);width:74px;flex-shrink:0}
+.cp-alpha-wrap{flex:1;position:relative;height:16px;display:flex;align-items:center}
+.cp-alpha-wrap::before{content:'';position:absolute;inset:5px 0;border-radius:3px;background:repeating-conic-gradient(#3a3a3a 0% 25%,#1a1a1a 0% 50%) 0 0/8px 8px;z-index:0}
+.cp-alpha-wrap::after{content:'';position:absolute;inset:5px 0;border-radius:3px;z-index:1;pointer-events:none}
+input.cp-alpha{position:relative;-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:transparent;outline:none;cursor:pointer;z-index:2;margin:0}
+input.cp-alpha::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#fff;border:2px solid rgba(0,0,0,.3);box-shadow:0 1px 4px rgba(0,0,0,.45);cursor:pointer;transition:transform .1s}
+input.cp-alpha::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.cp-alpha-pct{font-size:11px;color:var(--text2);min-width:32px;text-align:right;flex-shrink:0}
+/* Preset swatches */
+.cp-presets-lbl{font-size:10px;color:var(--text3);margin-bottom:6px}
+.cp-presets{display:flex;flex-wrap:wrap;gap:6px}
+.cp-dot{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .12s;flex-shrink:0}
+.cp-dot:hover{transform:scale(1.18);border-color:rgba(255,255,255,.5)}
+.cp-dot.active-dot{border-color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.35)}
+/* Section background rows */
+.sec-bg-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;margin-bottom:6px;transition:background .15s;cursor:default}
+.sec-bg-card:hover{background:var(--surface3)}
+.sec-bg-top{display:flex;align-items:center;gap:10px}
+.sec-bg-name{flex:1;font-size:12.5px;font-weight:600;color:var(--text)}
+.sec-bg-desc{font-size:10.5px;color:var(--text3)}
+.sec-preview-swatch{width:28px;height:28px;border-radius:5px;border:1.5px solid var(--border2);overflow:hidden;position:relative;flex-shrink:0;cursor:pointer;display:none}
+.sec-preview-swatch input[type=color]{position:absolute;inset:-5px;width:calc(100%+10px);height:calc(100%+10px);opacity:0;cursor:pointer;border:none}
+.sec-bg-extra{padding-top:8px;display:none}
+.sec-bg-extra.open{display:block}
+.sec-alpha-row{display:flex;align-items:center;gap:8px;padding-top:2px}
+.sec-alpha-lbl{font-size:10px;color:var(--text3);width:74px;flex-shrink:0}
+input.sec-alpha{flex:1;-webkit-appearance:none;appearance:none;height:5px;border-radius:3px;background:var(--border2);outline:none;cursor:pointer}
+input.sec-alpha::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid #fff;cursor:pointer}
+.sec-alpha-pct{font-size:10px;color:var(--text2);min-width:30px;text-align:right;flex-shrink:0}
+/* Font size sliders */
+.font-size-group{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.font-size-item{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:11px 13px}
+.font-size-item-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.font-size-lbl{font-size:12px;font-weight:500;color:var(--text2)}
+.font-size-val{font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-l);padding:2px 8px;border-radius:99px}
+input.font-size-sl{width:100%;-webkit-appearance:none;appearance:none;height:5px;border-radius:3px;background:var(--border2);outline:none;cursor:pointer;display:block}
+input.font-size-sl::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);border:2.5px solid var(--surface);box-shadow:0 1px 4px rgba(0,0,0,.4);cursor:pointer;transition:transform .1s}
+input.font-size-sl::-webkit-slider-thumb:hover{transform:scale(1.15)}
+/* Font preview box */
+.font-preview-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;margin-top:8px;color:var(--text);line-height:1.35;min-height:42px;transition:font-family .25s}
+/* Section order drag-to-reorder */
+.sec-order-list{display:flex;flex-direction:column;gap:5px}
+.sec-order-item{display:flex;align-items:center;gap:10px;padding:11px 13px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);cursor:pointer;user-select:none;transition:all .15s}
+.sec-order-item:hover{background:var(--surface3);border-color:var(--border2)}
+.sec-order-handle{cursor:grab}
+.sec-order-item:active{cursor:grabbing}
+.sec-order-item.dragging{opacity:.35;border-style:dashed;border-color:var(--border2)}
+.sec-order-item.drag-over{border-color:var(--accent);background:var(--accent-l);transform:scale(1.01)}
+.sec-order-handle{color:var(--text3);flex-shrink:0;display:flex;align-items:center}
+.sec-order-num{width:22px;height:22px;border-radius:50%;background:var(--surface3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text3);flex-shrink:0;font-variant-numeric:tabular-nums}
+.sec-order-name{flex:1;font-size:13px;font-weight:500;color:var(--text)}
 .sb-bottom{padding:10px 8px;border-top:1px solid var(--border);flex-shrink:0}
 .sb-user{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r-sm);margin-bottom:6px}
 .sb-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
@@ -155,9 +251,27 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
 /* ═══════════════════════════════════════════════════════════
    STATS GRID
 ═══════════════════════════════════════════════════════════ */
+/* greeting banner */
+.greet-banner{background:linear-gradient(120deg,#0f1e45 0%,#0e1b3d 50%,#131a38 100%);border:1px solid rgba(59,130,246,.2);border-radius:var(--r-lg);padding:28px 32px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:24px;position:relative;overflow:hidden}
+.greet-banner::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(59,130,246,.12) 0%,transparent 70%);pointer-events:none}
+.greet-banner::after{content:'';position:absolute;bottom:-40px;left:180px;width:160px;height:160px;background:radial-gradient(circle,rgba(139,92,246,.08) 0%,transparent 70%);pointer-events:none}
+.greet-left{flex:1;min-width:0}
+.greet-time{font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.greet-heading{font-family:'Outfit',sans-serif;font-size:22px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:4px}
+.greet-sub{font-size:12.5px;color:rgba(255,255,255,.45)}
+.greet-right{flex-shrink:0;max-width:380px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:var(--r);padding:16px 20px;position:relative}
+.greet-quote-mark{font-size:36px;line-height:1;color:var(--accent);opacity:.5;font-family:Georgia,serif;position:absolute;top:8px;left:14px}
+.greet-quote-text{font-size:12.5px;color:rgba(255,255,255,.75);line-height:1.6;font-style:italic;padding-left:16px;margin-top:6px}
+.greet-quote-author{font-size:11px;color:var(--accent);font-weight:600;padding-left:16px;margin-top:8px}
+.greet-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);margin-right:6px;vertical-align:middle;animation:pulse .8s ease-in-out infinite}
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:24px}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;position:relative;overflow:hidden}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent-color,var(--accent))}
+/* contact table */
+#dash-contacts-table tbody tr{border-bottom:1px solid var(--border);transition:background var(--transition)}
+#dash-contacts-table tbody tr:hover{background:var(--surface2)}
+#dash-contacts-table tbody tr:last-child{border-bottom:none}
+#dash-contacts-table td{padding:10px 16px;color:var(--text);vertical-align:middle}
 .stat-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.07em}
 .stat-value{font-family:'Outfit',sans-serif;font-size:24px;font-weight:700;color:var(--text);margin:8px 0 4px}
 .stat-hint{font-size:11px;color:var(--text3)}
@@ -172,7 +286,7 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
 .preview-panel{display:flex;flex-direction:column;background:#111;min-width:0}
 .preview-toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 14px;display:flex;align-items:center;gap:8px;flex-shrink:0}
 .preview-info{flex:1;font-size:11.5px;color:var(--text2)}
-.preview-iframe{flex:1;border:none;width:100%;background:#fff;transition:max-width .3s ease;margin:0 auto;display:block}
+.preview-iframe{flex:1;border:none;width:100%;background:#050a12;transition:max-width .3s ease,opacity .15s;margin:0 auto;display:block}
 .device-group{display:flex;gap:3px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:2px}
 .device-btn{padding:4px 10px;border-radius:4px;border:none;background:transparent;color:var(--text3);font-size:11.5px;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;gap:4px}
 .device-btn.active{background:var(--accent);color:#fff}
@@ -296,47 +410,66 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
       <div><div class="sb-logo-text">Aiventity</div><div class="sb-logo-sub">CMS Beheer</div></div>
     </div>
     <nav class="sb-nav">
-      <div class="sb-section">Overzicht</div>
+      <div class="sb-section">Home</div>
       <button class="sb-item active" onclick="nav('dashboard')">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         Dashboard
       </button>
 
-      <div class="sb-section">Content</div>
-      <button class="sb-item" onclick="nav('editor')">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        Visuele Editor
-      </button>
+      <div class="sb-section">Pagina's</div>
+      <div class="sb-folder" id="folder-marketing">
+        <button class="sb-folder-hdr open" onclick="toggleFolder('marketing')" id="sb-folder-hdr-marketing">
+          <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Secties
+          <svg class="sb-folder-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="sb-sub-nav open" id="sb-sub-marketing">
+          <button class="sb-sub-item" onclick="navToSection('hero')"         data-sec="hero">Hero</button>
+          <button class="sb-sub-item" onclick="navToSection('creativity')"   data-sec="creativity">Creativity</button>
+          <button class="sb-sub-item" onclick="navToSection('architecture')" data-sec="architecture">Architecture</button>
+          <button class="sb-sub-item" onclick="navToSection('integration')"  data-sec="integration">Integration</button>
+          <button class="sb-sub-item" onclick="navToSection('execution')"    data-sec="execution">Execution</button>
+          <button class="sb-sub-item" onclick="navToSection('apply')"        data-sec="apply">Apply</button>
+          <button class="sb-sub-item" onclick="navToSection('footer')"       data-sec="footer">Footer</button>
+        </div>
+      </div>
       <button class="sb-item" onclick="nav('media')">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        Media Bibliotheek
+        Media
       </button>
 
-      <div class="sb-section">Stijl</div>
-      <button class="sb-item" onclick="nav('theme')">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10"/><path d="M12 8a4 4 0 1 1 0 8"/></svg>
-        Thema &amp; Kleuren
-      </button>
+      <div class="sb-folder" id="folder-stijl">
+        <button class="sb-folder-hdr open" onclick="toggleFolder('stijl')" id="sb-folder-hdr-stijl">
+          <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="13" cy="13" r="3"/><path d="M4.5 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0Z"/><path d="M14.25 8.625a3.375 3.375 0 1 1 6.75 0 3.375 3.375 0 0 1-6.75 0Z"/><path d="M1.5 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122Z"/></svg>
+          Stijl
+          <svg class="sb-folder-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="sb-sub-nav open" id="sb-sub-stijl">
+          <button class="sb-sub-item" onclick="navToThemePanel('kleuren')"    data-tp="kleuren">Kleuren</button>
+          <button class="sb-sub-item" onclick="navToThemePanel('typografie')" data-tp="typografie">Typografie</button>
+          <button class="sb-sub-item" onclick="navToThemePanel('secties')"    data-tp="secties">Secties</button>
+        </div>
+      </div>
 
       <div class="sb-section">Beheer</div>
       <button class="sb-item" onclick="nav('inbox')">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        Inbox
+        Berichten
         <span id="inbox-badge" class="badge-count" style="display:none">0</span>
       </button>
       <button class="sb-item" onclick="nav('settings')">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        Website Instellingen
+        Instellingen
       </button>
       <button class="sb-item" onclick="nav('activity')">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        Activiteitenlog
+        Activiteit
       </button>
 
-      <div class="sb-section">Links</div>
+      <div class="sb-section">Extern</div>
       <a href="https://aiventitytool.netlify.app" target="_blank" class="sb-item">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        Live website ↗
+        Open website ↗
       </a>
     </nav>
     <div class="sb-bottom">
@@ -369,57 +502,96 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
 
     <!-- ═══════════ DASHBOARD ═══════════ -->
     <div id="page-dashboard" class="page active page-area">
-      <div class="stats-grid">
+
+      <!-- Greeting banner -->
+      <div class="greet-banner">
+        <div class="greet-left">
+          <div class="greet-time" id="greet-time">Goedemorgen</div>
+          <div class="greet-heading" id="greet-heading">👋 Welkom terug</div>
+          <div class="greet-sub"><span class="greet-dot"></span>Aiventity CMS — alles staat klaar voor je</div>
+        </div>
+        <div class="greet-right">
+          <div class="greet-quote-mark">"</div>
+          <div class="greet-quote-text" id="greet-quote">Laden...</div>
+          <div class="greet-quote-author" id="greet-author"></div>
+        </div>
+      </div>
+
+      <div class="stats-grid" style="grid-template-columns:repeat(2,1fr)">
         <div class="stat-card" style="--accent-color:var(--accent)">
           <div class="stat-label">Laatste publicatie</div>
           <div class="stat-value" id="s-published" style="font-size:15px;line-height:1.4;margin-top:10px">—</div>
           <div class="stat-icon">🚀</div>
         </div>
         <div class="stat-card" style="--accent-color:var(--green)">
-          <div class="stat-label">Website</div>
+          <div class="stat-label">Live website</div>
           <div class="stat-value" style="font-size:13px;margin-top:10px"><a href="https://aiventitytool.netlify.app" target="_blank" style="color:var(--accent)">aiventitytool.netlify.app ↗</a></div>
           <div class="stat-icon">🌐</div>
         </div>
-        <div class="stat-card" style="--accent-color:var(--purple)">
-          <div class="stat-label">CMS versie</div>
-          <div class="stat-value" style="font-size:18px;margin-top:8px">v2.0</div>
-          <div class="stat-hint">Netlify Functions</div>
-          <div class="stat-icon">⚡</div>
-        </div>
-        <div class="stat-card" style="--accent-color:var(--yellow)">
-          <div class="stat-label">Secties</div>
-          <div class="stat-value">6</div>
-          <div class="stat-hint">Hero, Creativity, Integration...</div>
-          <div class="stat-icon">📄</div>
-        </div>
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-        <div class="card">
-          <div class="card-header"><div class="card-title">Snelle acties</div></div>
-          <div class="card-body" style="display:flex;flex-direction:column;gap:8px">
-            <button class="btn btn-primary" style="justify-content:flex-start;gap:10px" onclick="nav('editor')">✏️ Content bewerken</button>
-            <button class="btn btn-ghost" style="justify-content:flex-start;gap:10px" onclick="nav('media')">🖼 Media beheren</button>
-            <button class="btn btn-ghost" style="justify-content:flex-start;gap:10px" onclick="nav('inbox')">📬 Inbox bekijken</button>
-            <button class="btn btn-ghost" style="justify-content:flex-start;gap:10px" onclick="nav('theme')">🎨 Thema aanpassen</button>
-            <button class="btn btn-success" style="justify-content:flex-start;gap:10px;margin-top:4px" onclick="publishSite(this)">🚀 Nu publiceren</button>
+      <!-- Adressenlijst + snelle acties -->
+      <div style="display:grid;grid-template-columns:200px 1fr;gap:20px;align-items:start">
+
+        <!-- Snelle acties — smal links -->
+        <div class="card" style="margin-bottom:0">
+          <div class="card-header"><div class="card-title">Acties</div></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:6px;padding:12px">
+            <button class="btn btn-primary btn-sm" style="justify-content:flex-start;gap:8px" onclick="nav('editor')">✏️ Content</button>
+            <button class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:8px" onclick="nav('media')">🖼 Media</button>
+            <button class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:8px" onclick="nav('theme')">🎨 Thema</button>
+            <button class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:8px" onclick="nav('settings')">⚙️ Instellingen</button>
           </div>
         </div>
-        <div class="card">
-          <div class="card-header"><div class="card-title">Recente activiteit</div><a onclick="nav('activity')" class="btn btn-ghost btn-sm" style="cursor:pointer">Alles bekijken</a></div>
-          <div id="dash-activity" class="card-body" style="padding:0">
-            <div style="padding:20px;color:var(--text3);font-size:12px">Laden...</div>
+
+        <!-- Adressenlijst -->
+        <div class="card" style="margin-bottom:0">
+          <div class="card-header">
+            <div>
+              <div class="card-title">📋 Adressenlijst</div>
+              <div style="font-size:11px;color:var(--text3);margin-top:2px">Aanmeldingen via het contactformulier</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span id="dash-contacts-count" style="font-size:11px;color:var(--text3)"></span>
+              <button class="btn btn-ghost btn-sm" onclick="nav('inbox')">Alles bekijken</button>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table id="dash-contacts-table" style="width:100%;border-collapse:collapse;font-size:12.5px">
+              <thead>
+                <tr style="border-bottom:1px solid var(--border)">
+                  <th style="padding:10px 16px;text-align:left;font-size:10.5px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap">Voornaam</th>
+                  <th style="padding:10px 16px;text-align:left;font-size:10.5px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap">Achternaam</th>
+                  <th style="padding:10px 16px;text-align:left;font-size:10.5px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap">E-mail</th>
+                  <th style="padding:10px 16px;text-align:left;font-size:10.5px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap">Telefoon</th>
+                  <th style="padding:10px 16px;text-align:left;font-size:10.5px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Onderwerp</th>
+                  <th style="padding:10px 16px;text-align:left;font-size:10.5px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap">Datum</th>
+                  <th style="padding:10px 16px"></th>
+                </tr>
+              </thead>
+              <tbody id="dash-contacts-body">
+                <tr><td colspan="7" style="padding:24px;text-align:center;color:var(--text3);font-size:12px">Laden...</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
+
       </div>
     </div>
 
     <!-- ═══════════ VISUELE EDITOR ═══════════ -->
     <div id="page-editor" class="editor-page">
-      <div class="section-tabs" id="sec-tabs"></div>
+      <div id="sec-tabs" style="display:none"></div>
       <div class="editor-split">
         <!-- Left panel -->
         <div class="editor-panel">
+          <div style="padding:12px 20px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+            <span style="font-size:11px;color:var(--text3)">Taal</span>
+            <div style="display:flex;gap:2px;background:var(--surface2);border-radius:6px;padding:2px">
+              <button id="lang-nl-btn" onclick="setEditorLang('nl')" style="padding:3px 12px;border-radius:4px;border:none;font-size:11px;font-weight:600;cursor:pointer;background:var(--accent);color:#fff;transition:all .15s">NL</button>
+              <button id="lang-en-btn" onclick="setEditorLang('en')" style="padding:3px 12px;border-radius:4px;border:none;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:var(--text2);transition:all .15s">EN</button>
+            </div>
+          </div>
           <div class="editor-panel-body" id="editor-fields"></div>
         </div>
         <!-- Preview -->
@@ -441,9 +613,8 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
         </div>
       </div>
       <div class="save-bar">
-        <button class="btn btn-primary" onclick="saveSection(this)" id="save-btn">💾 Opslaan</button>
-        <button class="btn btn-ghost btn-sm" onclick="showHistory()" title="Versiegeschiedenis">📚 Versies</button>
-        <button class="btn btn-success" onclick="publishSite(this)">🚀 Publiceer op Netlify</button>
+        <button class="btn btn-primary btn-sm" onclick="saveSection(this)" id="save-btn">Opslaan</button>
+        <button class="btn btn-ghost btn-sm" onclick="showHistory()" title="Versiegeschiedenis">Versies</button>
         <div class="auto-status">
           <div class="status-dot" id="editor-dot"></div>
           <span id="editor-status">Wijzigingen worden automatisch opgeslagen</span>
@@ -469,91 +640,230 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
     </div>
 
     <!-- ═══════════ THEME ═══════════ -->
-    <div id="page-theme" class="page page-area">
+    <div id="page-theme" class="editor-page" style="flex-direction:row">
 
-      <!-- LIVE PREVIEW WIDGET -->
-      <div class="card" style="margin-bottom:20px">
-        <div class="card-header"><div class="card-title">👁 Live kleurpreview</div><div style="font-size:11px;color:var(--text3)">Verandert direct als je kleuren aanpast</div></div>
-        <div id="theme-preview-box" style="padding:28px;background:#050505;transition:background .2s">
-          <div style="margin-bottom:14px">
-            <span id="tp-badge" style="display:inline-block;padding:4px 14px;border-radius:99px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#007AFF">AGENT SPACE — NOW LIVE</span>
-          </div>
-          <div style="margin-bottom:10px">
-            <span id="tp-h1" style="font-size:30px;font-weight:800;color:#fff">Imagine.</span>
-            <span id="tp-h2" style="font-size:30px;font-weight:800;color:#007AFF;margin:0 8px">Automate.</span>
-            <span id="tp-h3" style="font-size:30px;font-weight:800;color:#fff">Execute.</span>
-          </div>
-          <p id="tp-sub" style="font-size:13px;color:rgba(255,255,255,0.55);margin-bottom:18px">From Creative Spark to Flawless Execution.</p>
-          <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap">
-            <button id="tp-btn1" style="padding:10px 22px;border-radius:8px;border:none;font-weight:700;font-size:12px;color:#fff;cursor:default;background:#007AFF">Start Agent Space →</button>
-            <button id="tp-btn2" style="padding:10px 22px;border-radius:8px;font-weight:700;font-size:12px;color:#fff;cursor:default;background:transparent;border:2px solid rgba(255,255,255,0.22)">Meer leren ↓</button>
-          </div>
-          <div id="tp-card" style="padding:16px 18px;border-radius:12px;background:#131720;border:1px solid #252d3d;display:inline-block">
-            <div id="tp-card-dot" style="width:8px;height:8px;border-radius:50%;background:#10b981;display:inline-block;margin-right:6px"></div>
-            <span id="tp-card-text" style="font-size:12px;font-weight:600;color:#fff">AI automatisering — actief</span>
-          </div>
-        </div>
+      <!-- 1 — Left category nav (Shopify-style) -->
+      <div class="th-left-nav">
+        <div class="th-nav-head">Aanpassen</div>
+        <button class="th-nav-btn active" id="th-nav-kleuren" onclick="showThemePanel('kleuren')">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          Kleuren
+        </button>
+        <button class="th-nav-btn" id="th-nav-typografie" onclick="showThemePanel('typografie')">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+          Typografie
+        </button>
+        <button class="th-nav-btn" id="th-nav-secties" onclick="showThemePanel('secties')">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="5" rx="1"/><rect x="3" y="10" width="18" height="5" rx="1"/><rect x="3" y="17" width="18" height="4" rx="1"/></svg>
+          Secties
+        </button>
       </div>
 
-      <div class="card">
-        <div class="card-header"><div><div class="card-title">🎨 Kleuren</div><div class="card-subtitle">Pas de huisstijl aan</div></div></div>
-        <div class="card-body">
-          <div class="form-row cols-2">
-            <div class="form-group"><label class="form-label">Primaire kleur (blauw)</label>
-              <div class="color-row"><input type="color" id="th-primary_color" value="#007AFF"><input type="text" class="form-control" id="th-primary_color_hex" value="#007AFF" oninput="syncColor('primary_color',this.value)"></div></div>
-            <div class="form-group"><label class="form-label">Accent kleur (groen)</label>
-              <div class="color-row"><input type="color" id="th-accent_color" value="#10b981"><input type="text" class="form-control" id="th-accent_color_hex" value="#10b981" oninput="syncColor('accent_color',this.value)"></div></div>
-            <div class="form-group"><label class="form-label">Achtergrond kleur</label>
-              <div class="color-row"><input type="color" id="th-bg_color" value="#050505"><input type="text" class="form-control" id="th-bg_color_hex" value="#050505" oninput="syncColor('bg_color',this.value)"></div></div>
-            <div class="form-group"><label class="form-label">Tekst kleur</label>
-              <div class="color-row"><input type="color" id="th-text_color" value="#ffffff"><input type="text" class="form-control" id="th-text_color_hex" value="#ffffff" oninput="syncColor('text_color',this.value)"></div></div>
+      <!-- 2 — Settings panels -->
+      <div class="th-panels-wrap">
+
+        <!-- ── Panel: Kleuren ── -->
+        <div id="th-panel-kleuren" class="th-panel active">
+          <div class="th-panel-scroll">
+            <div class="th-section-title">Merkkleur</div>
+
+            <!-- Primaire kleur -->
+            <div class="th-card">
+              <div class="th-card-hd">
+                <div class="th-card-title">Primaire kleur</div>
+              </div>
+              <div class="th-card-sub">Knoppen · links · accenten</div>
+              <div class="cp-row">
+                <div class="cp-swatch" id="cp-sw-primary_color" style="background:#007AFF">
+                  <input type="color" id="th-primary_color" value="#007AFF" oninput="onCpInput('primary_color',this.value)">
+                </div>
+                <input type="text" class="cp-hex" id="th-primary_color_hex" value="#007AFF" placeholder="#007AFF" oninput="syncColor('primary_color',this.value)">
+              </div>
+              <div class="cp-presets-lbl">Presets</div>
+              <div class="cp-presets">
+                <div class="cp-dot" style="background:#007AFF" title="Aiventity blauw"  onclick="setCpPreset('primary_color','#007AFF')"></div>
+                <div class="cp-dot" style="background:#6366f1" title="Indigo"           onclick="setCpPreset('primary_color','#6366f1')"></div>
+                <div class="cp-dot" style="background:#8b5cf6" title="Paars"            onclick="setCpPreset('primary_color','#8b5cf6')"></div>
+                <div class="cp-dot" style="background:#ec4899" title="Roze"             onclick="setCpPreset('primary_color','#ec4899')"></div>
+                <div class="cp-dot" style="background:#f59e0b" title="Amber"            onclick="setCpPreset('primary_color','#f59e0b')"></div>
+                <div class="cp-dot" style="background:#ef4444" title="Rood"             onclick="setCpPreset('primary_color','#ef4444')"></div>
+                <div class="cp-dot" style="background:#06b6d4" title="Cyaan"            onclick="setCpPreset('primary_color','#06b6d4')"></div>
+                <div class="cp-dot" style="background:#22c55e" title="Groen"            onclick="setCpPreset('primary_color','#22c55e')"></div>
+                <div class="cp-dot" style="background:#f97316" title="Oranje"           onclick="setCpPreset('primary_color','#f97316')"></div>
+                <div class="cp-dot" style="background:#ffffff" title="Wit"              onclick="setCpPreset('primary_color','#ffffff')" style="background:#fff;border:1px solid var(--border2)"></div>
+              </div>
+            </div>
+
+            <!-- Accentkleur -->
+            <div class="th-card">
+              <div class="th-card-hd">
+                <div class="th-card-title">Accentkleur</div>
+              </div>
+              <div class="th-card-sub">Highlights · pulserende dot · tags</div>
+              <div class="cp-row">
+                <div class="cp-swatch" id="cp-sw-accent_color" style="background:#10b981">
+                  <input type="color" id="th-accent_color" value="#10b981" oninput="onCpInput('accent_color',this.value)">
+                </div>
+                <input type="text" class="cp-hex" id="th-accent_color_hex" value="#10b981" placeholder="#10b981" oninput="syncColor('accent_color',this.value)">
+              </div>
+              <div class="cp-presets-lbl">Presets</div>
+              <div class="cp-presets">
+                <div class="cp-dot" style="background:#10b981" title="Groen (standaard)" onclick="setCpPreset('accent_color','#10b981')"></div>
+                <div class="cp-dot" style="background:#00E5CC" title="Teal"              onclick="setCpPreset('accent_color','#00E5CC')"></div>
+                <div class="cp-dot" style="background:#34d399" title="Mint"              onclick="setCpPreset('accent_color','#34d399')"></div>
+                <div class="cp-dot" style="background:#3b82f6" title="Blauw"             onclick="setCpPreset('accent_color','#3b82f6')"></div>
+                <div class="cp-dot" style="background:#a78bfa" title="Lavendel"          onclick="setCpPreset('accent_color','#a78bfa')"></div>
+                <div class="cp-dot" style="background:#f59e0b" title="Goud"              onclick="setCpPreset('accent_color','#f59e0b')"></div>
+                <div class="cp-dot" style="background:#fb7185" title="Koraal"            onclick="setCpPreset('accent_color','#fb7185')"></div>
+                <div class="cp-dot" style="background:#e879f9" title="Fuchsia"           onclick="setCpPreset('accent_color','#e879f9')"></div>
+              </div>
+            </div>
+
+          </div>
+          <div class="th-save-bar">
+            <button class="btn btn-primary btn-sm" onclick="saveTheme(this)">Opslaan</button>
+            <span id="theme-save-status" style="font-size:11px;color:var(--text3)">Preview updatet automatisch</span>
           </div>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="card-title">🔤 Typografie</div></div>
-        <div class="card-body">
-          <div class="form-row cols-2">
-            <div class="form-group"><label class="form-label">Heading font</label>
-              <select class="form-control" id="th-heading_font">
-                <option value="Space Grotesk">Space Grotesk</option>
-                <option value="Outfit">Outfit</option>
-                <option value="Inter">Inter</option>
-                <option value="Poppins">Poppins</option>
-                <option value="Montserrat">Montserrat</option>
-                <option value="Raleway">Raleway</option>
-                <option value="DM Sans">DM Sans</option>
-              </select></div>
-            <div class="form-group"><label class="form-label">Body font</label>
-              <select class="form-control" id="th-body_font">
-                <option value="Inter">Inter</option>
-                <option value="Roboto">Roboto</option>
-                <option value="Open Sans">Open Sans</option>
-                <option value="Lato">Lato</option>
-                <option value="Source Sans 3">Source Sans 3</option>
-                <option value="Nunito">Nunito</option>
-              </select></div>
-            <div class="form-group"><label class="form-label">Basis lettergrootte (px)</label>
-              <input type="number" class="form-control" id="th-base_font_size" value="16" min="12" max="24"></div>
-            <div class="form-group"><label class="form-label">Sectie-afstand (px)</label>
-              <input type="number" class="form-control" id="th-section_spacing" value="100" min="40" max="200"></div>
+
+        <!-- ── Panel: Typografie ── -->
+        <div id="th-panel-typografie" class="th-panel">
+          <div class="th-panel-scroll">
+            <div class="th-section-title">Lettertypes</div>
+
+            <!-- Heading font -->
+            <div class="th-card">
+              <div class="th-card-title" style="margin-bottom:8px">Heading lettertype</div>
+              <select class="form-control" id="th-heading_font" onchange="scheduleThemePreview();updateFontPreview('heading')">
+                <optgroup label="Modern / Strak">
+                  <option value="Space Grotesk">Space Grotesk ★ standaard</option>
+                  <option value="Outfit">Outfit</option>
+                  <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+                  <option value="Manrope">Manrope</option>
+                  <option value="Figtree">Figtree</option>
+                  <option value="Urbanist">Urbanist</option>
+                  <option value="Syne">Syne</option>
+                  <option value="DM Sans">DM Sans</option>
+                  <option value="Inter">Inter</option>
+                </optgroup>
+                <optgroup label="Krachtig / Display">
+                  <option value="Montserrat">Montserrat</option>
+                  <option value="Poppins">Poppins</option>
+                  <option value="Raleway">Raleway</option>
+                  <option value="Oswald">Oswald</option>
+                  <option value="Barlow">Barlow</option>
+                  <option value="Work Sans">Work Sans</option>
+                  <option value="Bebas Neue">Bebas Neue</option>
+                </optgroup>
+                <optgroup label="Klassiek / Serif">
+                  <option value="Playfair Display">Playfair Display</option>
+                  <option value="Merriweather">Merriweather</option>
+                  <option value="Lora">Lora</option>
+                </optgroup>
+                <optgroup label="Futuristisch / Tech">
+                  <option value="Orbitron">Orbitron</option>
+                  <option value="Exo 2">Exo 2</option>
+                </optgroup>
+              </select>
+              <div class="font-preview-box" id="font-prev-heading" style="font-size:20px;font-weight:700">Bedenk. Automatiseer. Voer uit.</div>
+            </div>
+
+            <!-- Body font -->
+            <div class="th-card">
+              <div class="th-card-title" style="margin-bottom:8px">Body lettertype</div>
+              <select class="form-control" id="th-body_font" onchange="scheduleThemePreview();updateFontPreview('body')">
+                <optgroup label="Neutraal / Modern">
+                  <option value="Inter">Inter ★ standaard</option>
+                  <option value="Roboto">Roboto</option>
+                  <option value="Open Sans">Open Sans</option>
+                  <option value="Lato">Lato</option>
+                  <option value="Figtree">Figtree</option>
+                  <option value="Manrope">Manrope</option>
+                  <option value="Urbanist">Urbanist</option>
+                  <option value="DM Sans">DM Sans</option>
+                  <option value="Barlow">Barlow</option>
+                  <option value="Mulish">Mulish</option>
+                  <option value="Karla">Karla</option>
+                  <option value="Nunito">Nunito</option>
+                </optgroup>
+                <optgroup label="Leesbaar / Klassiek">
+                  <option value="Source Sans 3">Source Sans 3</option>
+                  <option value="Merriweather">Merriweather</option>
+                  <option value="Lora">Lora</option>
+                </optgroup>
+              </select>
+              <div class="font-preview-box" id="font-prev-body" style="font-size:13.5px;line-height:1.6">Van creatief idee naar vlekkeloze uitvoering. Aiventity verbindt strategie met technologie voor meetbare impact.</div>
+            </div>
+
+            <!-- Tekstgroottes via sliders -->
+            <div class="th-section-title" style="margin-top:18px">Tekstgroottes</div>
+            <div class="font-size-group">
+              <div class="font-size-item">
+                <div class="font-size-item-head">
+                  <span class="font-size-lbl">Hero titel</span>
+                  <span class="font-size-val" id="sl-hero_h1_lbl">Standaard</span>
+                </div>
+                <input type="range" class="font-size-sl" id="sl-hero_h1_size" min="0" max="10" value="0" oninput="onFontSizeSlider('hero_h1_size',+this.value,'hero')">
+              </div>
+              <div class="font-size-item">
+                <div class="font-size-item-head">
+                  <span class="font-size-lbl">Sectie titels</span>
+                  <span class="font-size-val" id="sl-section_h2_lbl">Standaard</span>
+                </div>
+                <input type="range" class="font-size-sl" id="sl-section_h2_size" min="0" max="9" value="0" oninput="onFontSizeSlider('section_h2_size',+this.value,'section')">
+              </div>
+              <div class="font-size-item">
+                <div class="font-size-item-head">
+                  <span class="font-size-lbl">Body tekst</span>
+                  <span class="font-size-val" id="sl-body_font_lbl">Standaard</span>
+                </div>
+                <input type="range" class="font-size-sl" id="sl-body_font_size" min="0" max="12" value="0" oninput="onFontSizeSlider('body_font_size',+this.value,'body')">
+              </div>
+            </div>
+            <!-- Hidden inputs consumed by getThemeFromForm() -->
+            <input type="hidden" id="th-hero_h1_size">
+            <input type="hidden" id="th-section_h2_size">
+            <input type="hidden" id="th-body_font_size">
+
+          </div>
+          <div class="th-save-bar">
+            <button class="btn btn-primary btn-sm" onclick="saveTheme(this)">Opslaan</button>
+            <span style="font-size:11px;color:var(--text3)">Preview updatet automatisch</span>
           </div>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="card-title">⬜ Borders &amp; Rounding</div></div>
-        <div class="card-body">
-          <div class="form-row cols-2">
-            <div class="form-group"><label class="form-label">Card border radius (px)</label>
-              <input type="number" class="form-control" id="th-card_radius" value="20" min="0" max="40"></div>
-            <div class="form-group"><label class="form-label">Button radius (px)</label>
-              <input type="number" class="form-control" id="th-button_radius" value="8" min="0" max="40"></div>
+
+        <!-- ── Panel: Secties ── -->
+        <div id="th-panel-secties" class="th-panel">
+          <div class="th-panel-scroll">
+            <div class="th-section-title">Volgorde van secties</div>
+            <div style="font-size:11.5px;color:var(--text3);line-height:1.7;margin-bottom:16px">
+              Sleep de secties in de gewenste volgorde. Druk op Opslaan en daarna Publiceer.
+            </div>
+            <div class="sec-order-list" id="sec-order-list"></div>
+          </div>
+          <div class="th-save-bar">
+            <button class="btn btn-primary btn-sm" onclick="saveSectionOrder(this)">Opslaan</button>
+            <span style="font-size:11px;color:var(--text3)">Daarna Publiceer om live te zetten</span>
           </div>
         </div>
-      </div>
-      <div class="save-bar" style="position:sticky;bottom:0;margin:0 -28px;padding:12px 28px">
-        <button class="btn btn-primary" onclick="saveTheme(this)">💾 Thema opslaan</button>
-        <button class="btn btn-success" onclick="publishSite(this)">🚀 Publiceer wijzigingen</button>
+
+      </div><!-- /th-panels-wrap -->
+
+      <!-- 3 — Live preview -->
+      <div class="preview-panel" style="flex:1">
+        <div class="preview-toolbar">
+          <div class="preview-info">Live preview — wijzigingen direct zichtbaar</div>
+          <div class="device-group">
+            <button class="device-btn active" onclick="setThemeDevice('100%',this)">🖥</button>
+            <button class="device-btn" onclick="setThemeDevice('768px',this)">📱</button>
+            <button class="device-btn" onclick="setThemeDevice('390px',this)">📲</button>
+          </div>
+          <a href="https://aiventitytool.netlify.app" target="_blank" class="btn btn-ghost btn-sm">↗ Live</a>
+        </div>
+        <div style="flex:1;display:flex;align-items:stretch;justify-content:center;overflow:hidden;position:relative">
+          <div id="theme-preview-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#0d1017;z-index:10;font-size:13px;color:var(--text3)"><span class="spinner" style="border-color:rgba(59,130,246,.25);border-top-color:var(--accent)"></span>&nbsp; Preview laden...</div>
+          <iframe id="theme-preview" class="preview-iframe"></iframe>
+        </div>
       </div>
     </div>
 
@@ -676,85 +986,173 @@ let modalConfirmCb = () => {};
 let previewLoaded = false;
 
 const SECTIONS = [
-  {key:'hero',        label:'Hero'},
-  {key:'creativity',  label:'Creativity'},
-  {key:'integration', label:'Integration'},
-  {key:'execution',   label:'Execution'},
-  {key:'apply',       label:'Apply'},
-  {key:'footer',      label:'Footer'},
+  {key:'hero',         label:'Hero'},
+  {key:'creativity',   label:'Creativity'},
+  {key:'architecture', label:'Architecture'},
+  {key:'integration',  label:'Integration'},
+  {key:'execution',    label:'Execution'},
+  {key:'apply',        label:'Apply'},
+  {key:'footer',       label:'Footer'},
 ];
 
 // Field definitions per section
 const FIELDS = {
   hero: {
     content: [
-      {f:'badge_en',      l:'Badge tekst (EN)',      wide:false},
-      {f:'badge_nl',      l:'Badge tekst (NL)',      wide:false},
-      {f:'h1_en',         l:'Regel 1 heading (EN)',  wide:false},
-      {f:'h1_nl',         l:'Regel 1 heading (NL)',  wide:false},
-      {f:'h2_en',         l:'Regel 2 heading (EN)',  wide:false},
-      {f:'h2_nl',         l:'Regel 2 heading (NL)',  wide:false},
-      {f:'h3_en',         l:'Regel 3 heading (EN)',  wide:false},
-      {f:'h3_nl',         l:'Regel 3 heading (NL)',  wide:false},
-      {f:'subheadline_en',l:'Subheadline (EN)',       wide:true},
-      {f:'subheadline_nl',l:'Subheadline (NL)',       wide:true},
-      {f:'body_en',       l:'Body tekst (EN)',        wide:true,  ta:true},
-      {f:'body_nl',       l:'Body tekst (NL)',        wide:true,  ta:true},
-      {f:'cta_primary_en',l:'CTA knop tekst (EN)',   wide:false},
-      {f:'cta_primary_nl',l:'CTA knop tekst (NL)',   wide:false},
-      {f:'cta_secondary_en',l:'Secundaire CTA (EN)', wide:false},
-      {f:'cta_secondary_nl',l:'Secundaire CTA (NL)', wide:false},
-      {f:'cta_href',      l:'CTA Link (URL)',         wide:true},
+      {f:'_div_tekst', l:'── Teksten', wide:true, divider:true},
+      {f:'badge_nl',        l:'Badge tekst',           wide:false, df:'Agentic Workflow — Nu Live'},
+      {f:'badge_en',        l:'Badge tekst',           wide:false, df:'Agentic Workflow — Now Live'},
+      {f:'h1_nl',           l:'Regel 1 heading',       wide:false, df:'Bedenk.'},
+      {f:'h1_en',           l:'Regel 1 heading',       wide:false, df:'Imagine.'},
+      {f:'h2_nl',           l:'Regel 2 heading',       wide:false, df:'Automatiseer.'},
+      {f:'h2_en',           l:'Regel 2 heading',       wide:false, df:'Automate.'},
+      {f:'h3_nl',           l:'Regel 3 heading',       wide:false, df:'Voer uit.'},
+      {f:'h3_en',           l:'Regel 3 heading',       wide:false, df:'Execute.'},
+      {f:'subheadline_nl',  l:'Subheadline',           wide:true,  df:'Van creatief idee naar vlekkeloze uitvoering.'},
+      {f:'subheadline_en',  l:'Subheadline',           wide:true,  df:'From creative idea to flawless execution.'},
+      {f:'body_nl',         l:'Body tekst',            wide:true,  ta:true},
+      {f:'body_en',         l:'Body tekst',            wide:true,  ta:true},
+      {f:'_div_knoppen', l:'── Knoppen', wide:true, divider:true},
+      {f:'cta_primary_nl',  l:'Primaire knop tekst',   wide:false, df:'Start Agent Space'},
+      {f:'cta_primary_en',  l:'Primaire knop tekst',   wide:false, df:'Start Agent Space'},
+      {f:'cta_href',        l:'Primaire knop URL',     wide:false, df:'#apply'},
+      {f:'cta_secondary_nl',l:'Secundaire knop tekst', wide:false, df:'Hoe werkt het'},
+      {f:'cta_secondary_en',l:'Secundaire knop tekst', wide:false, df:'How it works'},
+      {f:'cta_secondary_href',l:'Secundaire knop URL', wide:false, df:'#creativity'},
     ]
   },
   creativity: {
     content: [
-      {f:'label_en',  l:'Label (EN)',   wide:false},{f:'label_nl',  l:'Label (NL)',   wide:false},
-      {f:'title_en',  l:'Titel (EN)',   wide:false},{f:'title_nl',  l:'Titel (NL)',   wide:false},
-      {f:'subtitle_en',l:'Subtitel (EN)',wide:true,ta:true},{f:'subtitle_nl',l:'Subtitel (NL)',wide:true,ta:true},
-      {f:'c1_icon',l:'Kaart 1 Icoon',wide:false},{f:'c1_title_en',l:'Kaart 1 Titel (EN)',wide:false},{f:'c1_title_nl',l:'Kaart 1 Titel (NL)',wide:false},
-      {f:'c1_text_en',l:'Kaart 1 Tekst (EN)',wide:true,ta:true},{f:'c1_text_nl',l:'Kaart 1 Tekst (NL)',wide:true,ta:true},
-      {f:'c2_icon',l:'Kaart 2 Icoon',wide:false},{f:'c2_title_en',l:'Kaart 2 Titel (EN)',wide:false},{f:'c2_title_nl',l:'Kaart 2 Titel (NL)',wide:false},
-      {f:'c2_text_en',l:'Kaart 2 Tekst (EN)',wide:true,ta:true},{f:'c2_text_nl',l:'Kaart 2 Tekst (NL)',wide:true,ta:true},
-      {f:'c3_icon',l:'Kaart 3 Icoon',wide:false},{f:'c3_title_en',l:'Kaart 3 Titel (EN)',wide:false},{f:'c3_title_nl',l:'Kaart 3 Titel (NL)',wide:false},
-      {f:'c3_text_en',l:'Kaart 3 Tekst (EN)',wide:true,ta:true},{f:'c3_text_nl',l:'Kaart 3 Tekst (NL)',wide:true,ta:true},
+      {f:'_div_tekst', l:'── Sectie tekst', wide:true, divider:true},
+      {f:'label_nl',   l:'Label',  wide:false, df:'01 — CREATIVITY'},
+      {f:'label_en',   l:'Label',  wide:false, df:'01 — CREATIVITY'},
+      {f:'title_nl',   l:'Titel',   wide:false},
+      {f:'title_en',   l:'Titel',   wide:false},
+      {f:'subtitle_nl',l:'Subtitel',wide:true, ta:true},
+      {f:'subtitle_en',l:'Subtitel',wide:true, ta:true},
+      {f:'_div_k1', l:'── Kaart 1', wide:true, divider:true},
+      {f:'c1_icon',    l:'Icoon (emoji)',  wide:false, df:'✦'},
+      {f:'c1_title_nl',l:'Titel',          wide:false},
+      {f:'c1_title_en',l:'Titel',          wide:false},
+      {f:'c1_text_nl', l:'Tekst',          wide:true, ta:true},
+      {f:'c1_text_en', l:'Tekst',          wide:true, ta:true},
+      {f:'_div_k2', l:'── Kaart 2', wide:true, divider:true},
+      {f:'c2_icon',    l:'Icoon (emoji)',  wide:false, df:'✦'},
+      {f:'c2_title_nl',l:'Titel',          wide:false},
+      {f:'c2_title_en',l:'Titel',          wide:false},
+      {f:'c2_text_nl', l:'Tekst',          wide:true, ta:true},
+      {f:'c2_text_en', l:'Tekst',          wide:true, ta:true},
+      {f:'_div_k3', l:'── Kaart 3', wide:true, divider:true},
+      {f:'c3_icon',    l:'Icoon (emoji)',  wide:false, df:'✦'},
+      {f:'c3_title_nl',l:'Titel',          wide:false},
+      {f:'c3_title_en',l:'Titel',          wide:false},
+      {f:'c3_text_nl', l:'Tekst',          wide:true, ta:true},
+      {f:'c3_text_en', l:'Tekst',          wide:true, ta:true},
+    ]
+  },
+  architecture: {
+    content: [
+      {f:'_div_tekst', l:'── Sectie tekst', wide:true, divider:true},
+      {f:'label_nl',    l:'Label', wide:false, df:'02 — ARCHITECTUUR'},
+      {f:'label_en',    l:'Label', wide:false, df:'02 — ARCHITECTURE'},
+      {f:'title_nl',    l:'Titel',   wide:false, df:'Het cognitieve fundament'},
+      {f:'title_en',    l:'Titel',   wide:false, df:'The cognitive foundation'},
+      {f:'subtitle_nl', l:'Subtitel',wide:true,  df:'Een gestructureerde omgeving waar werk, context en uitvoering samensmelten.'},
+      {f:'subtitle_en', l:'Subtitel',wide:true,  df:'A structured environment where work, context and execution converge.'},
+      {f:'_div_k1', l:'── Kaart 1 — Topics', wide:true, divider:true},
+      {f:'c1_title_nl', l:'Titel', wide:false, df:'Topics als cognitieve containers'},
+      {f:'c1_title_en', l:'Titel', wide:false, df:'Topics as cognitive containers'},
+      {f:'c1_text_nl',  l:'Tekst', wide:true, ta:true},
+      {f:'c1_text_en',  l:'Tekst', wide:true, ta:true},
+      {f:'_div_k2', l:'── Kaart 2 — MCP', wide:true, divider:true},
+      {f:'c2_title_nl', l:'Titel', wide:false},
+      {f:'c2_title_en', l:'Titel', wide:false},
+      {f:'c2_text_nl',  l:'Tekst', wide:true, ta:true},
+      {f:'c2_text_en',  l:'Tekst', wide:true, ta:true},
+      {f:'_div_k3', l:'── Kaart 3 — A2A', wide:true, divider:true},
+      {f:'c3_title_nl', l:'Titel', wide:false},
+      {f:'c3_title_en', l:'Titel', wide:false},
+      {f:'c3_text_nl',  l:'Tekst', wide:true, ta:true},
+      {f:'c3_text_en',  l:'Tekst', wide:true, ta:true},
+      {f:'_div_slides', l:'── Platform screenshots (DNA carousel)', wide:true, divider:true},
+      {f:'slide1_img',  l:'Slide 1 afbeelding', wide:true, logo:true, df:''},
+      {f:'slide2_img',  l:'Slide 2 afbeelding', wide:true, logo:true, df:''},
+      {f:'slide3_img',  l:'Slide 3 afbeelding (optioneel)', wide:true, logo:true, df:''},
     ]
   },
   integration: {
     content: [
-      {f:'label_en',l:'Label (EN)',wide:false},{f:'label_nl',l:'Label (NL)',wide:false},
-      {f:'title_en',l:'Titel (EN)',wide:false},{f:'title_nl',l:'Titel (NL)',wide:false},
-      {f:'body_en',l:'Tekst (EN)',wide:true,ta:true},{f:'body_nl',l:'Tekst (NL)',wide:true,ta:true},
-      {f:'pill1_en',l:'Pill 1 (EN)',wide:false},{f:'pill2_en',l:'Pill 2 (EN)',wide:false},
-      {f:'pill3_en',l:'Pill 3 (EN)',wide:false},{f:'pill4_en',l:'Pill 4 (EN)',wide:false},
+      {f:'_div_tekst', l:'── Sectie tekst', wide:true, divider:true},
+      {f:'label_nl',   l:'Label', wide:false, df:'03 — INTEGRATIE'},
+      {f:'label_en',   l:'Label', wide:false, df:'03 — INTEGRATION'},
+      {f:'title_nl',   l:'Titel',   wide:false},
+      {f:'title_en',   l:'Titel',   wide:false},
+      {f:'subtitle_nl',l:'Subtitel',wide:true, ta:true},
+      {f:'subtitle_en',l:'Subtitel',wide:true, ta:true},
+      {f:'mcep_title_nl',l:'MCP blok titel', wide:false},
+      {f:'mcep_title_en',l:'MCP blok titel', wide:false},
+      {f:'mcep_text_nl', l:'MCP blok tekst', wide:true, ta:true},
+      {f:'mcep_text_en', l:'MCP blok tekst', wide:true, ta:true},
+      {f:'_div_tools', l:'── Gekoppelde tools', wide:true, divider:true},
+      {f:'tool1_name',l:'Tool 1 naam',wide:false,df:'Monday.com'},{f:'tool1_icon',l:'Tool 1 icoon',wide:false,df:'📋'},{f:'tool1_logo',l:'Tool 1 logo',wide:true,logo:true,df:''},
+      {f:'tool2_name',l:'Tool 2 naam',wide:false,df:'Pinterest'}, {f:'tool2_icon',l:'Tool 2 icoon',wide:false,df:'📌'},{f:'tool2_logo',l:'Tool 2 logo',wide:true,logo:true,df:''},
+      {f:'tool3_name',l:'Tool 3 naam',wide:false,df:'Slack'},     {f:'tool3_icon',l:'Tool 3 icoon',wide:false,df:'💬'},{f:'tool3_logo',l:'Tool 3 logo',wide:true,logo:true,df:''},
+      {f:'tool4_name',l:'Tool 4 naam',wide:false,df:'Google Sheets'},{f:'tool4_icon',l:'Tool 4 icoon',wide:false,df:'📊'},{f:'tool4_logo',l:'Tool 4 logo',wide:true,logo:true,df:''},
+      {f:'tool5_name',l:'Tool 5 naam',wide:false,df:'Google Calendar'},{f:'tool5_icon',l:'Tool 5 icoon',wide:false,df:'📅'},{f:'tool5_logo',l:'Tool 5 logo',wide:true,logo:true,df:''},
+      {f:'tool6_name',l:'Tool 6 naam',wide:false,df:'Notion'},    {f:'tool6_icon',l:'Tool 6 icoon',wide:false,df:'📝'},{f:'tool6_logo',l:'Tool 6 logo',wide:true,logo:true,df:''},
+      {f:'tool7_name',l:'Tool 7 naam',wide:false,df:'Airtable'},  {f:'tool7_icon',l:'Tool 7 icoon',wide:false,df:'🗃️'},{f:'tool7_logo',l:'Tool 7 logo',wide:true,logo:true,df:''},
+      {f:'tool8_name',l:'Tool 8 naam (leeg = verborgen)',wide:false,df:''},{f:'tool8_icon',l:'Tool 8 icoon',wide:false,df:''},{f:'tool8_logo',l:'Tool 8 logo',wide:true,logo:true,df:''},
     ]
   },
   execution: {
     content: [
-      {f:'label_en',l:'Label (EN)',wide:false},{f:'label_nl',l:'Label (NL)',wide:false},
-      {f:'title_en',l:'Titel (EN)',wide:false},{f:'title_nl',l:'Titel (NL)',wide:false},
-      {f:'body_en',l:'Tekst (EN)',wide:true,ta:true},{f:'body_nl',l:'Tekst (NL)',wide:true,ta:true},
-      {f:'c1_title_en',l:'Kaart 1 (EN)',wide:false},{f:'c1_title_nl',l:'Kaart 1 (NL)',wide:false},
-      {f:'c2_title_en',l:'Kaart 2 (EN)',wide:false},{f:'c2_title_nl',l:'Kaart 2 (NL)',wide:false},
-      {f:'c3_title_en',l:'Kaart 3 (EN)',wide:false},{f:'c3_title_nl',l:'Kaart 3 (NL)',wide:false},
-      {f:'c4_title_en',l:'Kaart 4 (EN)',wide:false},{f:'c4_title_nl',l:'Kaart 4 (NL)',wide:false},
+      {f:'_div_tekst', l:'── Sectie tekst', wide:true, divider:true},
+      {f:'label_nl',   l:'Label', wide:false, df:'04 — UITVOERING'},
+      {f:'label_en',   l:'Label', wide:false, df:'04 — EXECUTION'},
+      {f:'title_nl',   l:'Titel',   wide:false},
+      {f:'title_en',   l:'Titel',   wide:false},
+      {f:'subtitle_nl',l:'Subtitel',wide:true, ta:true},
+      {f:'subtitle_en',l:'Subtitel',wide:true, ta:true},
+      {f:'_div_k1', l:'── Kaart 1', wide:true, divider:true},
+      {f:'c1_title_nl',l:'Titel',wide:false},{f:'c1_title_en',l:'Titel',wide:false},
+      {f:'c1_text_nl',l:'Tekst',wide:true,ta:true},{f:'c1_text_en',l:'Tekst',wide:true,ta:true},
+      {f:'_div_k2', l:'── Kaart 2', wide:true, divider:true},
+      {f:'c2_title_nl',l:'Titel',wide:false},{f:'c2_title_en',l:'Titel',wide:false},
+      {f:'c2_text_nl',l:'Tekst',wide:true,ta:true},{f:'c2_text_en',l:'Tekst',wide:true,ta:true},
+      {f:'_div_k3', l:'── Kaart 3', wide:true, divider:true},
+      {f:'c3_title_nl',l:'Titel',wide:false},{f:'c3_title_en',l:'Titel',wide:false},
+      {f:'c3_text_nl',l:'Tekst',wide:true,ta:true},{f:'c3_text_en',l:'Tekst',wide:true,ta:true},
+      {f:'_div_k4', l:'── Kaart 4', wide:true, divider:true},
+      {f:'c4_title_nl',l:'Titel',wide:false},{f:'c4_title_en',l:'Titel',wide:false},
+      {f:'c4_text_nl',l:'Tekst',wide:true,ta:true},{f:'c4_text_en',l:'Tekst',wide:true,ta:true},
     ]
   },
   apply: {
     content: [
-      {f:'label_en',l:'Label (EN)',wide:false},{f:'label_nl',l:'Label (NL)',wide:false},
-      {f:'title_en',l:'Titel (EN)',wide:false},{f:'title_nl',l:'Titel (NL)',wide:false},
-      {f:'body_en',l:'Tekst (EN)',wide:true,ta:true},{f:'body_nl',l:'Tekst (NL)',wide:true,ta:true},
-      {f:'cta_en',l:'CTA knop (EN)',wide:false},{f:'cta_nl',l:'CTA knop (NL)',wide:false},
-      {f:'cta_href',l:'CTA Link (URL)',wide:true},
+      {f:'_div_tekst', l:'── Sectie tekst', wide:true, divider:true},
+      {f:'label_nl',          l:'Label',          wide:false},
+      {f:'label_en',          l:'Label',          wide:false},
+      {f:'headline_part1_nl', l:'Koptekst regel 1',wide:false, df:'Klaar om te starten?'},
+      {f:'headline_part1_en', l:'Koptekst regel 1',wide:false, df:'Ready to get started?'},
+      {f:'headline_accent_nl',l:'Koptekst accent', wide:false, df:'Boek een demo'},
+      {f:'headline_accent_en',l:'Koptekst accent', wide:false, df:'Book a demo'},
+      {f:'body_nl',           l:'Omschrijving',   wide:true, ta:true},
+      {f:'body_en',           l:'Omschrijving',   wide:true, ta:true},
+      {f:'note_nl',           l:'Kleine noot',    wide:false, df:'Geen creditcard vereist'},
+      {f:'note_en',           l:'Kleine noot',    wide:false, df:'No credit card required'},
+      {f:'_div_knop', l:'── Knop', wide:true, divider:true},
+      {f:'btn_nl',            l:'Knop tekst',     wide:false, df:'Aanmelden'},
+      {f:'btn_en',            l:'Knop tekst',     wide:false, df:'Sign up'},
+      {f:'btn_href',          l:'Knop URL (leeg = formulier)',wide:false, df:''},
     ]
   },
   footer: {
     content: [
-      {f:'tagline_en',l:'Tagline (EN)',wide:false},{f:'tagline_nl',l:'Tagline (NL)',wide:false},
-      {f:'copyright_en',l:'Copyright (EN)',wide:false},{f:'copyright_nl',l:'Copyright (NL)',wide:false},
+      {f:'tagline_nl', l:'Tagline',  wide:false},
+      {f:'tagline_en', l:'Tagline',  wide:false},
+      {f:'copyright',  l:'Copyright tekst', wide:false, df:'© 2025 Aiventity. All rights reserved.'},
     ]
-  }
+  },
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -826,9 +1224,9 @@ function closeModal(){
 // ═══════════════════════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════════════════════
-const titles={dashboard:'Dashboard',editor:'Visuele Editor',media:'Media Bibliotheek',
-               theme:'Thema & Kleuren',settings:'Website Instellingen',
-               activity:'Activiteitenlog',inbox:'Inbox'};
+const titles={dashboard:'Dashboard',editor:'Visuele Editor',media:'Media',
+               theme:'Stijl',settings:'Instellingen',
+               activity:'Activiteit',inbox:'Berichten'};
 
 function nav(page) {
   document.querySelectorAll('.page,.editor-page').forEach(p=>p.classList.remove('active'));
@@ -838,6 +1236,11 @@ function nav(page) {
   document.querySelectorAll('.sb-item').forEach(n=>{
     if(n.getAttribute('onclick')?.includes("'"+page+"'")) n.classList.add('active');
   });
+  // Highlight folder headers when their pages are active
+  const fhdrM=document.getElementById('sb-folder-hdr-marketing');
+  if(fhdrM) fhdrM.style.color = page==='editor' ? 'var(--text)' : '';
+  const fhdrS=document.getElementById('sb-folder-hdr-stijl');
+  if(fhdrS) fhdrS.style.color = page==='theme'  ? 'var(--text)' : '';
   document.getElementById('tb-title').textContent=titles[page]||page;
   currentPage=page;
   if(page==='editor') initEditor();
@@ -847,6 +1250,24 @@ function nav(page) {
   if(page==='activity') loadActivity();
   if(page==='dashboard') loadDashboard();
   if(page==='inbox') loadInbox();
+}
+
+function toggleFolder(id) {
+  const hdr=document.getElementById('sb-folder-hdr-'+id);
+  const sub=document.getElementById('sb-sub-'+id);
+  const isOpen=sub.classList.contains('open');
+  hdr.classList.toggle('open',!isOpen);
+  sub.classList.toggle('open',!isOpen);
+}
+
+function navToSection(key) {
+  nav('editor');
+  // After initEditor sets up the tab bar, switch to the right section
+  setTimeout(()=>{ showSection(key); },80);
+  // Update sidebar sub-item active highlight
+  document.querySelectorAll('.sb-sub-item').forEach(b=>{
+    b.classList.toggle('active', b.dataset.sec===key);
+  });
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -871,23 +1292,130 @@ async function showApp() {
 // ═══════════════════════════════════════════════════════════
 // DASHBOARD
 // ═══════════════════════════════════════════════════════════
+const AI_QUOTES=[
+  {q:"De beste manier om de toekomst te voorspellen is om hem te creëren.",a:"Peter Drucker"},
+  {q:"AI zal niet de wereld overnemen. Mensen die AI gebruiken, wel.",a:"Kai-Fu Lee"},
+  {q:"Automatiseer het saaie zodat je energie overblijft voor het geniale.",a:"Aiventity"},
+  {q:"Intelligentie is het vermogen om te veranderen.",a:"Stephen Hawking"},
+  {q:"De machines werken. De mensen denken. Zo hoort het.",a:"Aiventity"},
+  {q:"Elke grote doorbraak begon ooit als een gek idee.",a:"Arthur C. Clarke"},
+  {q:"We staan aan het begin van het meest transformatieve tijdperk in de menselijke geschiedenis.",a:"Ray Kurzweil"},
+  {q:"AI is de nieuwe elektriciteit.",a:"Andrew Ng"},
+  {q:"Niet de sterkste overleeft, maar degene die het snelst aanpast.",a:"Charles Darwin"},
+  {q:"Werk slimmer, niet harder — laat AI het zware tillen doen.",a:"Aiventity"},
+  {q:"De toekomst behoort aan degenen die de kracht van AI begrijpen en benutten.",a:"Sundar Pichai"},
+  {q:"Creativiteit is intelligentie die plezier maakt.",a:"Albert Einstein"},
+  {q:"Automatisering is niet het einde van werk. Het is het begin van beter werk.",a:"Aiventity"},
+  {q:"Wat we vandaag denken, scheppen we morgen.",a:"Buddha"},
+  {q:"AI neemt geen banen af. Het tilt mensen naar een hoger niveau.",a:"Mark Cuban"},
+  {q:"Technologie is het beste wat er met de mensheid is gebeurd.",a:"Bill Gates"},
+  {q:"Elke dag is een kans om iets te bouwen wat gisteren nog onmogelijk leek.",a:"Aiventity"},
+  {q:"De vraag is niet of machines kunnen denken, maar hoe slim wij ze laten denken.",a:"Aiventity"},
+  {q:"Mensen die bang zijn voor AI hebben nog nooit gezien hoe het hun leven vereenvoudigt.",a:"Fei-Fei Li"},
+  {q:"Innovatie is het onderscheid tussen leider en volger.",a:"Steve Jobs"},
+  {q:"In een wereld vol ruis is focus de schaarste.",a:"Aiventity"},
+  {q:"De beste investering is in jezelf — en in de tools die je versterken.",a:"Warren Buffett"},
+  {q:"AI is een versterker van menselijk potentieel, geen vervanging.",a:"Satya Nadella"},
+  {q:"Durf te automatiseren wat anderen nog handmatig doen.",a:"Aiventity"},
+  {q:"Eenvoud is de ultieme verfijning.",a:"Leonardo da Vinci"},
+  {q:"Een agent die nooit slaapt is de collega die je altijd had willen hebben.",a:"Aiventity"},
+  {q:"Data is de olie van de 21e eeuw. AI is de motor.",a:"Clive Humby"},
+  {q:"Elk probleem is een kans in disguise.",a:"John Adams"},
+  {q:"We are what we repeatedly do. Excellence is not an act, but a habit.",a:"Aristoteles"},
+  {q:"De meest gevaarlijke frase in taal is: 'Dat doen we altijd zo'.",a:"Grace Hopper"},
+  {q:"Denk groot. Begin klein. Beweeg snel.",a:"Aiventity"},
+  {q:"AI is niet slim. Mensen die AI gebruiken zijn slim.",a:"Aiventity"},
+  {q:"De toekomst is al hier, alleen niet gelijk verdeeld.",a:"William Gibson"},
+  {q:"Wat je aandacht geeft, groeit.",a:"Aiventity"},
+  {q:"Leer de regels als een professional zodat je ze kunt breken als een kunstenaar.",a:"Pablo Picasso"},
+  {q:"Succes is een slechte leraar. Het laat slimme mensen denken dat ze niet kunnen verliezen.",a:"Bill Gates"},
+  {q:"Jouw concurrenten slapen niet. Maar jouw AI-agents wel niet.",a:"Aiventity"},
+  {q:"Snelheid is de valuta van de nieuwe economie.",a:"Aiventity"},
+  {q:"Machines dromen misschien niet van schapen, maar ze kunnen wel jouw agenda runnen.",a:"Aiventity"},
+  {q:"Elk bedrijf wordt een tech-bedrijf — of het verdwijnt.",a:"Mark Andreessen"},
+  {q:"Automatiseer het repetitieve. Reserveer je brein voor het revolutionaire.",a:"Aiventity"},
+  {q:"De beste software is onzichtbaar en werkt gewoon.",a:"Aiventity"},
+  {q:"AI geeft je de superkracht om 10x meer te doen met hetzelfde team.",a:"Sam Altman"},
+  {q:"Discipline is de brug tussen doel en prestatie.",a:"Jim Rohn"},
+  {q:"Elk groot bedrijf begon ooit met één beslissing om het anders te doen.",a:"Aiventity"},
+  {q:"Technologie schaalt. Mensen ook — met de juiste tools.",a:"Aiventity"},
+  {q:"Kennis is macht. Geautomatiseerde kennis is superkracht.",a:"Aiventity"},
+  {q:"Het geheim van vooruitgang is beginnen.",a:"Mark Twain"},
+  {q:"AI werkt het hardst als jij slaapt.",a:"Aiventity"},
+  {q:"De toekomst is niet iets wat je overkomt. Het is iets wat je bouwt.",a:"Aiventity"},
+  {q:"Stop met doen wat een machine beter kan. Begin met doen wat alleen jij kunt.",a:"Aiventity"},
+  {q:"Iedereen heeft een plan totdat de markt verandert. AI helpt je mee te bewegen.",a:"Aiventity"},
+  {q:"Het verschil tussen goed en geweldig is detail.",a:"Aiventity"},
+  {q:"Durf te vragen: wat als we dit volledig anders aanpakken?",a:"Aiventity"},
+  {q:"De kracht van AI zit niet in de technologie — maar in de intentie erachter.",a:"Aiventity"},
+  {q:"Bouw systemen die voor je werken, niet om je heen.",a:"Aiventity"},
+  {q:"Elke seconde die je bespaart met AI, kun je investeren in echte verbinding.",a:"Aiventity"},
+  {q:"De slimste bedrijven van morgen worden gebouwd met AI van vandaag.",a:"Aiventity"},
+  {q:"Transformatie begint niet met technologie. Het begint met een vraag.",a:"Aiventity"},
+  {q:"Wees niet bang voor AI. Wees bang voor degene die het sneller omarmt dan jij.",a:"Aiventity"},
+  {q:"Automatisering bevrijdt mensen voor menselijk werk.",a:"Stewart Brand"},
+  {q:"De toekomst heeft geen wachtkamer.",a:"Aiventity"},
+];
+
+function initGreeting(){
+  const h=new Date().getHours();
+  let greet,emoji;
+  if(h>=5&&h<12){greet='Goedemorgen';emoji='☀️';}
+  else if(h>=12&&h<18){greet='Goedemiddag';emoji='⚡';}
+  else{greet='Goedenavond';emoji='🌙';}
+  const now=new Date();
+  const start=new Date(now.getFullYear(),0,0);
+  const dayOfYear=Math.floor((now-start)/(1000*60*60*24));
+  const {q,a}=AI_QUOTES[dayOfYear%AI_QUOTES.length];
+  document.getElementById('greet-time').textContent=`${emoji} ${greet}`;
+  document.getElementById('greet-heading').textContent='👋 Welkom terug bij Aiventity';
+  document.getElementById('greet-quote').textContent=q;
+  document.getElementById('greet-author').textContent='— '+a;
+}
+
 async function loadDashboard() {
+  initGreeting();
   const ps=await apiFetch('/publish-status');
   if(ps.last_published) document.getElementById('s-published').textContent=ps.last_published;
-  // Load recent activity
-  const acts=await apiFetch('/activity');
-  const el=document.getElementById('dash-activity');
-  if(!Array.isArray(acts)||acts.length===0){ el.innerHTML='<div style="padding:16px;color:var(--text3);font-size:12px">Geen activiteit</div>'; return; }
-  const icons={publish:'🚀',content_save:'✏️',settings_save:'⚙️',theme_save:'🎨',media_upload:'📁',media_delete:'🗑',restore:'↩'};
-  el.innerHTML=acts.slice(0,6).map(a=>`
-    <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border)">
-      <span style="font-size:16px">${icons[a.action]||'•'}</span>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:12.5px;font-weight:500;color:var(--text)">${a.detail||a.action}</div>
-        <div style="font-size:11px;color:var(--text3)">${new Date(a.ts).toLocaleString('nl-NL')}</div>
-      </div>
-    </div>
-  `).join('');
+  // Load contacts/inbox for address list
+  const contacts=await apiFetch('/inbox');
+  const tbody=document.getElementById('dash-contacts-body');
+  const countEl=document.getElementById('dash-contacts-count');
+  if(!Array.isArray(contacts)||!contacts.length){
+    tbody.innerHTML='<tr><td colspan="7" style="padding:32px;text-align:center;color:var(--text3);font-size:12px">Nog geen aanmeldingen ontvangen.</td></tr>';
+    if(countEl) countEl.textContent='';
+    return;
+  }
+  if(countEl) countEl.textContent=contacts.length+' contacten';
+  tbody.innerHTML=contacts.map(m=>{
+    const dt=m.ts?new Date(m.ts).toLocaleString('nl-NL',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'';
+    const unreadDot=!m.read?'<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:5px;vertical-align:middle;flex-shrink:0"></span>':'';
+    const firstname=esc(m.name||'—');
+    const lastname=esc(m.lastname||m.achternaam||'—');
+    const email=esc(m.email||'—');
+    const phone=esc(m.phone||'—');
+    const subject=esc(m.subject||m.message?.slice(0,60)||'—');
+    return `<tr>
+      <td><div style="display:flex;align-items:center">${unreadDot}<span style="font-weight:${m.read?'400':'600'}">${firstname}</span></div></td>
+      <td style="color:var(--text2)">${lastname}</td>
+      <td><a href="mailto:${email}" style="color:var(--accent)">${email}</a></td>
+      <td style="color:var(--text2)">${phone}</td>
+      <td style="color:var(--text2);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${subject}">${subject}</td>
+      <td style="color:var(--text3);white-space:nowrap;font-size:11.5px">${dt}</td>
+      <td style="white-space:nowrap">
+        <a href="mailto:${email}?subject=Re: ${encodeURIComponent(m.subject||'')}" class="btn btn-ghost btn-sm" style="margin-right:4px">↩</a>
+        <button class="btn btn-danger btn-sm" onclick="dashDeleteContact('${m.id}')">🗑</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+async function dashDeleteContact(id){
+  showModal('Contact verwijderen','Weet je zeker dat je dit contact wilt verwijderen?',async()=>{
+    const r=await apiFetch(`/inbox/${id}/delete`,'POST');
+    if(r.ok){ toast('🗑 Verwijderd','info'); loadDashboard(); }
+    else toast('❌ '+(r.error||'Mislukt'),'error');
+  },'Verwijderen');
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -902,6 +1430,14 @@ async function initEditor() {
   buildSectionTabs();
   showSection(currentSection);
   if(!previewLoaded) { previewLoaded=true; reloadPreview(); }
+  // Auto-scroll preview when a field gets focus
+  const editorFields=document.getElementById('editor-fields');
+  if(editorFields&&!editorFields._scrollBound){
+    editorFields._scrollBound=true;
+    editorFields.addEventListener('focusin',function(e){
+      if(e.target.matches('input,textarea,select')) scrollPreviewToSection(currentSection);
+    });
+  }
 }
 
 function buildSectionTabs() {
@@ -909,55 +1445,76 @@ function buildSectionTabs() {
   bar.innerHTML=SECTIONS.map(s=>`<button class="section-tab${s.key===currentSection?' active':''}" onclick="showSection('${s.key}')">${s.label}</button>`).join('');
 }
 
+// Returns saved value, or field.df default if saved value is empty/null
+function fval(sec, field) {
+  const v = sec[field.f];
+  return (v != null && v !== '') ? v : (field.df != null ? field.df : '');
+}
+
 function showSection(key) {
   currentSection=key;
   document.querySelectorAll('.section-tab').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.section-tab').forEach(b=>{if(b.textContent===SECTIONS.find(s=>s.key===key)?.label)b.classList.add('active');});
+  document.querySelectorAll('.sb-sub-item').forEach(b=>b.classList.toggle('active',b.dataset.sec===key));
+  scrollPreviewToSection(key);
   const sec=contentData[key]||{};
   const def=FIELDS[key]||{content:[]};
-  const fields=def.content||[];
-  // Group EN/NL fields side by side
+  const allFields=def.content||[];
+  const lang=editorLang||'nl';
+  const suffix='_'+lang;
+
+  // Show only fields matching active language (or language-neutral fields)
   const rendered=[];
-  const paired=new Set();
-  for(const field of fields){
-    if(paired.has(field.f)) continue;
-    const isEN=field.f.endsWith('_en');
-    const isNL=field.f.endsWith('_nl');
-    const pairKey=field.f.replace(/_en$/,'').replace(/_nl$/,'');
-    const nlField=fields.find(x=>x.f===pairKey+'_nl');
-    if(isEN&&nlField){
-      paired.add(field.f); paired.add(pairKey+'_nl');
-      if(field.ta){
-        rendered.push(`
-          <div class="form-group">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-              <div><div class="lang-tag lang-en">🇬🇧 EN</div><textarea class="form-control" id="f-${field.f}" rows="3" oninput="scheduleAutoSave()">${esc(sec[field.f]||'')}</textarea></div>
-              <div><div class="lang-tag lang-nl">🇳🇱 NL</div><textarea class="form-control" id="f-${pairKey}_nl" rows="3" oninput="scheduleAutoSave()">${esc(sec[pairKey+'_nl']||'')}</textarea></div>
-            </div>
-            <div class="form-hint">${field.l.replace(' (EN)','')}</div>
-          </div>`);
-      } else {
-        rendered.push(`
-          <div class="form-group">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-              <div><div class="lang-tag lang-en">🇬🇧 EN</div><input type="text" class="form-control" id="f-${field.f}" value="${esc(sec[field.f]||'')}" oninput="scheduleAutoSave()"></div>
-              <div><div class="lang-tag lang-nl">🇳🇱 NL</div><input type="text" class="form-control" id="f-${pairKey}_nl" value="${esc(sec[pairKey+'_nl']||'')}" oninput="scheduleAutoSave()"></div>
-            </div>
-            <div class="form-hint">${field.l.replace(' (EN)','')}</div>
-          </div>`);
-      }
-    } else if(!isNL||!nlField){
-      const inp=field.ta
-        ?`<textarea class="form-control" id="f-${field.f}" rows="3" oninput="scheduleAutoSave()">${esc(sec[field.f]||'')}</textarea>`
-        :`<input type="text" class="form-control" id="f-${field.f}" value="${esc(sec[field.f]||'')}" oninput="scheduleAutoSave()">`;
-      rendered.push(`<div class="form-group"><label class="form-label">${field.l}</label>${inp}</div>`);
+  for(const field of allFields){
+    if(field.divider){
+      rendered.push(`<div style="border-top:1px solid var(--border);margin:18px 0 10px;padding-top:14px;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">${field.l}</div>`);
+      continue;
     }
-    paired.add(field.f);
+    const isLangField = field.f.endsWith('_en') || field.f.endsWith('_nl');
+    if(isLangField && !field.f.endsWith(suffix)) continue; // skip other language
+
+    let inp;
+    if(field.logo) {
+      const val=esc(fval(sec,field));
+      const preview=val?`<img src="${val}" style="height:28px;width:28px;object-fit:contain;border-radius:4px;background:rgba(255,255,255,0.06);padding:2px;flex-shrink:0" onerror="this.style.display='none'">`:'';
+      inp=`<div style="display:flex;gap:6px;align-items:center">
+        ${preview}
+        <input type="text" class="form-control" id="f-${field.f}" value="${val}" oninput="scheduleAutoSave()" placeholder="https://... — of klik 📎 om te uploaden" style="min-width:0">
+        <button class="btn btn-ghost btn-sm" onclick="uploadLogoToField('f-${field.f}')" title="Logo uploaden" style="flex-shrink:0;white-space:nowrap">📎 Upload</button>
+      </div>`;
+    } else {
+      inp=field.ta
+        ?`<textarea class="form-control" id="f-${field.f}" rows="3" oninput="scheduleAutoSave()">${esc(fval(sec,field))}</textarea>`
+        :`<input type="text" class="form-control" id="f-${field.f}" value="${esc(fval(sec,field))}" oninput="scheduleAutoSave()">`;
+    }
+    rendered.push(`<div class="form-group"><label class="form-label">${field.l}</label>${inp}</div>`);
   }
   document.getElementById('editor-fields').innerHTML=rendered.length?rendered.join(''):'<p style="color:var(--text3)">Geen velden voor deze sectie.</p>';
 }
 
+
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+let editorLang = 'nl';
+function setEditorLang(lang) {
+  editorLang = lang;
+  document.getElementById('lang-nl-btn').style.background = lang==='nl' ? 'var(--accent)' : 'transparent';
+  document.getElementById('lang-nl-btn').style.color = lang==='nl' ? '#fff' : 'var(--text2)';
+  document.getElementById('lang-en-btn').style.background = lang==='en' ? 'var(--accent)' : 'transparent';
+  document.getElementById('lang-en-btn').style.color = lang==='en' ? '#fff' : 'var(--text2)';
+  if(currentSection) showSection(currentSection);
+}
+
+// Collect form values — only fields visible in current language tab
+function collectFields(fields) {
+  const data={};
+  const lang = editorLang || 'nl';
+  fields.forEach((field)=>{
+    const el=document.getElementById('f-'+field.f);
+    if(el) data[field.f]=el.value;
+  });
+  return data;
+}
 
 let livePreviewTimer=null;
 
@@ -969,8 +1526,7 @@ function scheduleAutoSave() {
   if(livePreviewTimer) clearTimeout(livePreviewTimer);
   livePreviewTimer=setTimeout(()=>{
     const fields=FIELDS[currentSection]?.content||[];
-    const sectionData={};
-    fields.forEach(({f})=>{ const el=document.getElementById('f-'+f); if(el) sectionData[f]=el.value; });
+    const sectionData=collectFields(fields);
     const previewContent={...contentData,[currentSection]:{...(contentData[currentSection]||{}),...sectionData}};
     postLivePreview(previewContent,themeData);
   },400);
@@ -979,10 +1535,19 @@ function scheduleAutoSave() {
   autoSaveTimer=setTimeout(()=>saveSection(null,true),4000);
 }
 
+function injectPreviewBase(html) {
+  // Ensure all links open in new tab — prevents iframe from navigating to admin
+  if(html.includes('<base ')) return html;
+  return html.replace('<head>','<head><base target="_blank">');
+}
+
 async function postLivePreview(content,theme) {
   const loading=document.getElementById('preview-loading');
   const iframe=document.getElementById('preview');
   if(!iframe) return;
+  // Save scroll position before reload
+  let savedScrollY=0;
+  try { savedScrollY=iframe.contentWindow?.scrollY||0; } catch{}
   try {
     const r=await fetch(API+'/preview',{
       method:'POST',
@@ -990,16 +1555,46 @@ async function postLivePreview(content,theme) {
       body:JSON.stringify({content,theme})
     });
     if(!r.ok) return;
-    const html=await r.text();
+    const html=injectPreviewBase(await r.text());
+    iframe.onload=()=>{
+      if(loading) loading.style.display='none';
+      // Restore scroll position — no more jump to top
+      try { iframe.contentWindow.scrollTo(0, savedScrollY); } catch{}
+    };
     iframe.srcdoc=html;
-    iframe.onload=()=>{ if(loading) loading.style.display='none'; };
   } catch{}
+}
+
+// Section → #id mapping for auto-scroll
+var SECTION_SCROLL_MAP={
+  hero:'#cms-hero', creativity:'#creativity', integration:'#integration',
+  architecture:'#architecture', dna_slides:'#dna',
+  execution:'#execution', apply:'#apply', footer:'footer'
+};
+
+function scrollPreviewToSection(key) {
+  const selector=SECTION_SCROLL_MAP[key];
+  if(!selector) return;
+  const iframe=document.getElementById('preview');
+  if(!iframe) return;
+  const doScroll=()=>{
+    try {
+      const doc=iframe.contentDocument||iframe.contentWindow?.document;
+      if(!doc) return;
+      const el=doc.querySelector(selector);
+      if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    } catch{}
+  };
+  // If iframe is already loaded scroll immediately, otherwise wait for load
+  try {
+    if(iframe.contentDocument?.readyState==='complete') doScroll();
+    else { const prev=iframe.onload; iframe.onload=()=>{ if(prev) prev(); doScroll(); }; }
+  } catch{ doScroll(); }
 }
 
 async function saveSection(btn, silent=false) {
   const fields=FIELDS[currentSection]?.content||[];
-  const data={};
-  fields.forEach(({f})=>{ const el=document.getElementById('f-'+f); if(el) data[f]=el.value; });
+  const data=collectFields(fields);
   // Save to undo stack (before overwriting)
   undoStack.push({section:currentSection, data:{...contentData[currentSection]}});
   if(undoStack.length>50) undoStack.shift();
@@ -1020,6 +1615,7 @@ async function saveSection(btn, silent=false) {
     toast('❌ '+(r.error||'Opslaan mislukt'),'error');
   }
 }
+
 
 function undoAction() {
   if(!undoStack.length) return;
@@ -1063,9 +1659,9 @@ async function reloadPreview() {
   try {
     const r=await fetch(API+'/preview',{headers:{'Authorization':'Bearer '+token}});
     if(!r.ok) throw new Error(r.status);
-    const html=await r.text();
-    iframe.srcdoc=html;
+    const html=injectPreviewBase(await r.text());
     iframe.onload=()=>{ if(loading) loading.style.display='none'; };
+    iframe.srcdoc=html;
   } catch(e) {
     if(loading) loading.style.display='none';
     iframe.srcdoc='<p style="color:red;font-family:sans-serif;padding:20px">Preview niet beschikbaar: '+e.message+'</p>';
@@ -1182,62 +1778,413 @@ function fileToBase64(file) {
   return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); });
 }
 
+async function uploadLogoToField(fieldId) {
+  const input=document.createElement('input');
+  input.type='file';
+  input.accept='image/*';
+  input.onchange=async(e)=>{
+    const file=e.target.files[0];
+    if(!file) return;
+    if(file.size>10*1024*1024){ toast('❌ Max 10MB per afbeelding','error'); return; }
+    toast('⏳ Logo uploaden...','info');
+    const b64=await fileToBase64(file);
+    const r=await apiFetch('/media/upload','POST',{name:file.name,base64:b64,type:file.type,size:file.size});
+    if(r.ok&&r.url){
+      const el=document.getElementById(fieldId);
+      if(el){ el.value=r.url; scheduleAutoSave(); }
+      // Refresh the preview image if it exists
+      const preview=el?.parentElement?.querySelector('img');
+      if(preview){ preview.src=r.url; preview.style.display=''; }
+      toast('✅ Logo geüpload en ingevuld!','success');
+    } else {
+      toast('❌ '+(r.error||'Upload mislukt'),'error');
+    }
+  };
+  input.click();
+}
+
 // ═══════════════════════════════════════════════════════════
 // THEME
 // ═══════════════════════════════════════════════════════════
+// ── Theme panel navigation ──────────────────────────────────
+function showThemePanel(id) {
+  document.querySelectorAll('.th-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.th-nav-btn').forEach(b=>b.classList.remove('active'));
+  const panel=document.getElementById('th-panel-'+id);
+  const btn=document.getElementById('th-nav-'+id);
+  if(panel) panel.classList.add('active');
+  if(btn)   btn.classList.add('active');
+  // Sync sidebar sub-item
+  document.querySelectorAll('.sb-sub-item[data-tp]').forEach(b=>b.classList.toggle('active',b.dataset.tp===id));
+  // Load section order when switching to Secties panel
+  if(id==='secties') loadSectionOrder();
+}
+function navToThemePanel(id) {
+  nav('theme');
+  setTimeout(()=>showThemePanel(id), 80);
+  document.querySelectorAll('.sb-sub-item[data-tp]').forEach(b=>b.classList.toggle('active',b.dataset.tp===id));
+}
+
+// ═══════════════════════════════════════════════════════════
+// SECTION ORDER (drag-to-reorder)
+// ═══════════════════════════════════════════════════════════
+const DEFAULT_SEC_ORDER=['hero','creativity','architecture','integration','execution','apply','footer'];
+const SEC_LABELS={hero:'Hero',creativity:'Creativity',architecture:'Architecture',
+                  integration:'Integration',execution:'Execution',apply:'Apply',footer:'Footer'};
+let sectionOrder=[...DEFAULT_SEC_ORDER];
+let soSrcKey=null;
+
+async function loadSectionOrder() {
+  const cfg=await apiFetch('/config');
+  if(cfg&&Array.isArray(cfg.section_order)&&cfg.section_order.length>0) {
+    sectionOrder=cfg.section_order;
+  } else {
+    sectionOrder=[...DEFAULT_SEC_ORDER];
+  }
+  renderSectionOrder();
+}
+
+function renderSectionOrder() {
+  const list=document.getElementById('sec-order-list');
+  if(!list) return;
+  list.innerHTML=sectionOrder.map((key,i)=>`
+    <div class="sec-order-item" draggable="true" data-key="${key}"
+      onclick="scrollThemeToSection('${key}')"
+      ondragstart="soStart(event,'${key}')"
+      ondragover="soOver(event,'${key}')"
+      ondrop="soDrop(event,'${key}')"
+      ondragend="soEnd()">
+      <span class="sec-order-handle">
+        <svg width="14" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 14 18">
+          <line x1="2" y1="4" x2="12" y2="4"/><line x1="2" y1="9" x2="12" y2="9"/><line x1="2" y1="14" x2="12" y2="14"/>
+        </svg>
+      </span>
+      <span class="sec-order-num">${i+1}</span>
+      <span class="sec-order-name">${SEC_LABELS[key]||key}</span>
+    </div>`).join('');
+}
+
+function scrollThemeToSection(key) {
+  const selector=SECTION_SCROLL_MAP[key];
+  if(!selector) return;
+  const iframe=document.getElementById('theme-preview');
+  if(!iframe) return;
+  const doScroll=()=>{
+    try{
+      const doc=iframe.contentDocument||iframe.contentWindow?.document;
+      if(!doc) return;
+      const el=doc.querySelector(selector);
+      if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    }catch{}
+  };
+  try{
+    const doc=iframe.contentDocument||iframe.contentWindow?.document;
+    if(doc&&doc.readyState==='complete') doScroll();
+    else iframe.addEventListener('load',function h(){iframe.removeEventListener('load',h);setTimeout(doScroll,50);});
+  }catch{doScroll();}
+}
+
+function soStart(e,key) {
+  soSrcKey=key;
+  setTimeout(()=>e.target.classList.add('dragging'),0);
+  e.dataTransfer.effectAllowed='move';
+}
+function soOver(e,key) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect='move';
+  document.querySelectorAll('.sec-order-item').forEach(el=>el.classList.remove('drag-over'));
+  if(key!==soSrcKey) e.currentTarget.classList.add('drag-over');
+}
+function soDrop(e,key) {
+  e.preventDefault();
+  if(!soSrcKey||soSrcKey===key) return;
+  const from=sectionOrder.indexOf(soSrcKey);
+  const to  =sectionOrder.indexOf(key);
+  sectionOrder.splice(from,1);
+  sectionOrder.splice(to,0,soSrcKey);
+  setTimeout(renderSectionOrder,0);
+}
+function soEnd() {
+  soSrcKey=null;
+  document.querySelectorAll('.sec-order-item').forEach(el=>el.classList.remove('dragging','drag-over'));
+}
+
+async function saveSectionOrder(btn) {
+  const orig=btn.innerHTML; btn.innerHTML='<span class="spinner"></span>'; btn.disabled=true;
+  const r=await apiFetch('/config','POST',{section_order:sectionOrder});
+  btn.innerHTML=orig; btn.disabled=false;
+  if(r.ok) toast('✅ Volgorde opgeslagen! Druk op Publiceer om live te zetten.','success');
+  else toast('❌ Opslaan mislukt','error');
+}
+
+// ── Font preview ────────────────────────────────────────────
+function updateFontPreview(type) {
+  const sel  = document.getElementById('th-'+(type==='heading'?'heading_font':'body_font'));
+  const prev = document.getElementById('font-prev-'+type);
+  if(!sel||!prev) return;
+  const font = sel.value||'inherit';
+  // Inject a quick Google Fonts link if not already in head
+  const id='gf-'+font.replace(/\s/g,'-');
+  if(!document.getElementById(id)){
+    const link=document.createElement('link');
+    link.id=id; link.rel='stylesheet';
+    link.href=`https://fonts.googleapis.com/css2?family=${encodeURIComponent(font)}:wght@400;600;700&display=swap`;
+    document.head.appendChild(link);
+  }
+  prev.style.fontFamily=`'${font}', sans-serif`;
+}
+
+// ── Font size sliders ───────────────────────────────────────
+const FS_HERO   =['','clamp(0.875rem,2vw,1.125rem)','clamp(1rem,2.5vw,1.5rem)','clamp(1.25rem,3vw,1.875rem)','clamp(1.5rem,3.5vw,2.25rem)','clamp(1.875rem,4vw,2.75rem)','clamp(2.25rem,5vw,3.5rem)','clamp(2.75rem,6vw,4.5rem)','clamp(3.25rem,7vw,5.5rem)','clamp(4rem,8.5vw,6.5rem)','clamp(5rem,10vw,8rem)'];
+const FS_SECT   =['','clamp(0.75rem,1.5vw,1rem)','clamp(0.875rem,2vw,1.25rem)','clamp(1rem,2.5vw,1.5rem)','clamp(1.25rem,3vw,1.875rem)','clamp(1.5rem,3.5vw,2.25rem)','clamp(1.75rem,4vw,2.75rem)','clamp(2.25rem,5vw,3.25rem)','clamp(2.75rem,6vw,4rem)','clamp(3.25rem,7vw,5rem)'];
+const FS_BODY   =['','0.625rem','0.6875rem','0.75rem','0.8125rem','0.875rem','0.9375rem','1rem','1.0625rem','1.125rem','1.25rem','1.375rem','1.5rem'];
+const FS_LABELS =['Standaard','Heel klein','Klein','Klein+','Compact','Normaal','Normaal+','Groot','Groter','Extra groot','Mega','XL','XXL'];
+function onFontSizeSlider(key,idx,type) {
+  const steps=type==='hero'?FS_HERO:type==='section'?FS_SECT:FS_BODY;
+  const val=steps[idx]||'';
+  const hidden=document.getElementById('th-'+key);
+  if(hidden) hidden.value=val;
+  const lbl=document.getElementById('sl-'+key.replace('_size','')+'_lbl')||document.getElementById('sl-'+key+'_lbl');
+  if(lbl) lbl.textContent=FS_LABELS[idx]||'';
+  scheduleThemePreview();
+}
+function syncFontSizeSlider(sliderId, val, type) {
+  const steps=type==='hero'?FS_HERO:type==='section'?FS_SECT:FS_BODY;
+  const idx=Math.max(0, steps.indexOf(val));
+  const slider=document.getElementById(sliderId);
+  // label id: sl-hero_h1_lbl / sl-section_h2_lbl / sl-body_font_lbl
+  const lblId=sliderId.replace('sl-','sl-').replace('_size','')+'_lbl';
+  const lbl=document.getElementById(lblId);
+  if(slider) slider.value=idx;
+  if(lbl) lbl.textContent=FS_LABELS[idx]||'Standaard';
+}
+
+// ── Color helpers ───────────────────────────────────────────
+function hexToRgb(hex){
+  const h=hex.replace('#','');
+  const b=h.length===3?h.split('').map(c=>c+c).join(''):h;
+  return{r:parseInt(b.slice(0,2),16),g:parseInt(b.slice(2,4),16),b:parseInt(b.slice(4,6),16)};
+}
+function rgbToHex(r,g,b){return'#'+[r,g,b].map(v=>Math.round(v).toString(16).padStart(2,'0')).join('');}
+function parseColorVal(val){
+  if(!val) return{hex:'#0d1017',alpha:100};
+  const rm=val.match(/rgba?\((\d+)[, ]+(\d+)[, ]+(\d+)(?:[, ]+([\d.]+))?\)/);
+  if(rm) return{hex:rgbToHex(+rm[1],+rm[2],+rm[3]),alpha:rm[4]!=null?Math.round(+rm[4]*100):100};
+  return{hex:val,alpha:100};
+}
+function buildColorVal(hex,alpha){
+  if(alpha>=100) return hex;
+  const{r,g,b}=hexToRgb(hex);
+  return`rgba(${r},${g},${b},${(alpha/100).toFixed(2)})`;
+}
+function updateAlphaTrack(key) {
+  const sw=document.getElementById('cp-sw-'+key)||document.getElementById('sec-sw-'+key);
+  const hex=(document.getElementById('th-'+key)||{}).value||'#0d1017';
+  const alpha=+(document.getElementById('th-'+key+'_alpha')||{value:100}).value;
+  if(sw) sw.style.background=buildColorVal(hex,alpha);
+  // Update alpha slider gradient overlay
+  const wrap=document.getElementById('th-'+key+'_alpha')?.parentElement;
+  if(wrap&&wrap.classList.contains('cp-alpha-wrap')){
+    const{r,g,b}=hexToRgb(hex);
+    wrap.style.setProperty('--c',`${r},${g},${b}`);
+    wrap.after; // no-op
+    const slider=document.getElementById('th-'+key+'_alpha');
+    if(slider) slider.style.background=`linear-gradient(90deg,rgba(${r},${g},${b},0),rgba(${r},${g},${b},1))`;
+  }
+}
+
+// ── Brand color picker handlers ─────────────────────────────
+function onCpInput(key,value) {
+  const hexField=document.getElementById('th-'+key+'_hex');
+  if(hexField) hexField.value=value;
+  const sw=document.getElementById('cp-sw-'+key);
+  if(sw) sw.style.background=value;
+  scheduleThemePreview();
+}
+function syncColor(key,hex) {
+  const picker=document.getElementById('th-'+key);
+  if(picker&&/^#[0-9a-fA-F]{6}$/.test(hex)){
+    picker.value=hex;
+    const sw=document.getElementById('cp-sw-'+key);
+    if(sw) sw.style.background=hex;
+    scheduleThemePreview();
+  }
+}
+function setCpPreset(key,hex) {
+  const picker=document.getElementById('th-'+key);
+  const hexF  =document.getElementById('th-'+key+'_hex');
+  const sw    =document.getElementById('cp-sw-'+key);
+  if(picker) picker.value=hex;
+  if(hexF)   hexF.value=hex;
+  if(sw)     sw.style.background=hex;
+  scheduleThemePreview();
+}
+// Legacy alias (kept for any old onclick references)
+function setPresetColor(type,hex){setCpPreset(type==='primary'?'primary_color':'accent_color',hex);}
+function onThemeColorInput(key,value){onCpInput(key,value);}
+
+// ── Section background handlers ─────────────────────────────
+const SECTION_BG_KEYS=['nav_bg','hero_bg','creativity_bg','architecture_bg','integration_bg','execution_bg','apply_bg','footer_bg'];
+function toggleSecBg(key) {
+  const on=document.getElementById('th-'+key+'_on').checked;
+  const sw  =document.getElementById('sec-sw-'+key);
+  const extra=document.getElementById('sec-extra-'+key);
+  if(sw)    sw.style.display   =on?'block':'none';
+  if(extra) extra.classList.toggle('open',on);
+  scheduleThemePreview();
+}
+// Legacy alias
+function toggleSectionColor(key){toggleSecBg(key);}
+function onSecBgInput(key,hex) {
+  const sw=document.getElementById('sec-sw-'+key);
+  const alpha=+(document.getElementById('th-'+key+'_alpha')||{value:100}).value;
+  if(sw) sw.style.background=buildColorVal(hex,alpha);
+  scheduleThemePreview();
+}
+function onSecAlpha(key,val) {
+  const pct=document.getElementById('sec-alpha-pct-'+key);
+  if(pct) pct.textContent=val+'%';
+  const hex=(document.getElementById('th-'+key)||{}).value||'#0d1017';
+  const sw=document.getElementById('sec-sw-'+key);
+  if(sw) sw.style.background=buildColorVal(hex,+val);
+  scheduleThemePreview();
+}
+
+// Scroll theme-preview iframe to relevant section
+const THEME_SECTION_MAP={nav_bg:'#cms-hero',hero_bg:'#cms-hero',creativity_bg:'#creativity',architecture_bg:'#architecture',integration_bg:'#integration',execution_bg:'#execution',apply_bg:'#apply',footer_bg:'footer'};
+function scrollThemePreview(key) {
+  const selector=THEME_SECTION_MAP[key];
+  if(!selector) return;
+  const iframe=document.getElementById('theme-preview');
+  if(!iframe||!iframe.contentDocument) return;
+  try{ const el=iframe.contentDocument.querySelector(selector); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }catch{}
+}
+
 async function loadTheme() {
   themeData=await apiFetch('/theme');
   if(typeof themeData!=='object'||Array.isArray(themeData)) themeData={};
-  const defaults={primary_color:'#007AFF',accent_color:'#10b981',bg_color:'#050505',text_color:'#ffffff',
-                  heading_font:'Space Grotesk',body_font:'Inter',base_font_size:'16',section_spacing:'100',card_radius:'20',button_radius:'8'};
+  // Brand colors
+  const defaults={primary_color:'#007AFF',accent_color:'#10b981',heading_font:'Space Grotesk',body_font:'Inter'};
   Object.entries(defaults).forEach(([k,v])=>{
     const val=themeData[k]||v;
-    const el=document.getElementById('th-'+k); if(el) el.value=val;
+    const el =document.getElementById('th-'+k); if(el)  el.value =val;
     const hex=document.getElementById('th-'+k+'_hex'); if(hex) hex.value=val;
+    const sw =document.getElementById('cp-sw-'+k);     if(sw)  sw.style.background=val;
   });
-  updateThemePreview();
+  // Font size sliders
+  syncFontSizeSlider('sl-hero_h1_size',   themeData.hero_h1_size   ||'','hero');
+  syncFontSizeSlider('sl-section_h2_size',themeData.section_h2_size||'','section');
+  syncFontSizeSlider('sl-body_font_size', themeData.body_font_size  ||'','body');
+  ['hero_h1_size','section_h2_size','body_font_size'].forEach(k=>{
+    const h=document.getElementById('th-'+k); if(h) h.value=themeData[k]||'';
+  });
+  // Font previews
+  updateFontPreview('heading');
+  updateFontPreview('body');
+  // Section bg colors with alpha
+  SECTION_BG_KEYS.forEach(k=>{
+    const saved=themeData[k];
+    const on   =document.getElementById('th-'+k+'_on');
+    const extra=document.getElementById('sec-extra-'+k);
+    const sw   =document.getElementById('sec-sw-'+k);
+    if(saved&&on){
+      on.checked=true;
+      const{hex,alpha}=parseColorVal(saved);
+      const picker=document.getElementById('th-'+k);
+      if(picker) picker.value=hex;
+      const alphaSlider=document.getElementById('th-'+k+'_alpha');
+      if(alphaSlider) alphaSlider.value=alpha;
+      const pct=document.getElementById('sec-alpha-pct-'+k);
+      if(pct) pct.textContent=alpha+'%';
+      if(sw)    { sw.style.display='block'; sw.style.background=buildColorVal(hex,alpha); }
+      if(extra) extra.classList.add('open');
+    }
+  });
+  // Content for preview
+  if(!Object.keys(contentData).length) contentData=await apiFetch('/content');
+  loadThemePreview();
 }
 
-function syncColor(key,hex) {
-  const picker=document.getElementById('th-'+key);
-  if(picker&&/^#[0-9a-fA-F]{6}$/.test(hex)) { picker.value=hex; updateThemePreview(); }
+// Device toggle for theme preview iframe
+function setThemeDevice(w,btn) {
+  const iframe=document.getElementById('theme-preview');
+  if(iframe) iframe.style.maxWidth=w;
+  document.querySelectorAll('#page-theme .device-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
 }
 
-function updateThemePreview() {
-  const primary=document.getElementById('th-primary_color')?.value||'#007AFF';
-  const accent=document.getElementById('th-accent_color')?.value||'#10b981';
-  const bg=document.getElementById('th-bg_color')?.value||'#050505';
-  const textC=document.getElementById('th-text_color')?.value||'#ffffff';
-  const box=document.getElementById('theme-preview-box');
-  if(!box) return;
-  box.style.background=bg;
-  ['tp-badge','tp-btn1'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.background=primary; });
-  ['tp-h1','tp-h3','tp-card-text'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.color=textC; });
-  const h2=document.getElementById('tp-h2'); if(h2) h2.style.color=accent;
-  const dot=document.getElementById('tp-card-dot'); if(dot) dot.style.background=accent;
-  const sub=document.getElementById('tp-sub'); if(sub) sub.style.color=hexWithAlpha(textC,.55);
+// Debounced live preview for theme page
+let themePreviewTimer=null;
+function scheduleThemePreview() {
+  if(themePreviewTimer) clearTimeout(themePreviewTimer);
+  themePreviewTimer=setTimeout(()=>{
+    const theme=getThemeFromForm();
+    postThemePreview(theme);
+  },400);
 }
 
-function hexWithAlpha(hex,alpha) {
+// Load initial theme preview via GET (shows saved content + current theme)
+async function loadThemePreview() {
+  const loading=document.getElementById('theme-preview-loading');
+  const iframe=document.getElementById('theme-preview');
+  if(!iframe) return;
+  if(loading) loading.style.display='flex';
   try {
-    const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
-    return `rgba(${r},${g},${b},${alpha})`;
-  } catch { return hex; }
+    const r=await fetch(API+'/preview',{headers:{'Authorization':'Bearer '+token}});
+    if(!r.ok) throw new Error(r.status);
+    const html=await r.text();
+    // Set onload BEFORE srcdoc so we don't miss the event
+    iframe.onload=()=>{ if(loading) loading.style.display='none'; };
+    iframe.srcdoc=html;
+  } catch(e) { if(loading) loading.style.display='none'; }
 }
 
-document.addEventListener('input',e=>{
-  if(e.target.type==='color'&&e.target.id.startsWith('th-')){
-    const key=e.target.id.slice(3);
-    const hex=document.getElementById('th-'+key+'_hex');
-    if(hex) hex.value=e.target.value;
-    updateThemePreview();
-  }
-});
+// POST live preview for theme page — shows content + new theme without saving
+async function postThemePreview(theme) {
+  const loading=document.getElementById('theme-preview-loading');
+  const iframe=document.getElementById('theme-preview');
+  if(!iframe) return;
+  // Show subtle loading pulse on the preview border
+  iframe.style.transition='opacity .15s';
+  iframe.style.opacity='.6';
+  try {
+    const r=await fetch(API+'/preview',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({content:contentData,theme})
+    });
+    if(!r.ok) { iframe.style.opacity='1'; return; }
+    const html=await r.text();
+    // Set onload BEFORE srcdoc so we don't miss the event
+    iframe.onload=()=>{ iframe.style.opacity='1'; if(loading) loading.style.display='none'; };
+    iframe.srcdoc=html;
+  } catch{ iframe.style.opacity='1'; }
+}
 
 function getThemeFromForm() {
-  const keys=['primary_color','accent_color','bg_color','text_color','heading_font','body_font','base_font_size','section_spacing','card_radius','button_radius'];
   const data={};
-  keys.forEach(k=>{ const el=document.getElementById('th-'+k); if(el) data[k]=el.value; });
+  // Brand colors
+  ['primary_color','accent_color'].forEach(k=>{
+    const el=document.getElementById('th-'+k); if(el&&el.value) data[k]=el.value;
+  });
+  // Fonts
+  ['heading_font','body_font'].forEach(k=>{
+    const el=document.getElementById('th-'+k); if(el&&el.value) data[k]=el.value;
+  });
+  // Font sizes from hidden inputs
+  ['hero_h1_size','section_h2_size','body_font_size'].forEach(k=>{
+    const el=document.getElementById('th-'+k); if(el&&el.value) data[k]=el.value;
+  });
+  // Section bgs: include rgba if alpha < 100
+  SECTION_BG_KEYS.forEach(k=>{
+    const on    =document.getElementById('th-'+k+'_on');
+    const picker=document.getElementById('th-'+k);
+    const alphaEl=document.getElementById('th-'+k+'_alpha');
+    if(on&&on.checked&&picker){
+      const alpha=alphaEl?+alphaEl.value:100;
+      data[k]=buildColorVal(picker.value,alpha);
+    }
+  });
   return data;
 }
 
@@ -1246,7 +2193,7 @@ async function saveTheme(btn) {
   const orig=btn.innerHTML; btn.innerHTML='<span class="spinner"></span>'; btn.disabled=true;
   const r=await apiFetch('/theme','POST',data);
   btn.innerHTML=orig; btn.disabled=false;
-  if(r.ok){ themeData=data; toast('✅ Thema opgeslagen! Publiceer de website om de kleuren live te zien.','success'); }
+  if(r.ok){ themeData=data; toast('✅ Thema opgeslagen! Druk op Publiceer om het live te zetten.','success'); loadThemePreview(); }
   else toast('❌ '+(r.error||'Mislukt'),'error');
 }
 
