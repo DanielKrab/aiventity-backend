@@ -146,7 +146,7 @@
   <nav class="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
 
     <a id="nav-logo" href="#" class="flex items-center leading-none" style="text-decoration:none;">
-      <img src="/logo-wordmark.png" alt="Aiventity" style="height:22px;width:auto;object-fit:contain;display:block;opacity:0.85;" />
+      {% if nav.get('nav_logo','') %}<img src="{{ nav.get('nav_logo','') }}" alt="Logo" style="height:22px;width:auto;object-fit:contain;display:block;opacity:0.85;" />{% else %}<img src="/logo-wordmark.png" alt="Logo" style="height:22px;width:auto;object-fit:contain;display:block;opacity:0.85;" />{% endif %}
     </a>
 
     <ul class="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide text-white/60">
@@ -950,8 +950,7 @@
   </div>
   <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/30 mb-6">
     <div class="flex items-center gap-2">
-      <img src="/logo.png" alt="Aiventity" style="height:20px;width:auto;opacity:0.7;">
-      <span class="font-heading font-semibold text-white/60">Aiventity</span>
+      {% if nav.get('nav_logo','') %}<img src="{{ nav.get('nav_logo','') }}" alt="Logo" style="height:20px;width:auto;opacity:0.6;">{% else %}<img src="/logo-wordmark.png" alt="Logo" style="height:20px;width:auto;opacity:0.6;">{% endif %}
       <span class="mx-2">·</span>
       <span data-en="{{ ft.get('tagline_en','') }}" data-nl="{{ ft.get('tagline_nl','') }}">{{ ft.get('tagline_en','') }}</span>
     </div>
