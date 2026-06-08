@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-01T19:59:23.274Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: integration"
-  },
-  {
     "ts": "2026-06-01T19:59:47.699Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: monday-1.svg"
@@ -998,5 +993,10 @@
     "ts": "2026-06-08T21:04:28.823Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
+  },
+  {
+    "ts": "2026-06-08T21:04:32.208Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation"
   }
 ]
