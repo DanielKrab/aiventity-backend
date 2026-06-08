@@ -90,13 +90,15 @@
     .reveal.will-animate { opacity: 0; transform: translateY(30px); }
     .reveal.will-animate.visible { opacity: 1; transform: translateY(0); }
 
-    /* ── DNA mockup: mobiel schalen ── */
+    /* ── DNA mockup: mobiel ── */
     @media (max-width: 767px) {
       #dna-outer {
         transform: none !important;
-        zoom: 0.52;
         box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.07) !important;
       }
+      /* Verhinder horizontale overflow door 3D transform op de gehele pagina */
+      body { overflow-x: hidden; }
+      section { overflow-x: hidden; }
     }
 
     /* ── Feature card hover ── */
