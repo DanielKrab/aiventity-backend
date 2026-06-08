@@ -993,5 +993,10 @@
     "ts": "2026-06-08T20:55:57.470Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
+  },
+  {
+    "ts": "2026-06-08T20:56:08.191Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation"
   }
 ]
