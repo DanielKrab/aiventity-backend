@@ -63,7 +63,7 @@
     .glass-blue { background: rgba(0,122,255,0.08);  border: 1px solid rgba(0,122,255,0.25);   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
 
     /* ── Nav ── */
-    .nav-blur { background: rgba(5,5,5,0.18); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .nav-blur { background: rgba(5,5,5,0.10); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.02); }
     img[src=""],img:not([src]) { display:none!important; }
 
     /* ── Logo float ── */
@@ -144,7 +144,7 @@
 
 <!-- ══ NAV ══════════════════════════════════════════════════════════════ -->
 <header id="nav" class="fixed top-0 left-0 right-0 z-50 nav-blur">
-  <nav class="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
+  <nav class="max-w-7xl mx-auto px-6 py-1 flex items-center justify-between">
 
     <a id="nav-logo" href="#" class="flex items-center leading-none" style="text-decoration:none;">
       <img src="{{ nav.get('nav_logo','') }}" alt="" id="site-nav-logo" style="height:{{ nav.get('nav_logo_height','22') }}px;width:auto;object-fit:contain;display:block;opacity:0.85;" />
