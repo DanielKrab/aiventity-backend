@@ -89,5 +89,12 @@
     "type": "image/webp",
     "size": 24260,
     "uploaded": "2026-06-08T10:09:28.281Z"
+  },
+  {
+    "name": "ai_colleagues_screenshot.webp",
+    "url": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/ai_colleagues_screenshot.webp",
+    "type": "image/webp",
+    "size": 89804,
+    "uploaded": "2026-06-08T18:49:42.317Z"
   }
 ]
