@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-01T20:03:36.510Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: integration"
-  },
-  {
     "ts": "2026-06-01T20:03:48.869Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: formation-google-sheet-belgique.png"
@@ -998,5 +993,10 @@
     "ts": "2026-06-08T21:06:52.663Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation"
+  },
+  {
+    "ts": "2026-06-08T21:06:54.624Z",
+    "action": "publish",
+    "detail": "Website gepubliceerd op Netlify"
   }
 ]
