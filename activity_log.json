@@ -548,5 +548,10 @@
     "ts": "2026-06-08T10:19:00.724Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: architecture"
+  },
+  {
+    "ts": "2026-06-08T10:19:14.042Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: architecture"
   }
 ]
