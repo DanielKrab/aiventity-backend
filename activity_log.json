@@ -588,5 +588,10 @@
     "ts": "2026-06-08T17:47:07.226Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
+  },
+  {
+    "ts": "2026-06-08T18:36:35.896Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero"
   }
 ]
