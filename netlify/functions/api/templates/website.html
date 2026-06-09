@@ -986,10 +986,10 @@
       var txt = el.getAttribute('data-' + lang);
       if (txt && txt.trim()) {
         el.textContent = txt;
-      } else if (lang === 'en') {
-        // EN ontbreekt — toon NL als fallback zodat er altijd tekst staat
-        var nl = el.getAttribute('data-nl');
-        if (nl && nl.trim()) el.textContent = nl;
+      } else {
+        var other = lang === 'en' ? 'nl' : 'en';
+        var fb = el.getAttribute('data-' + other);
+        if (fb && fb.trim()) el.textContent = fb;
       }
     });
     document.documentElement.lang = lang;
