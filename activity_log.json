@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-02T14:21:39.589Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: hero"
-  },
-  {
     "ts": "2026-06-02T14:33:55.327Z",
     "action": "settings_save",
     "detail": "Website instellingen opgeslagen"
@@ -998,5 +993,10 @@
     "ts": "2026-06-09T18:53:32.802Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
+  },
+  {
+    "ts": "2026-06-09T18:59:53.410Z",
+    "action": "media_upload",
+    "detail": "Bestand geüpload: Screenshot_2026-06-09_at_20.19.45.png"
   }
 ]
