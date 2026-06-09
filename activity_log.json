@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-02T10:51:04.091Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: apply"
-  },
-  {
     "ts": "2026-06-02T11:09:40.031Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: Screenshot_2026-06-02_at_13.08.37.png"
@@ -996,6 +991,11 @@
   },
   {
     "ts": "2026-06-09T18:38:12.802Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: creativity"
+  },
+  {
+    "ts": "2026-06-09T18:38:29.751Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: creativity"
   }
