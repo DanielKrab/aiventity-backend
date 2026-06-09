@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-02T13:42:35.501Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: hero"
-  },
-  {
     "ts": "2026-06-02T14:21:27.409Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: footer"
@@ -996,6 +991,11 @@
   },
   {
     "ts": "2026-06-09T18:53:18.812Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero"
+  },
+  {
+    "ts": "2026-06-09T18:53:30.544Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero"
   }
