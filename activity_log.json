@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-02T10:35:06.442Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: dna_slides"
-  },
-  {
     "ts": "2026-06-02T10:47:22.052Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: architecture"
@@ -998,5 +993,10 @@
     "ts": "2026-06-09T18:34:19.603Z",
     "action": "theme_save",
     "detail": "Thema-instellingen opgeslagen"
+  },
+  {
+    "ts": "2026-06-09T18:35:37.748Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: creativity"
   }
 ]
