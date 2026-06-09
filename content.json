@@ -154,7 +154,7 @@
     "c3_text_nl": "Teams delegeren subtaken automatisch aan gespecialiseerde uitvoeringsgerichte digitale collega's.",
     "c3_text_en": "Teams automatically delegate subtasks to specialized execution-oriented digital colleagues.",
     "slide1_img": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/ai_colleagues_screenshot.webp",
-    "slide2_img": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/ai_colleagues_platform.png",
+    "slide2_img": "",
     "slide3_img": "",
     "label_nl": "02 — ARCHITECTUUR",
     "label_en": "02 — ARCHITECTURE"
