@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-02T13:37:06.941Z",
-    "action": "translate",
-    "detail": "Auto-vertaling NL→EN uitgevoerd"
-  },
-  {
     "ts": "2026-06-02T13:42:35.501Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero"
@@ -998,5 +993,10 @@
     "ts": "2026-06-09T18:48:38.135Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
+  },
+  {
+    "ts": "2026-06-09T18:53:18.812Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero"
   }
 ]
