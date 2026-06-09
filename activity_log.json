@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-02T14:33:55.327Z",
-    "action": "settings_save",
-    "detail": "Website instellingen opgeslagen"
-  },
-  {
     "ts": "2026-06-02T14:40:55.778Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: architecture"
@@ -998,5 +993,10 @@
     "ts": "2026-06-09T18:59:53.410Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: Screenshot_2026-06-09_at_20.19.45.png"
+  },
+  {
+    "ts": "2026-06-09T18:59:57.399Z",
+    "action": "media_upload",
+    "detail": "Bestand geüpload: Screenshot_2026-06-09_at_20.17.37.png"
   }
 ]
