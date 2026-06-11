@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-08T10:09:29.305Z",
-    "action": "media_upload",
-    "detail": "Bestand geüpload: whatsapp-logo-whatsapp-logo-transparent-whatsapp-icon-transparent-free-free-png.webp"
-  },
-  {
     "ts": "2026-06-08T10:09:35.565Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
@@ -998,5 +993,10 @@
     "ts": "2026-06-11T07:16:30.666Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: architecture"
+  },
+  {
+    "ts": "2026-06-11T07:16:33.551Z",
+    "action": "publish",
+    "detail": "Website gepubliceerd op Netlify"
   }
 ]
