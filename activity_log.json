@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-08T20:32:37.379Z",
-    "action": "publish",
-    "detail": "Website gepubliceerd op Netlify"
-  },
-  {
     "ts": "2026-06-08T20:37:55.062Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: Logo-Aiventity__1_.png"
@@ -996,6 +991,11 @@
   },
   {
     "ts": "2026-06-15T14:21:50.377Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero"
+  },
+  {
+    "ts": "2026-06-15T14:21:52.452Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero"
   }
