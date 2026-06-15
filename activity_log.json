@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-08T18:49:49.133Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: architecture"
-  },
-  {
     "ts": "2026-06-08T18:50:02.546Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: architecture"
@@ -998,5 +993,10 @@
     "ts": "2026-06-15T14:09:30.138Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
+  },
+  {
+    "ts": "2026-06-15T14:10:46.117Z",
+    "action": "media_upload",
+    "detail": "Bestand geüpload: 655b60964be1a1b36c746e65_Pipedrive-Emblem__1_.png"
   }
 ]
