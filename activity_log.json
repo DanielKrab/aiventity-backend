@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-08T18:46:55.382Z",
-    "action": "publish",
-    "detail": "Website gepubliceerd op Netlify"
-  },
-  {
     "ts": "2026-06-08T18:49:43.144Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: ai_colleagues_screenshot.webp"
@@ -998,5 +993,10 @@
     "ts": "2026-06-15T14:09:25.382Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
+  },
+  {
+    "ts": "2026-06-15T14:09:27.451Z",
+    "action": "publish",
+    "detail": "Website gepubliceerd op Netlify"
   }
 ]
