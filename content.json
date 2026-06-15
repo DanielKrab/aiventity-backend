@@ -164,6 +164,22 @@
     "nav_logo_height": "120",
     "nav_bar_padding": "1",
     "nav_bar_alpha": "0.00",
-    "nav_bar_height": "44"
+    "nav_bar_height": "44",
+    "nav1_title_nl": "Hoe het werkt",
+    "nav1_title_en": "How it works",
+    "nav1_sub_nl": "Agents op elk knelpunt",
+    "nav1_sub_en": "Agents for every bottleneck",
+    "nav2_title_nl": "Architectuur",
+    "nav2_title_en": "Architecture",
+    "nav2_sub_nl": "Het cognitieve fundament",
+    "nav2_sub_en": "The cognitive foundation",
+    "nav3_title_nl": "Integratie",
+    "nav3_title_en": "Integration",
+    "nav3_sub_nl": "Veilig opgebouwd",
+    "nav3_sub_en": "Built securely",
+    "nav4_title_nl": "Jouw beslissing",
+    "nav4_title_en": "Your decision",
+    "nav4_sub_nl": "Geen actie zonder akkoord",
+    "nav4_sub_en": "No action without approval"
   }
 }
