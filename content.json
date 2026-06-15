@@ -22,8 +22,8 @@
     "cta_secondary_href": "#creativity"
   },
   "creativity": {
-    "label_en": "01 — What it does",
-    "label_nl": "01 — Wat het doet",
+    "label_en": "01 — CREATIVITY",
+    "label_nl": "01 — CREATIVITEIT",
     "title_en": "Deployable on any bottleneck in your business.",
     "title_nl": "Inzetbaar op elk knelpunt in je bedrijf.",
     "subtitle_en": "Whether it's procurement, scheduling, communications or analysis — digital colleagues take it on. Every agent retains its context, works securely and gives you full insight into who does what.",
@@ -45,8 +45,8 @@
     "c3_text_nl": "Niets wordt verstuurd, vastgelegd of afgerond zonder jouw akkoord. Je delegeert taken, bewaakt de voortgang en stuurt bij waar nodig. De agents voeren uit — jij bepaalt de richting."
   },
   "integration": {
-    "label_en": "05 — Under the hood",
-    "label_nl": "05 — Onder de motorkap",
+    "label_en": "03 — INTEGRATION",
+    "label_nl": "03 — INTEGRATIE",
     "title_en": "Built securely and ready for what comes next.",
     "title_nl": "Veilig opgebouwd en klaar voor wat komt.",
     "subtitle_en": "For those who want to look further, here is how it works.",
@@ -81,8 +81,8 @@
     "tool8_logo": ""
   },
   "execution": {
-    "label_en": "03 — Always your decision",
-    "label_nl": "03 — Altijd jouw beslissing",
+    "label_en": "04 — EXECUTION",
+    "label_nl": "04 — UITVOERING",
     "title_en": "No action without approval.",
     "title_nl": "Geen actie zonder akkoord.",
     "subtitle_en": "Your digital colleagues prepare everything, but take no step without your approval.",
