@@ -145,5 +145,12 @@
     "type": "image/png",
     "size": 14028,
     "uploaded": "2026-06-15T14:10:45.306Z"
+  },
+  {
+    "name": "instagram-logo_971166-164438.avif",
+    "url": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/instagram-logo_971166-164438.avif",
+    "type": "image/avif",
+    "size": 16428,
+    "uploaded": "2026-06-15T14:11:50.250Z"
   }
 ]
