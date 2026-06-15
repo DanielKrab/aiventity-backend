@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-08T18:50:05.585Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: architecture"
-  },
-  {
     "ts": "2026-06-08T18:50:09.530Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
@@ -998,5 +993,10 @@
     "ts": "2026-06-15T14:11:01.361Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
+  },
+  {
+    "ts": "2026-06-15T14:11:51.006Z",
+    "action": "media_upload",
+    "detail": "Bestand geüpload: instagram-logo_971166-164438.avif"
   }
 ]
