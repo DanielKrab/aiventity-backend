@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-08T10:10:54.575Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: integration"
-  },
-  {
     "ts": "2026-06-08T10:11:19.371Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: architecture"
@@ -998,5 +993,10 @@
     "ts": "2026-06-15T12:39:09.219Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: execution"
+  },
+  {
+    "ts": "2026-06-15T12:39:21.856Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: apply"
   }
 ]
