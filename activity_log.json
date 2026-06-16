@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-08T20:48:29.261Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: footer"
-  },
-  {
     "ts": "2026-06-08T20:48:34.327Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: footer"
@@ -996,6 +991,11 @@
   },
   {
     "ts": "2026-06-16T08:34:18.459Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: integration"
+  },
+  {
+    "ts": "2026-06-16T08:34:20.350Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
   }
