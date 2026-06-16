@@ -131,54 +131,79 @@
     #mobile-menu { display: none; }
     #mobile-menu.open { display: block; }
 
-    /* ── Light mode (default) ── */
+    /* ══ PREMIUM LIGHT MODE — Apple/Stripe aesthetic ══ */
     body.light-mode {
-      background-color: #ffffff !important;
-      color: #0f1117 !important;
+      background-color: #FAFAFA !important;
+      color: #0F172A !important;
     }
     body.light-mode .hero-bg {
       background:
-        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,122,255,0.07) 0%, transparent 65%),
-        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(0,122,255,0.04) 0%, transparent 60%),
-        #ffffff !important;
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,122,255,0.06) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(0,122,255,0.03) 0%, transparent 60%),
+        #FAFAFA !important;
     }
+    /* Glass cards — pure white with soft shadow */
     body.light-mode .glass {
       background: #ffffff !important;
       border-color: rgba(0,0,0,0.07) !important;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04) !important;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 4px 24px rgba(0,0,0,0.05) !important;
     }
     body.light-mode .glass-blue {
-      background: rgba(0,122,255,0.04) !important;
-      border-color: rgba(0,122,255,0.15) !important;
-      box-shadow: 0 1px 3px rgba(0,122,255,0.05) !important;
+      background: rgba(0,122,255,0.05) !important;
+      border-color: rgba(0,122,255,0.18) !important;
+      box-shadow: 0 1px 6px rgba(0,122,255,0.06) !important;
     }
+    /* Nav — clean off-white, thin bottom line only */
     body.light-mode .nav-blur {
-      background: rgba(220,228,245,0.97) !important;
-      border-bottom: 1px solid rgba(0,0,0,0.10) !important;
-      box-shadow: 0 2px 24px rgba(0,0,0,0.09) !important;
+      background: rgba(250,250,250,0.96) !important;
+      border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.05), 0 4px 20px rgba(0,0,0,0.04) !important;
     }
     body.light-mode .divider { background: linear-gradient(90deg,transparent,rgba(0,0,0,0.08),transparent) !important; }
-    body.light-mode .gradient-text { background: linear-gradient(135deg,#0f1117 0%,#007AFF 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-    body.light-mode .feature-card  { border-color: rgba(0,0,0,0.07) !important; box-shadow: 0 2px 12px rgba(0,0,0,0.05) !important; }
-    body.light-mode .feature-card:hover { transform: translateY(-4px); border-color: rgba(0,122,255,0.25) !important; box-shadow: 0 12px 40px rgba(0,122,255,0.10) !important; }
-    body.light-mode .btn-secondary { border-color: rgba(0,0,0,0.15) !important; color: #0f1117 !important; }
-    body.light-mode .btn-secondary:hover { background: rgba(0,122,255,0.06) !important; }
-    /* text colour overrides */
-    body.light-mode .text-white    { color: #0f1117 !important; }
-    body.light-mode .text-white\/75 { color: rgba(15,17,23,0.75) !important; }
-    body.light-mode .text-white\/70 { color: rgba(15,17,23,0.70) !important; }
-    body.light-mode .text-white\/60 { color: rgba(15,17,23,0.60) !important; }
-    body.light-mode .text-white\/55 { color: rgba(15,17,23,0.55) !important; }
-    body.light-mode .text-white\/50 { color: rgba(15,17,23,0.50) !important; }
-    body.light-mode .text-white\/45 { color: rgba(15,17,23,0.45) !important; }
-    body.light-mode .text-white\/40 { color: rgba(15,17,23,0.40) !important; }
-    body.light-mode .text-white\/35 { color: rgba(15,17,23,0.35) !important; }
-    body.light-mode .text-white\/30 { color: rgba(15,17,23,0.30) !important; }
-    body.light-mode .text-white\/25 { color: rgba(15,17,23,0.25) !important; }
-    body.light-mode .text-white\/22 { color: rgba(15,17,23,0.22) !important; }
-    body.light-mode .text-white\/20 { color: rgba(15,17,23,0.20) !important; }
-    body.light-mode .lbtn-off  { color: rgba(15,17,23,0.40) !important; }
-    body.light-mode footer { background: #f7f8fa !important; border-color: rgba(0,0,0,0.06) !important; }
+    /* Gradient text: deep charcoal → blue */
+    body.light-mode .gradient-text {
+      background: linear-gradient(135deg,#0F172A 0%,#007AFF 60%);
+      -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    }
+    /* Feature/section cards */
+    body.light-mode .feature-card {
+      background: #ffffff !important;
+      border-color: rgba(0,0,0,0.07) !important;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.05) !important;
+    }
+    body.light-mode .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0,122,255,0.25) !important;
+      box-shadow: 0 16px 48px rgba(0,122,255,0.10) !important;
+    }
+    /* CTA secondary button — white bg + blue outline */
+    body.light-mode .btn-secondary {
+      background: #ffffff !important;
+      border-color: rgba(0,122,255,0.40) !important;
+      color: #007AFF !important;
+    }
+    body.light-mode .btn-secondary:hover {
+      background: rgba(0,122,255,0.04) !important;
+      border-color: rgba(0,122,255,0.65) !important;
+    }
+    /* ── Text overrides: charcoal headings, slate supporting ── */
+    body.light-mode .text-white     { color: #0F172A !important; }
+    body.light-mode .text-white\/75 { color: rgba(15,23,42,0.80) !important; }
+    body.light-mode .text-white\/70 { color: rgba(15,23,42,0.75) !important; }
+    body.light-mode .text-white\/60 { color: #64748B !important; }
+    body.light-mode .text-white\/55 { color: rgba(100,116,139,0.90) !important; }
+    body.light-mode .text-white\/50 { color: #64748B !important; }
+    body.light-mode .text-white\/45 { color: rgba(100,116,139,0.80) !important; }
+    body.light-mode .text-white\/40 { color: rgba(100,116,139,0.65) !important; }
+    body.light-mode .text-white\/35 { color: rgba(100,116,139,0.55) !important; }
+    body.light-mode .text-white\/30 { color: rgba(100,116,139,0.45) !important; }
+    body.light-mode .text-white\/25 { color: rgba(100,116,139,0.38) !important; }
+    body.light-mode .text-white\/22 { color: rgba(100,116,139,0.32) !important; }
+    body.light-mode .text-white\/20 { color: rgba(100,116,139,0.28) !important; }
+    body.light-mode .lbtn-off  { color: rgba(15,23,42,0.40) !important; }
+    /* Footer — light slate */
+    body.light-mode footer { background: #F1F5F9 !important; border-color: rgba(0,0,0,0.06) !important; }
+    /* Cross/grid pattern — black at 0.14 opacity, clearly visible on #FAFAFA */
     body.light-mode .noise::before {
       background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.14'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") !important;
       opacity: 1 !important;
@@ -187,11 +212,11 @@
     /* theme toggle icon swap */
     body:not(.light-mode) #theme-icon-moon { display: none; }
     body.light-mode #theme-icon-sun { display: none; }
-    /* Hero console: exact dark look on light background */
+    /* ══ LIVE WORKFLOW ENGINE — stays dark inside light page ══ */
     body.light-mode #hero-console {
       background: #0d1424 !important;
       border-color: rgba(255,255,255,0.07) !important;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.06) !important;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.30), 0 0 0 1px rgba(255,255,255,0.06), 0 0 60px rgba(0,122,255,0.08) !important;
     }
     body.light-mode #hero-console .glass      { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.14) !important; box-shadow: none !important; }
     body.light-mode #hero-console .glass-blue { background: rgba(0,122,255,0.15) !important; border-color: rgba(0,122,255,0.35) !important; box-shadow: none !important; }
@@ -205,9 +230,9 @@
     body.light-mode #hero-console .text-white\/20 { color: rgba(255,255,255,0.20) !important; }
     body.light-mode #hero-console .divider        { background: linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent) !important; }
     body.light-mode #dna-outer { filter: none !important; }
-    /* nav text on light */
-    body.light-mode #nav a, body.light-mode #nav ul li a { color: rgba(15,17,23,0.55) !important; }
-    body.light-mode #nav a:hover { color: #0f1117 !important; }
+    /* Nav text — slate grey, charcoal on hover */
+    body.light-mode #nav a, body.light-mode #nav ul li a { color: #64748B !important; font-weight: 500; }
+    body.light-mode #nav a:hover { color: #0F172A !important; }
 
     /* ── FAQ accordion ── */
     .faq-a { transition: max-height 0.3s ease, opacity 0.3s ease; overflow: hidden; }
