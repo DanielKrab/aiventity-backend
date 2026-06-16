@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-08T20:44:28.082Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: navigation"
-  },
-  {
     "ts": "2026-06-08T20:44:40.186Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
@@ -998,5 +993,10 @@
     "ts": "2026-06-16T08:33:59.533Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
+  },
+  {
+    "ts": "2026-06-16T08:34:11.889Z",
+    "action": "media_upload",
+    "detail": "Bestand geüpload: instagram-vector-logo-icon-social-media-logotype_901408-392-Photoroom.png"
   }
 ]
