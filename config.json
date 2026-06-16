@@ -13,17 +13,17 @@
   "netlify_site_id": "5559f234-9246-4edf-a2c5-778983c63285",
   "secret_key": "00e3323101f0141b53f24be521309c051da43d3947fad78ffe6fe29a7cf719d0",
   "theme": {
-    "primary_color": "#007aff",
-    "accent_color": "#a78bfa",
+    "primary_color": "#0433ff",
+    "accent_color": "#10b981",
     "heading_font": "Inter",
     "body_font": "Open Sans",
     "nav_bg": "#070d1c",
     "hero_h1_size": "clamp(1.25rem,3vw,1.875rem)",
     "section_h2_size": "clamp(1.25rem,3vw,1.75rem)",
     "body_font_size": "0.8125rem",
-    "custom_css": "/* ── Dark navy logo in light mode ── */\nbody.light-mode #site-nav-logo{filter:brightness(0) invert(1) sepia(1) saturate(5000%) hue-rotate(160deg) brightness(0.22) saturate(0.47)!important;opacity:1!important;}\n/* ── Pure black nav links in light mode ── */\nbody.light-mode #nav ul li a{color:#000000!important;}\nbody.light-mode #nav ul li a:hover{color:#007AFF!important;}"
+    "custom_css": "/* ── Dark navy logo in light mode ── */\nbody.light-mode #site-nav-logo{filter:brightness(0) invert(1) sepia(1) saturate(5000%) hue-rotate(160deg) brightness(0.22) saturate(0.47)!important;opacity:1!important;}\n/* ── Pure black nav links in light mode ── */\nbody.light-mode #nav ul li a{color:#000000!important;}\nbody.light-mode #nav ul li a:hover{color:#007AFF!important;}\n/* ── Tekst in blauwe knoppen blijft altijd wit ── */\nbody.light-mode .btn-primary,\nbody.light-mode .btn-primary *,\nbody.light-mode a.btn-primary,\nbody.light-mode button.btn-primary{color:#ffffff!important;}"
   },
-  "last_published": "16-6-2026, 13:47:42",
+  "last_published": "16-6-2026, 13:28:37",
   "site_name": "Aiventity",
   "instagram_url": "aiventity"
 }
