@@ -78,7 +78,22 @@
     "tool7_logo": "",
     "tool8_name": "",
     "tool8_icon": "",
-    "tool8_logo": ""
+    "tool8_logo": "",
+    "mcep_btn_nl": "Bekijk alle integraties",
+    "mcep_btn_url": "#",
+    "tool9_name": "",
+    "tool9_icon": "",
+    "tool9_logo": "",
+    "tool10_name": "",
+    "tool10_icon": "",
+    "tool10_logo": "",
+    "tool11_name": "",
+    "tool11_icon": "",
+    "tool11_logo": "",
+    "tool12_name": "",
+    "tool12_icon": "",
+    "tool12_logo": "",
+    "mcep_btn_en": "View all integrations"
   },
   "execution": {
     "label_en": "04 — EXECUTION",
