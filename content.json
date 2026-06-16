@@ -136,7 +136,8 @@
     "title_en": "",
     "cta_nl": "",
     "cta_en": "",
-    "cta_href": ""
+    "cta_href": "",
+    "btn_href": ""
   },
   "footer": {
     "tagline_en": "Think. Automate. Execute.",
