@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-08T20:38:17.447Z",
-    "action": "media_upload",
-    "detail": "Bestand geüpload: Logo-Aiventity__1_-Photoroom.png"
-  },
-  {
     "ts": "2026-06-08T20:38:22.219Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation"
@@ -998,5 +993,10 @@
     "ts": "2026-06-15T14:22:01.441Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
+  },
+  {
+    "ts": "2026-06-16T08:00:35.151Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation, faq"
   }
 ]
