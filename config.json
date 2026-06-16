@@ -23,7 +23,7 @@
     "body_font_size": "0.8125rem",
     "custom_css": "/* ── Dark navy logo in light mode ── */\nbody.light-mode #site-nav-logo{filter:brightness(0) invert(1) sepia(1) saturate(5000%) hue-rotate(160deg) brightness(0.22) saturate(0.47)!important;opacity:1!important;}\n/* ── Pure black nav links in light mode ── */\nbody.light-mode #nav ul li a{color:#000000!important;}\nbody.light-mode #nav ul li a:hover{color:#007AFF!important;}\n/* ── Tekst in blauwe knoppen blijft altijd wit (hogere specificiteit wint van .text-white) ── */\nbody.light-mode .btn-primary.text-white,\nbody.light-mode .text-white.btn-primary,\nbody.light-mode .btn-primary,\nbody.light-mode .btn-primary *,\nbody.light-mode a.btn-primary,\nbody.light-mode button.btn-primary{color:#ffffff!important;}\n/* ── Workflow console tekst: behoud wit in light mode ── */\nbody.light-mode #hero-console{color:rgba(255,255,255,0.80)!important;}"
   },
-  "last_published": "16-6-2026, 14:29:47",
+  "last_published": "16-6-2026, 14:29:53",
   "site_name": "Aiventity",
   "instagram_url": "aiventity"
 }
