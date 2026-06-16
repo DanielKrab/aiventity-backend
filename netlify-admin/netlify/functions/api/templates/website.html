@@ -860,23 +860,78 @@
     <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool6_logo','') }}" data-icon="{{ ig.get('tool6_icon','🔶') }}">
       <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool6_name','HubSpot') }}</span>
     </div>
-    <div style="display:none" class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool7_logo','') }}" data-icon="{{ ig.get('tool7_icon','') }}">
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool7_logo','') }}" data-icon="{{ ig.get('tool7_icon','') }}">
       <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool7_name','') }}</span>
     </div>
-    <div style="display:none" class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool8_logo','') }}" data-icon="{{ ig.get('tool8_icon','') }}">
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool8_logo','') }}" data-icon="{{ ig.get('tool8_icon','') }}">
       <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool8_name','') }}</span>
+    </div>
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool9_logo','') }}" data-icon="{{ ig.get('tool9_icon','') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool9_name','') }}</span>
+    </div>
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool10_logo','') }}" data-icon="{{ ig.get('tool10_icon','') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool10_name','') }}</span>
+    </div>
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool11_logo','') }}" data-icon="{{ ig.get('tool11_icon','') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool11_name','') }}</span>
+    </div>
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool12_logo','') }}" data-icon="{{ ig.get('tool12_icon','') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool12_name','') }}</span>
     </div>
   </div>
 
-  <div class="glass rounded-2xl p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center gap-6 reveal">
-    <div class="w-14 h-14 rounded-2xl bg-ai-blue/15 flex items-center justify-center shrink-0 animate-glow-pulse">
-      <i data-lucide="network" class="w-7 h-7 text-ai-blue"></i>
-    </div>
-    <div>
-      <h3 class="font-heading font-bold text-xl mb-1"
-          data-en="{{ ig.get('mcep_title_en','') }}" data-nl="{{ ig.get('mcep_title_nl','') }}">{{ ig.get('mcep_title_en','') }}</h3>
-      <p class="text-white/50 text-sm leading-relaxed max-w-2xl"
-         data-en="{{ ig.get('mcep_text_en','') }}" data-nl="{{ ig.get('mcep_text_nl','') }}">{{ ig.get('mcep_text_en','') }}</p>
+  <!-- ── CONNECT YOUR STACK CARD ─────────────────────────────────────────── -->
+  <div class="glass rounded-2xl p-8 md:p-10 reveal" style="border:1px solid rgba(0,122,255,0.15);overflow:hidden">
+    <div class="flex flex-col md:flex-row items-center gap-8">
+      <!-- LEFT: content + button -->
+      <div class="flex-1">
+        <div style="width:56px;height:56px;border-radius:50%;background:rgba(0,122,255,0.08);border:2px dashed rgba(0,122,255,0.38);display:flex;align-items:center;justify-content:center;margin-bottom:16px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#007AFF" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+        <h3 class="font-heading font-bold text-xl mb-2"
+            data-en="{{ ig.get('mcep_title_en','Connect your favorite tools') }}"
+            data-nl="{{ ig.get('mcep_title_nl','Koppel je favoriete tools') }}">{{ ig.get('mcep_title_en','Connect your favorite tools') }}</h3>
+        <p class="text-white/55 text-sm leading-relaxed mb-6" style="max-width:340px"
+           data-en="{{ ig.get('mcep_text_en','Koppel eenvoudig met de software die jouw team al gebruikt. Nieuwe integraties worden voortdurend toegevoegd.') }}"
+           data-nl="{{ ig.get('mcep_text_nl','Koppel eenvoudig met de software die jouw team al gebruikt. Nieuwe integraties worden voortdurend toegevoegd.') }}">{{ ig.get('mcep_text_en','Koppel eenvoudig met de software die jouw team al gebruikt. Nieuwe integraties worden voortdurend toegevoegd.') }}</p>
+        <a href="{{ ig.get('mcep_btn_url','#') }}"
+           class="btn-secondary inline-flex items-center gap-2 text-sm font-medium"
+           style="padding:10px 20px;border-radius:12px"
+           data-en="{{ ig.get('mcep_btn_en','View all integrations') }}"
+           data-nl="{{ ig.get('mcep_btn_nl','Bekijk alle integraties') }}">
+          {{ ig.get('mcep_btn_nl','Bekijk alle integraties') }}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+      <!-- RIGHT: floating logo cloud -->
+      <div class="hidden md:block relative shrink-0" style="width:310px;height:210px">
+        <!-- connecting lines -->
+        <svg style="position:absolute;inset:0;width:310px;height:210px;overflow:visible;pointer-events:none" viewBox="0 0 310 210">
+          <line x1="60" y1="46" x2="126" y2="104" stroke="rgba(148,163,184,0.3)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="155" y1="22" x2="126" y2="104" stroke="rgba(148,163,184,0.3)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="248" y1="40" x2="206" y2="100" stroke="rgba(148,163,184,0.3)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="126" y1="104" x2="206" y2="100" stroke="rgba(148,163,184,0.3)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="52" y1="148" x2="126" y2="104" stroke="rgba(148,163,184,0.3)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="180" y1="162" x2="206" y2="100" stroke="rgba(148,163,184,0.3)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="52" y1="148" x2="180" y2="162" stroke="rgba(148,163,184,0.3)" stroke-width="1.5" stroke-dasharray="5 4"/>
+        </svg>
+        <!-- logo bubbles — tool1-6 as floating tiles -->
+        <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:20px;left:34px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool1_logo','') }}" data-icon="{{ ig.get('tool1_icon','💬') }}"><span class="tool-media shrink-0"></span></div>
+        <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:0px;left:129px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool2_logo','') }}" data-icon="{{ ig.get('tool2_icon','📁') }}"><span class="tool-media shrink-0"></span></div>
+        <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:14px;right:14px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool3_logo','') }}" data-icon="{{ ig.get('tool3_icon','#️⃣') }}"><span class="tool-media shrink-0"></span></div>
+        <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:78px;left:100px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool5_logo','') }}" data-icon="{{ ig.get('tool5_icon','📋') }}"><span class="tool-media shrink-0"></span></div>
+        <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:74px;right:24px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool4_logo','') }}" data-icon="{{ ig.get('tool4_icon','📸') }}"><span class="tool-media shrink-0"></span></div>
+        <!-- decorative dots -->
+        <div style="position:absolute;top:134px;left:26px;display:flex;gap:6px;align-items:center">
+          <div style="width:18px;height:18px;border-radius:50%;background:#ef4444;opacity:0.75"></div>
+          <div style="width:18px;height:18px;border-radius:50%;background:#10b981;opacity:0.75"></div>
+          <div style="width:16px;height:16px;border-radius:50%;background:#8b5cf6;opacity:0.65"></div>
+        </div>
+        <!-- +100 badge -->
+        <div style="position:absolute;bottom:16px;right:10px;background:rgba(0,122,255,0.10);border:1.5px solid rgba(0,122,255,0.28);border-radius:10px;padding:5px 13px">
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#007AFF">+100</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1506,18 +1561,18 @@
     document.getElementById('apply-success').classList.remove('hidden');
   }
 
-  /* ── Tool grid: inject logos + hide empty tiles ── */
+  /* ── Tool grid: hide empty tiles ── */
   document.querySelectorAll('#tools-grid .tool-tile').forEach(function(tile) {
     var nameEl = tile.querySelector('.tool-name');
-    var mediaEl = tile.querySelector('.tool-media');
     if (!nameEl || !nameEl.textContent.trim()) { tile.style.display = 'none'; return; }
-    var logoUrl = tile.getAttribute('data-logo');
-    if (mediaEl && logoUrl && logoUrl.trim() && !mediaEl.querySelector('img')) {
-      var img = document.createElement('img');
-      img.src = logoUrl.trim();
-      img.alt = '';
-      img.style.cssText = 'width:28px;height:28px;object-fit:contain;flex-shrink:0;';
-      mediaEl.appendChild(img);
+  });
+
+  /* ── ig-bubble logo cloud: emoji fallback when no logo embedded ── */
+  document.querySelectorAll('.ig-bubble').forEach(function(bubble) {
+    var media = bubble.querySelector('.tool-media');
+    if (media && !media.querySelector('img')) {
+      var icon = bubble.getAttribute('data-icon') || '';
+      if (icon) media.innerHTML = '<span style="font-size:22px;line-height:1">' + icon + '</span>';
     }
   });
 </script>
