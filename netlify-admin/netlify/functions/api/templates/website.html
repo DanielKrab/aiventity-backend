@@ -5,6 +5,8 @@
 {% set ex = content.get('execution', {}) %}
 {% set ap = content.get('apply', {}) %}
 {% set ft = content.get('footer', {}) %}
+{% set fq = content.get('faq', {}) %}
+{% set nav = content.get('navigation', {}) %}
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
@@ -63,7 +65,8 @@
     .glass-blue { background: rgba(0,122,255,0.08);  border: 1px solid rgba(0,122,255,0.25);   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
 
     /* ── Nav ── */
-    .nav-blur { background: rgba(5,5,5,0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .nav-blur { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); background: rgba(5,5,5,0.72); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    img[src=""],img:not([src]) { display:none!important; }
 
     /* ── Logo float ── */
     @keyframes logoFloat { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
@@ -95,8 +98,13 @@
       #dna-outer {
         transform: none !important;
         box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.07) !important;
+        zoom: 0.67;
+        max-width: 100%;
       }
-      /* Verhinder horizontale overflow door 3D transform op de gehele pagina */
+      [style*="perspective:1200px"] {
+        overflow: visible !important;
+      }
+      /* Verhinder horizontale overflow */
       body { overflow-x: hidden; }
       section { overflow-x: hidden; }
     }
@@ -123,6 +131,89 @@
     #mobile-menu { display: none; }
     #mobile-menu.open { display: block; }
 
+    /* ── Light mode (default) ── */
+    body.light-mode {
+      background-color: #ffffff !important;
+      color: #0f1117 !important;
+    }
+    body.light-mode .hero-bg {
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,122,255,0.07) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(0,122,255,0.04) 0%, transparent 60%),
+        #ffffff !important;
+    }
+    body.light-mode .glass {
+      background: #ffffff !important;
+      border-color: rgba(0,0,0,0.07) !important;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04) !important;
+    }
+    body.light-mode .glass-blue {
+      background: rgba(0,122,255,0.04) !important;
+      border-color: rgba(0,122,255,0.15) !important;
+      box-shadow: 0 1px 3px rgba(0,122,255,0.05) !important;
+    }
+    body.light-mode .nav-blur {
+      background: rgba(255,255,255,0.92) !important;
+      border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+      box-shadow: 0 1px 20px rgba(0,0,0,0.06) !important;
+    }
+    body.light-mode .divider { background: linear-gradient(90deg,transparent,rgba(0,0,0,0.08),transparent) !important; }
+    body.light-mode .gradient-text { background: linear-gradient(135deg,#0f1117 0%,#007AFF 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+    body.light-mode .feature-card  { border-color: rgba(0,0,0,0.07) !important; box-shadow: 0 2px 12px rgba(0,0,0,0.05) !important; }
+    body.light-mode .feature-card:hover { transform: translateY(-4px); border-color: rgba(0,122,255,0.25) !important; box-shadow: 0 12px 40px rgba(0,122,255,0.10) !important; }
+    body.light-mode .btn-secondary { border-color: rgba(0,0,0,0.15) !important; color: #0f1117 !important; }
+    body.light-mode .btn-secondary:hover { background: rgba(0,122,255,0.06) !important; }
+    /* text colour overrides */
+    body.light-mode .text-white    { color: #0f1117 !important; }
+    body.light-mode .text-white\/75 { color: rgba(15,17,23,0.75) !important; }
+    body.light-mode .text-white\/70 { color: rgba(15,17,23,0.70) !important; }
+    body.light-mode .text-white\/60 { color: rgba(15,17,23,0.60) !important; }
+    body.light-mode .text-white\/55 { color: rgba(15,17,23,0.55) !important; }
+    body.light-mode .text-white\/50 { color: rgba(15,17,23,0.50) !important; }
+    body.light-mode .text-white\/45 { color: rgba(15,17,23,0.45) !important; }
+    body.light-mode .text-white\/40 { color: rgba(15,17,23,0.40) !important; }
+    body.light-mode .text-white\/35 { color: rgba(15,17,23,0.35) !important; }
+    body.light-mode .text-white\/30 { color: rgba(15,17,23,0.30) !important; }
+    body.light-mode .text-white\/25 { color: rgba(15,17,23,0.25) !important; }
+    body.light-mode .text-white\/22 { color: rgba(15,17,23,0.22) !important; }
+    body.light-mode .text-white\/20 { color: rgba(15,17,23,0.20) !important; }
+    body.light-mode .lbtn-off  { color: rgba(15,17,23,0.40) !important; }
+    body.light-mode footer { background: #f7f8fa !important; border-color: rgba(0,0,0,0.06) !important; }
+    body.light-mode .noise::before {
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.09'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") !important;
+      opacity: 1 !important;
+    }
+    body.light-mode .faq-item { background: #fff !important; border-color: rgba(0,0,0,0.07) !important; box-shadow: 0 1px 6px rgba(0,0,0,0.05) !important; }
+    /* theme toggle icon swap */
+    body:not(.light-mode) #theme-icon-moon { display: none; }
+    body.light-mode #theme-icon-sun { display: none; }
+    /* Hero console: exact dark look on light background */
+    body.light-mode #hero-console {
+      background: #0d1424 !important;
+      border-color: rgba(255,255,255,0.07) !important;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.06) !important;
+    }
+    body.light-mode #hero-console .glass      { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.14) !important; box-shadow: none !important; }
+    body.light-mode #hero-console .glass-blue { background: rgba(0,122,255,0.15) !important; border-color: rgba(0,122,255,0.35) !important; box-shadow: none !important; }
+    body.light-mode #hero-console .text-white    { color: #ffffff !important; }
+    body.light-mode #hero-console .text-white\/60 { color: rgba(255,255,255,0.60) !important; }
+    body.light-mode #hero-console .text-white\/50 { color: rgba(255,255,255,0.50) !important; }
+    body.light-mode #hero-console .text-white\/45 { color: rgba(255,255,255,0.45) !important; }
+    body.light-mode #hero-console .text-white\/40 { color: rgba(255,255,255,0.40) !important; }
+    body.light-mode #hero-console .text-white\/30 { color: rgba(255,255,255,0.30) !important; }
+    body.light-mode #hero-console .text-white\/25 { color: rgba(255,255,255,0.25) !important; }
+    body.light-mode #hero-console .text-white\/20 { color: rgba(255,255,255,0.20) !important; }
+    body.light-mode #hero-console .divider        { background: linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent) !important; }
+    body.light-mode #dna-outer { filter: none !important; }
+    /* nav text on light */
+    body.light-mode #nav a, body.light-mode #nav ul li a { color: rgba(15,17,23,0.55) !important; }
+    body.light-mode #nav a:hover { color: #0f1117 !important; }
+
+    /* ── FAQ accordion ── */
+    .faq-a { transition: max-height 0.3s ease, opacity 0.3s ease; overflow: hidden; }
+    .faq-a.collapsed { max-height: 0; opacity: 0; padding-bottom: 0 !important; }
+    .faq-a.expanded  { max-height: 600px; opacity: 1; }
+
     /* ── Lang buttons ── */
     .lbtn { border-radius: 999px; padding: 4px 12px; font-size: 0.75rem; font-weight: 600; transition: all 0.2s; cursor: pointer; border: none; }
     .lbtn-on  { background: rgba(0,122,255,1); color: #fff; }
@@ -137,16 +228,20 @@
 
 
 <!-- ══ NAV ══════════════════════════════════════════════════════════════ -->
+<style>
+  #nav { background: rgba(5,5,5,{{ nav.get('nav_bar_alpha','0.10') }}) !important; }
+  #nav nav { height: {{ nav.get('nav_bar_height','48') }}px !important; }
+  #site-nav-logo { height: {{ nav.get('nav_logo_height','22') }}px !important; }
+</style>
 <header id="nav" class="fixed top-0 left-0 right-0 z-50 nav-blur">
-  <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+  <nav class="max-w-7xl mx-auto px-6 flex items-center justify-between">
 
-    <a id="nav-logo" href="#" class="flex items-center gap-2 group leading-none">
-      <img src="/logo.png" alt="Aiventity" class="h-8 w-8 object-contain logo-float" />
-      <span class="font-heading font-semibold text-white text-[15px] tracking-tight">Aiventity</span>
+    <a id="nav-logo" href="#" class="flex items-center leading-none" style="text-decoration:none;">
+      <img src="{{ nav.get('nav_logo','') }}" alt="" id="site-nav-logo" style="height:{{ nav.get('nav_logo_height','22') }}px;width:auto;object-fit:contain;display:block;opacity:0.85;" />
     </a>
 
     <ul class="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide text-white/60">
-      <li><a href="#creativity"    class="hover:text-white transition-colors duration-200 uppercase tracking-widest text-xs" data-en="Creativity"    data-nl="Creativiteit">Creativity</a></li>
+      <li><a href="#creativity"   class="hover:text-white transition-colors duration-200 uppercase tracking-widest text-xs" data-en="Creativity"   data-nl="Creativiteit">Creativity</a></li>
       <li><a href="#architecture" class="hover:text-white transition-colors duration-200 uppercase tracking-widest text-xs" data-en="Architecture" data-nl="Architectuur">Architecture</a></li>
       <li><a href="#integration"  class="hover:text-white transition-colors duration-200 uppercase tracking-widest text-xs" data-en="Integration"  data-nl="Integratie">Integration</a></li>
       <li><a href="#execution"    class="hover:text-white transition-colors duration-200 uppercase tracking-widest text-xs" data-en="Execution"    data-nl="Uitvoering">Execution</a></li>
@@ -157,6 +252,12 @@
         <button id="lbtn-en" onclick="setLang('en')" class="lbtn lbtn-on">EN</button>
         <button id="lbtn-nl" onclick="setLang('nl')" class="lbtn lbtn-off">NL</button>
       </div>
+      <button id="theme-toggle" onclick="toggleLightMode()" title="Toggle light mode"
+        class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 text-white/60 hover:text-white"
+        style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);">
+        <i id="theme-icon-sun"  data-lucide="sun"  class="w-4 h-4"></i>
+        <i id="theme-icon-moon" data-lucide="moon" class="w-4 h-4"></i>
+      </button>
       <a href="#apply" class="hidden md:inline-flex btn-primary px-5 py-2 rounded-full text-sm font-semibold text-white"
          data-en="{{ h.get('cta_primary_en','') }}" data-nl="{{ h.get('cta_primary_nl','') }}">{{ h.get('cta_primary_en','Apply') }}</a>
       <button id="hamburger" class="md:hidden text-white/70 hover:text-white" onclick="toggleMenu()">
@@ -166,7 +267,7 @@
   </nav>
 
   <div id="mobile-menu" class="md:hidden glass border-t border-white/5 px-6 py-4 space-y-3">
-    <a href="#creativity"    onclick="toggleMenu()" class="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-widest" data-en="Creativity"    data-nl="Creativiteit">Creativity</a>
+    <a href="#creativity"   onclick="toggleMenu()" class="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-widest" data-en="Creativity"   data-nl="Creativiteit">Creativity</a>
     <a href="#architecture" onclick="toggleMenu()" class="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-widest" data-en="Architecture" data-nl="Architectuur">Architecture</a>
     <a href="#integration"  onclick="toggleMenu()" class="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-widest" data-en="Integration"  data-nl="Integratie">Integration</a>
     <a href="#execution"    onclick="toggleMenu()" class="block text-sm text-white/70 hover:text-white py-2 uppercase tracking-widest" data-en="Execution"    data-nl="Uitvoering">Execution</a>
@@ -183,14 +284,14 @@
 <section id="cms-hero" class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-24 pb-16 relative">
 
   <!-- Badge -->
-  <div class="glass-blue rounded-full px-4 py-1.5 text-xs font-medium text-ai-blue tracking-widest uppercase mb-8 inline-flex items-center gap-2 reveal">
-    <span class="ping-dot relative w-2 h-2 rounded-full bg-green-400 inline-block"></span>
-    <span data-en="{{ h.get('badge_en','') }}" data-nl="{{ h.get('badge_nl','') }}">{{ h.get('badge_en','') }}</span>
-  </div>
-
-  <!-- Hero logo -->
-  <div class="logo-float mb-10 reveal">
-    <img src="/logo.png" alt="Aiventity Logo" class="w-48 h-48 md:w-56 md:h-56 object-contain" />
+  <div class="mb-8 reveal" style="display:inline-flex;align-items:center;gap:8px;padding:7px 14px 7px 8px;background:rgba(0,0,0,0.22);border:1px solid rgba(255,255,255,0.07);border-radius:7px;">
+    <div style="display:flex;gap:4px;">
+      <div style="width:20px;height:20px;border-radius:4px;background:rgba(0,122,255,0.18);border:1px solid rgba(0,122,255,0.32);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#60a5fa;font-family:'Space Mono',monospace;letter-spacing:0">A1</div>
+      <div style="width:20px;height:20px;border-radius:4px;background:rgba(16,185,129,0.18);border:1px solid rgba(16,185,129,0.32);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#6ee7b7;font-family:'Space Mono',monospace;letter-spacing:0">A2</div>
+      <div style="width:20px;height:20px;border-radius:4px;background:rgba(129,140,248,0.18);border:1px solid rgba(129,140,248,0.32);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#a5b4fc;font-family:'Space Mono',monospace;letter-spacing:0">A3</div>
+    </div>
+    <span style="width:1px;height:14px;background:rgba(255,255,255,0.09);display:inline-block;flex-shrink:0"></span>
+    <span style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#007AFF;font-family:'Space Grotesk',sans-serif;" data-en="{{ h.get('badge_en','') }}" data-nl="{{ h.get('badge_nl','') }}">{{ h.get('badge_en','') }}</span>
   </div>
 
   <!-- Headline -->
@@ -223,8 +324,8 @@
   </div>
 
   <!-- Live Workflow Console -->
-  <div class="w-full max-w-4xl reveal">
-    <div class="glass rounded-2xl overflow-hidden shadow-2xl">
+  <div class="w-full max-w-4xl reveal dark-zone">
+    <div id="hero-console" class="glass rounded-2xl overflow-hidden shadow-2xl">
       <div class="flex items-center justify-between px-5 py-3 border-b border-white/[0.08]" style="background:rgba(255,255,255,0.02);">
         <div class="flex items-center gap-2">
           <div class="w-3 h-3 rounded-full bg-red-500/70"></div>
@@ -275,33 +376,63 @@
        data-en="{{ cr.get('subtitle_en','') }}" data-nl="{{ cr.get('subtitle_nl','') }}">{{ cr.get('subtitle_en','') }}</p>
   </div>
   <div class="grid md:grid-cols-3 gap-6">
-    <div class="glass feature-card rounded-2xl p-7 reveal" style="transition-delay:0s">
-      <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center mb-5">
-        <span class="text-xl">{{ cr.get('c1_icon', '✦') }}</span>
+
+    <!-- Card 1 — Specialisme (blauw) -->
+    <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0s">
+      <div class="flex items-center justify-between mb-5">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:rgba(0,122,255,0.15);border:1px solid rgba(0,122,255,0.28)">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#007AFF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/>
+            <line x1="12" y1="7" x2="5.8" y2="17.2"/><line x1="12" y1="7" x2="18.2" y2="17.2"/>
+            <line x1="7" y1="19" x2="17" y2="19"/>
+            <circle cx="12" cy="13" r="1.5" fill="#007AFF" stroke="none"/>
+          </svg>
+        </div>
+        <span class="text-xs font-mono text-white/20 tracking-widest">01</span>
       </div>
-      <h3 class="font-heading font-semibold text-lg mb-2"
+      <h3 class="font-heading font-bold text-xl mb-3"
           data-en="{{ cr.get('c1_title_en','') }}" data-nl="{{ cr.get('c1_title_nl','') }}">{{ cr.get('c1_title_en','') }}</h3>
       <p class="text-white/45 text-sm leading-relaxed"
          data-en="{{ cr.get('c1_text_en','') }}" data-nl="{{ cr.get('c1_text_nl','') }}">{{ cr.get('c1_text_en','') }}</p>
     </div>
-    <div class="glass feature-card rounded-2xl p-7 reveal" style="transition-delay:0.1s">
-      <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center mb-5">
-        <span class="text-xl">{{ cr.get('c2_icon', '✦') }}</span>
+
+    <!-- Card 2 — Context & traceability (groen) -->
+    <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0.1s">
+      <div class="flex items-center justify-between mb-5">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.28)">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L4 5.5v5.7c0 4.8 3.4 9.3 8 10.3 4.6-1 8-5.5 8-10.3V5.5L12 2z"/>
+            <path d="M9 12c0 0 1.2-2 3-2s3 2 3 2-1.2 2-3 2-3-2-3-2z"/>
+            <circle cx="12" cy="12" r="1" fill="#10b981" stroke="none"/>
+          </svg>
+        </div>
+        <span class="text-xs font-mono text-white/20 tracking-widest">02</span>
       </div>
-      <h3 class="font-heading font-semibold text-lg mb-2"
+      <h3 class="font-heading font-bold text-xl mb-3"
           data-en="{{ cr.get('c2_title_en','') }}" data-nl="{{ cr.get('c2_title_nl','') }}">{{ cr.get('c2_title_en','') }}</h3>
       <p class="text-white/45 text-sm leading-relaxed"
          data-en="{{ cr.get('c2_text_en','') }}" data-nl="{{ cr.get('c2_text_nl','') }}">{{ cr.get('c2_text_en','') }}</p>
     </div>
-    <div class="glass feature-card rounded-2xl p-7 reveal" style="transition-delay:0.2s">
-      <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center mb-5">
-        <span class="text-xl">{{ cr.get('c3_icon', '✦') }}</span>
+
+    <!-- Card 3 — Regisseur (paars) -->
+    <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0.2s">
+      <div class="flex items-center justify-between mb-5">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.28)">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>
+            <circle cx="9" cy="6" r="2" fill="rgba(139,92,246,0.3)" stroke="#818cf8"/>
+            <circle cx="15" cy="12" r="2" fill="rgba(139,92,246,0.3)" stroke="#818cf8"/>
+            <circle cx="10" cy="18" r="2" fill="rgba(139,92,246,0.3)" stroke="#818cf8"/>
+          </svg>
+        </div>
+        <span class="text-xs font-mono text-white/20 tracking-widest">03</span>
       </div>
-      <h3 class="font-heading font-semibold text-lg mb-2"
+      <h3 class="font-heading font-bold text-xl mb-3"
           data-en="{{ cr.get('c3_title_en','') }}" data-nl="{{ cr.get('c3_title_nl','') }}">{{ cr.get('c3_title_en','') }}</h3>
       <p class="text-white/45 text-sm leading-relaxed"
          data-en="{{ cr.get('c3_text_en','') }}" data-nl="{{ cr.get('c3_text_nl','') }}">{{ cr.get('c3_text_en','') }}</p>
     </div>
+
   </div>
 </section>
 
@@ -323,8 +454,11 @@
 
     <!-- Card 1 -->
     <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0s">
-      <div class="w-12 h-12 rounded-xl mb-6 flex items-center justify-center" style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.25)">
-        <i data-lucide="layers" class="w-5 h-5" style="color:#10b981"></i>
+      <div class="flex items-center justify-between mb-6">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.25)">
+          <i data-lucide="layers" class="w-5 h-5" style="color:#10b981"></i>
+        </div>
+        <span class="text-xs font-mono text-white/20 tracking-widest">01</span>
       </div>
       <h3 class="font-heading font-bold text-xl mb-3"
           data-en="{{ ar.get('c1_title_en', 'Topics as cognitive containers') }}"
@@ -350,15 +484,18 @@
 
     <!-- Card 2 -->
     <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0.1s">
-      <div class="w-12 h-12 rounded-xl mb-6 flex items-center justify-center" style="background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.25)">
-        <i data-lucide="plug-zap" class="w-5 h-5" style="color:#f59e0b"></i>
+      <div class="flex items-center justify-between mb-6">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.25)">
+          <i data-lucide="plug-zap" class="w-5 h-5" style="color:#f59e0b"></i>
+        </div>
+        <span class="text-xs font-mono text-white/20 tracking-widest">02</span>
       </div>
       <h3 class="font-heading font-bold text-xl mb-3"
           data-en="{{ ar.get('c2_title_en', 'The universal adapter (MCP)') }}"
           data-nl="{{ ar.get('c2_title_nl', 'De universele adapter (MCP)') }}">{{ ar.get('c2_title_en', 'The universal adapter (MCP)') }}</h3>
       <p class="text-white/45 text-sm leading-relaxed mb-5"
-         data-en="{{ ar.get('c2_text_en', 'Topics acts as an MCP host, giving digital colleagues direct authorized access to external systems.') }}"
-         data-nl="{{ ar.get('c2_text_nl', 'Topics fungeert als een MCP-host, waardoor digitale collega\'s direct geautoriseerde toegang krijgen tot externe systemen.') }}">{{ ar.get('c2_text_en', 'Topics acts as an MCP host, giving digital colleagues direct authorized access to external systems.') }}</p>
+         data-en="{{ ar.get('c2_text_en','') }}"
+         data-nl="{{ ar.get('c2_text_nl','') }}">{{ ar.get('c2_text_en','') }}</p>
       <ul class="space-y-2.5">
         <li class="flex items-center gap-2.5 text-sm text-white/55">
           <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0" style="color:#f59e0b"></i>
@@ -377,15 +514,18 @@
 
     <!-- Card 3 -->
     <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0.2s">
-      <div class="w-12 h-12 rounded-xl mb-6 flex items-center justify-center" style="background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.25)">
-        <i data-lucide="git-branch" class="w-5 h-5" style="color:#818cf8"></i>
+      <div class="flex items-center justify-between mb-6">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.25)">
+          <i data-lucide="git-branch" class="w-5 h-5" style="color:#818cf8"></i>
+        </div>
+        <span class="text-xs font-mono text-white/20 tracking-widest">03</span>
       </div>
       <h3 class="font-heading font-bold text-xl mb-3"
           data-en="{{ ar.get('c3_title_en', 'A2A collaboration') }}"
           data-nl="{{ ar.get('c3_title_nl', 'A2A-samenwerking') }}">{{ ar.get('c3_title_en', 'A2A collaboration') }}</h3>
       <p class="text-white/45 text-sm leading-relaxed mb-5"
-         data-en="{{ ar.get('c3_text_en', 'Teams automatically delegate subtasks to specialized executing digital colleagues.') }}"
-         data-nl="{{ ar.get('c3_text_nl', 'Teams delegeren deeltaken automatisch naar gespecialiseerde uitvoerende digitale collega\'s.') }}">{{ ar.get('c3_text_en', 'Teams automatically delegate subtasks to specialized executing digital colleagues.') }}</p>
+         data-en="{{ ar.get('c3_text_en','') }}"
+         data-nl="{{ ar.get('c3_text_nl','') }}">{{ ar.get('c3_text_en','') }}</p>
       <ul class="space-y-2.5">
         <li class="flex items-center gap-2.5 text-sm text-white/55">
           <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0" style="color:#818cf8"></i>
@@ -405,10 +545,8 @@
   </div>
 </section>
 
-<div class="divider max-w-7xl mx-auto px-6"></div>
-
-<!-- ══ DNA VAN DE DIGITALE COLLEGA ═══════════════════════════════════════ -->
-<section id="dna" class="py-28 px-6 max-w-7xl mx-auto">
+<!-- ══ DNA VAN DE DIGITALE COLLEGA — VERWIJDERD ══════════════════════════ -->
+<section id="dna" style="display:none">
   <div class="grid md:grid-cols-2 gap-14 items-center">
 
     <!-- Left: numbered steps -->
@@ -667,8 +805,6 @@
   </div>
 </section>
 
-<div class="divider max-w-7xl mx-auto px-6"></div>
-
 <!-- ══ INTEGRATION ══════════════════════════════════════════════════════ -->
 <section id="integration" class="py-28 px-6 max-w-7xl mx-auto">
   <div class="text-center mb-16 reveal">
@@ -680,29 +816,29 @@
        data-en="{{ ig.get('subtitle_en','') }}" data-nl="{{ ig.get('subtitle_nl','') }}">{{ ig.get('subtitle_en','') }}</p>
   </div>
 
-  <div id="tools-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 reveal">
-    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool1_logo','') }}" data-icon="{{ ig.get('tool1_icon','📋') }}">
-      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool1_name','Monday.com') }}</span>
+  <div id="tools-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-12 reveal">
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool1_logo','') }}" data-icon="{{ ig.get('tool1_icon','💬') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool1_name','WhatsApp') }}</span>
     </div>
-    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool2_logo','') }}" data-icon="{{ ig.get('tool2_icon','📌') }}">
-      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool2_name','Pinterest') }}</span>
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool2_logo','') }}" data-icon="{{ ig.get('tool2_icon','📁') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool2_name','Google Drive') }}</span>
     </div>
-    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool3_logo','') }}" data-icon="{{ ig.get('tool3_icon','💬') }}">
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool3_logo','') }}" data-icon="{{ ig.get('tool3_icon','#️⃣') }}">
       <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool3_name','Slack') }}</span>
     </div>
     <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool4_logo','') }}" data-icon="{{ ig.get('tool4_icon','📊') }}">
       <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool4_name','Google Sheets') }}</span>
     </div>
-    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool5_logo','') }}" data-icon="{{ ig.get('tool5_icon','📅') }}">
-      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool5_name','Google Calendar') }}</span>
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool5_logo','') }}" data-icon="{{ ig.get('tool5_icon','📋') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool5_name','Monday') }}</span>
     </div>
-    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool6_logo','') }}" data-icon="{{ ig.get('tool6_icon','📝') }}">
-      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool6_name','Notion') }}</span>
+    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool6_logo','') }}" data-icon="{{ ig.get('tool6_icon','🔶') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool6_name','HubSpot') }}</span>
     </div>
-    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool7_logo','') }}" data-icon="{{ ig.get('tool7_icon','🗃️') }}">
-      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool7_name','Airtable') }}</span>
+    <div style="display:none" class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool7_logo','') }}" data-icon="{{ ig.get('tool7_icon','') }}">
+      <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool7_name','') }}</span>
     </div>
-    <div class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool8_logo','') }}" data-icon="{{ ig.get('tool8_icon','') }}">
+    <div style="display:none" class="tool-tile glass-blue rounded-xl p-4 flex items-center gap-3 feature-card" data-logo="{{ ig.get('tool8_logo','') }}" data-icon="{{ ig.get('tool8_icon','') }}">
       <span class="tool-media shrink-0"></span><span class="text-sm font-medium tool-name">{{ ig.get('tool8_name','') }}</span>
     </div>
   </div>
@@ -748,56 +884,52 @@
   </div>
   <div class="grid md:grid-cols-2 gap-6">
     <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0s">
-      <div class="flex items-start gap-5">
-        <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center shrink-0">
+      <div class="flex items-center justify-between mb-4">
+        <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center" style="border:1px solid rgba(0,122,255,0.2)">
           <i data-lucide="bot" class="w-5 h-5 text-ai-blue"></i>
         </div>
-        <div>
-          <h3 class="font-heading font-semibold text-lg mb-2"
-              data-en="{{ ex.get('c1_title_en','') }}" data-nl="{{ ex.get('c1_title_nl','') }}">{{ ex.get('c1_title_en','') }}</h3>
-          <p class="text-white/45 text-sm leading-relaxed"
-             data-en="{{ ex.get('c1_text_en','') }}" data-nl="{{ ex.get('c1_text_nl','') }}">{{ ex.get('c1_text_en','') }}</p>
-        </div>
+        <span class="text-xs font-mono text-white/20 tracking-widest">01</span>
       </div>
+      <h3 class="font-heading font-semibold text-lg mb-2"
+          data-en="{{ ex.get('c1_title_en','') }}" data-nl="{{ ex.get('c1_title_nl','') }}">{{ ex.get('c1_title_en','') }}</h3>
+      <p class="text-white/45 text-sm leading-relaxed"
+         data-en="{{ ex.get('c1_text_en','') }}" data-nl="{{ ex.get('c1_text_nl','') }}">{{ ex.get('c1_text_en','') }}</p>
     </div>
     <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0.1s">
-      <div class="flex items-start gap-5">
-        <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center shrink-0">
+      <div class="flex items-center justify-between mb-4">
+        <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center" style="border:1px solid rgba(0,122,255,0.2)">
           <i data-lucide="shield-check" class="w-5 h-5 text-ai-blue"></i>
         </div>
-        <div>
-          <h3 class="font-heading font-semibold text-lg mb-2"
-              data-en="{{ ex.get('c2_title_en','') }}" data-nl="{{ ex.get('c2_title_nl','') }}">{{ ex.get('c2_title_en','') }}</h3>
-          <p class="text-white/45 text-sm leading-relaxed"
-             data-en="{{ ex.get('c2_text_en','') }}" data-nl="{{ ex.get('c2_text_nl','') }}">{{ ex.get('c2_text_en','') }}</p>
-        </div>
+        <span class="text-xs font-mono text-white/20 tracking-widest">02</span>
       </div>
+      <h3 class="font-heading font-semibold text-lg mb-2"
+          data-en="{{ ex.get('c2_title_en','') }}" data-nl="{{ ex.get('c2_title_nl','') }}">{{ ex.get('c2_title_en','') }}</h3>
+      <p class="text-white/45 text-sm leading-relaxed"
+         data-en="{{ ex.get('c2_text_en','') }}" data-nl="{{ ex.get('c2_text_nl','') }}">{{ ex.get('c2_text_en','') }}</p>
     </div>
-    <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0s">
-      <div class="flex items-start gap-5">
-        <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center shrink-0">
+    <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0.15s">
+      <div class="flex items-center justify-between mb-4">
+        <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center" style="border:1px solid rgba(0,122,255,0.2)">
           <i data-lucide="bar-chart-2" class="w-5 h-5 text-ai-blue"></i>
         </div>
-        <div>
-          <h3 class="font-heading font-semibold text-lg mb-2"
-              data-en="{{ ex.get('c3_title_en','') }}" data-nl="{{ ex.get('c3_title_nl','') }}">{{ ex.get('c3_title_en','') }}</h3>
-          <p class="text-white/45 text-sm leading-relaxed"
-             data-en="{{ ex.get('c3_text_en','') }}" data-nl="{{ ex.get('c3_text_nl','') }}">{{ ex.get('c3_text_en','') }}</p>
-        </div>
+        <span class="text-xs font-mono text-white/20 tracking-widest">03</span>
       </div>
+      <h3 class="font-heading font-semibold text-lg mb-2"
+          data-en="{{ ex.get('c3_title_en','') }}" data-nl="{{ ex.get('c3_title_nl','') }}">{{ ex.get('c3_title_en','') }}</h3>
+      <p class="text-white/45 text-sm leading-relaxed"
+         data-en="{{ ex.get('c3_text_en','') }}" data-nl="{{ ex.get('c3_text_nl','') }}">{{ ex.get('c3_text_en','') }}</p>
     </div>
-    <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0.1s">
-      <div class="flex items-start gap-5">
-        <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center shrink-0">
+    <div class="glass feature-card rounded-2xl p-8 reveal" style="transition-delay:0.2s">
+      <div class="flex items-center justify-between mb-4">
+        <div class="w-11 h-11 rounded-xl bg-ai-blue/15 flex items-center justify-center" style="border:1px solid rgba(0,122,255,0.2)">
           <i data-lucide="refresh-cw" class="w-5 h-5 text-ai-blue"></i>
         </div>
-        <div>
-          <h3 class="font-heading font-semibold text-lg mb-2"
-              data-en="{{ ex.get('c4_title_en','') }}" data-nl="{{ ex.get('c4_title_nl','') }}">{{ ex.get('c4_title_en','') }}</h3>
-          <p class="text-white/45 text-sm leading-relaxed"
-             data-en="{{ ex.get('c4_text_en','') }}" data-nl="{{ ex.get('c4_text_nl','') }}">{{ ex.get('c4_text_en','') }}</p>
-        </div>
+        <span class="text-xs font-mono text-white/20 tracking-widest">04</span>
       </div>
+      <h3 class="font-heading font-semibold text-lg mb-2"
+          data-en="{{ ex.get('c4_title_en','') }}" data-nl="{{ ex.get('c4_title_nl','') }}">{{ ex.get('c4_title_en','') }}</h3>
+      <p class="text-white/45 text-sm leading-relaxed"
+         data-en="{{ ex.get('c4_text_en','') }}" data-nl="{{ ex.get('c4_text_nl','') }}">{{ ex.get('c4_text_en','') }}</p>
     </div>
   </div>
 </section>
@@ -810,7 +942,7 @@
 
     <!-- Left: bullet points -->
     <div class="reveal">
-      <span class="text-xs font-heading font-semibold text-ai-blue uppercase tracking-widest mb-4 block">HUMAN IN THE LOOP</span>
+      <span class="text-xs font-heading font-semibold text-ai-blue uppercase tracking-widest mb-4 block" data-en="04 — EXECUTION" data-nl="04 — UITVOERING">04 — EXECUTION</span>
       <h2 class="font-heading text-3xl md:text-4xl font-bold mb-4"
           data-en="Seamless collaboration: Human-in-the-Loop"
           data-nl="Naadloze samenwerking: Human-in-the-Loop">Seamless collaboration: Human-in-the-Loop</h2>
@@ -913,6 +1045,102 @@
 
 <div class="divider max-w-7xl mx-auto px-6"></div>
 
+<!-- ══ FAQ ════════════════════════════════════════════════════════════ -->
+<section id="faq" class="py-28 px-6 max-w-3xl mx-auto">
+  <div class="text-center mb-14 reveal">
+    <span class="text-xs font-heading font-semibold text-ai-blue uppercase tracking-widest mb-4 block"
+          data-en="{{ fq.get('label_en','FAQ') }}" data-nl="{{ fq.get('label_nl','FAQ') }}">{{ fq.get('label_en','FAQ') }}</span>
+    <h2 class="font-heading text-4xl md:text-5xl font-bold gradient-text"
+        data-en="{{ fq.get('title_en','Frequently asked questions') }}" data-nl="{{ fq.get('title_nl','Veelgestelde vragen') }}">{{ fq.get('title_en','Frequently asked questions') }}</h2>
+  </div>
+
+  <div class="space-y-3 reveal">
+
+    <div class="faq-item glass rounded-2xl overflow-hidden">
+      <button class="faq-q w-full text-left px-6 py-5 flex items-start justify-between gap-4" onclick="toggleFaq(this)">
+        <span class="font-heading font-semibold text-base leading-snug" data-en="{{ fq.get('q1_en','') }}" data-nl="{{ fq.get('q1_nl','') }}">{{ fq.get('q1_en','') }}</span>
+        <i data-lucide="plus" class="w-5 h-5 text-ai-blue shrink-0 mt-0.5 faq-icon" style="transition:transform 0.25s ease"></i>
+      </button>
+      <div class="faq-a collapsed px-6 pb-5">
+        <p class="text-white/50 text-sm leading-relaxed" data-en="{{ fq.get('a1_en','') }}" data-nl="{{ fq.get('a1_nl','') }}">{{ fq.get('a1_en','') }}</p>
+      </div>
+    </div>
+
+    <div class="faq-item glass rounded-2xl overflow-hidden">
+      <button class="faq-q w-full text-left px-6 py-5 flex items-start justify-between gap-4" onclick="toggleFaq(this)">
+        <span class="font-heading font-semibold text-base leading-snug" data-en="{{ fq.get('q2_en','') }}" data-nl="{{ fq.get('q2_nl','') }}">{{ fq.get('q2_en','') }}</span>
+        <i data-lucide="plus" class="w-5 h-5 text-ai-blue shrink-0 mt-0.5 faq-icon" style="transition:transform 0.25s ease"></i>
+      </button>
+      <div class="faq-a collapsed px-6 pb-5">
+        <p class="text-white/50 text-sm leading-relaxed" data-en="{{ fq.get('a2_en','') }}" data-nl="{{ fq.get('a2_nl','') }}">{{ fq.get('a2_en','') }}</p>
+      </div>
+    </div>
+
+    <div class="faq-item glass rounded-2xl overflow-hidden">
+      <button class="faq-q w-full text-left px-6 py-5 flex items-start justify-between gap-4" onclick="toggleFaq(this)">
+        <span class="font-heading font-semibold text-base leading-snug" data-en="{{ fq.get('q3_en','') }}" data-nl="{{ fq.get('q3_nl','') }}">{{ fq.get('q3_en','') }}</span>
+        <i data-lucide="plus" class="w-5 h-5 text-ai-blue shrink-0 mt-0.5 faq-icon" style="transition:transform 0.25s ease"></i>
+      </button>
+      <div class="faq-a collapsed px-6 pb-5">
+        <p class="text-white/50 text-sm leading-relaxed" data-en="{{ fq.get('a3_en','') }}" data-nl="{{ fq.get('a3_nl','') }}">{{ fq.get('a3_en','') }}</p>
+      </div>
+    </div>
+
+    <div class="faq-item glass rounded-2xl overflow-hidden">
+      <button class="faq-q w-full text-left px-6 py-5 flex items-start justify-between gap-4" onclick="toggleFaq(this)">
+        <span class="font-heading font-semibold text-base leading-snug" data-en="{{ fq.get('q4_en','') }}" data-nl="{{ fq.get('q4_nl','') }}">{{ fq.get('q4_en','') }}</span>
+        <i data-lucide="plus" class="w-5 h-5 text-ai-blue shrink-0 mt-0.5 faq-icon" style="transition:transform 0.25s ease"></i>
+      </button>
+      <div class="faq-a collapsed px-6 pb-5">
+        <p class="text-white/50 text-sm leading-relaxed" data-en="{{ fq.get('a4_en','') }}" data-nl="{{ fq.get('a4_nl','') }}">{{ fq.get('a4_en','') }}</p>
+      </div>
+    </div>
+
+    <div class="faq-item glass rounded-2xl overflow-hidden">
+      <button class="faq-q w-full text-left px-6 py-5 flex items-start justify-between gap-4" onclick="toggleFaq(this)">
+        <span class="font-heading font-semibold text-base leading-snug" data-en="{{ fq.get('q5_en','') }}" data-nl="{{ fq.get('q5_nl','') }}">{{ fq.get('q5_en','') }}</span>
+        <i data-lucide="plus" class="w-5 h-5 text-ai-blue shrink-0 mt-0.5 faq-icon" style="transition:transform 0.25s ease"></i>
+      </button>
+      <div class="faq-a collapsed px-6 pb-5">
+        <p class="text-white/50 text-sm leading-relaxed" data-en="{{ fq.get('a5_en','') }}" data-nl="{{ fq.get('a5_nl','') }}">{{ fq.get('a5_en','') }}</p>
+      </div>
+    </div>
+
+    <div class="faq-item glass rounded-2xl overflow-hidden">
+      <button class="faq-q w-full text-left px-6 py-5 flex items-start justify-between gap-4" onclick="toggleFaq(this)">
+        <span class="font-heading font-semibold text-base leading-snug" data-en="{{ fq.get('q6_en','') }}" data-nl="{{ fq.get('q6_nl','') }}">{{ fq.get('q6_en','') }}</span>
+        <i data-lucide="plus" class="w-5 h-5 text-ai-blue shrink-0 mt-0.5 faq-icon" style="transition:transform 0.25s ease"></i>
+      </button>
+      <div class="faq-a collapsed px-6 pb-5">
+        <p class="text-white/50 text-sm leading-relaxed" data-en="{{ fq.get('a6_en','') }}" data-nl="{{ fq.get('a6_nl','') }}">{{ fq.get('a6_en','') }}</p>
+      </div>
+    </div>
+
+    <div class="faq-item glass rounded-2xl overflow-hidden">
+      <button class="faq-q w-full text-left px-6 py-5 flex items-start justify-between gap-4" onclick="toggleFaq(this)">
+        <span class="font-heading font-semibold text-base leading-snug" data-en="{{ fq.get('q7_en','') }}" data-nl="{{ fq.get('q7_nl','') }}">{{ fq.get('q7_en','') }}</span>
+        <i data-lucide="plus" class="w-5 h-5 text-ai-blue shrink-0 mt-0.5 faq-icon" style="transition:transform 0.25s ease"></i>
+      </button>
+      <div class="faq-a collapsed px-6 pb-5">
+        <p class="text-white/50 text-sm leading-relaxed" data-en="{{ fq.get('a7_en','') }}" data-nl="{{ fq.get('a7_nl','') }}">{{ fq.get('a7_en','') }}</p>
+      </div>
+    </div>
+
+    <div class="faq-item glass rounded-2xl overflow-hidden">
+      <button class="faq-q w-full text-left px-6 py-5 flex items-start justify-between gap-4" onclick="toggleFaq(this)">
+        <span class="font-heading font-semibold text-base leading-snug" data-en="{{ fq.get('q8_en','') }}" data-nl="{{ fq.get('q8_nl','') }}">{{ fq.get('q8_en','') }}</span>
+        <i data-lucide="plus" class="w-5 h-5 text-ai-blue shrink-0 mt-0.5 faq-icon" style="transition:transform 0.25s ease"></i>
+      </button>
+      <div class="faq-a collapsed px-6 pb-5">
+        <p class="text-white/50 text-sm leading-relaxed" data-en="{{ fq.get('a8_en','') }}" data-nl="{{ fq.get('a8_nl','') }}">{{ fq.get('a8_en','') }}</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider max-w-7xl mx-auto px-6"></div>
+
 <!-- ══ APPLY / CTA ════════════════════════════════════════════════════ -->
 <section id="apply" class="py-32 px-6 text-center">
   <div class="max-w-2xl mx-auto reveal">
@@ -938,23 +1166,36 @@
       <p class="text-green-400 font-semibold text-lg" data-en="Applied! We will be in touch within 48 hours." data-nl="Aangemeld! We nemen binnen 48 uur contact op.">Applied! We will be in touch within 48 hours.</p>
     </div>
 
-    <p class="text-xs text-white/25 mt-4"
-       data-en="{{ ap.get('note_en','No credit card required') }}" data-nl="{{ ap.get('note_nl','Geen creditcard vereist') }}">{{ ap.get('note_en','No credit card required') }}</p>
   </div>
 </section>
 
 <!-- ══ FOOTER ════════════════════════════════════════════════════════════ -->
-<footer id="cms-footer" class="border-t border-white/[0.06] py-10 px-6">
-  <div class="max-w-7xl mx-auto mb-8 flex flex-wrap justify-center gap-x-8 gap-y-2">
-    <a href="#creativity"    class="text-xs uppercase tracking-widest text-white/30 hover:text-white/60 transition-colors" data-en="Creativity"    data-nl="Creativiteit">Creativity</a>
-    <a href="#architecture"  class="text-xs uppercase tracking-widest text-white/30 hover:text-white/60 transition-colors" data-en="Architecture"  data-nl="Architectuur">Architecture</a>
-    <a href="#integration"   class="text-xs uppercase tracking-widest text-white/30 hover:text-white/60 transition-colors" data-en="Integration"   data-nl="Integratie">Integration</a>
-    <a href="#execution"     class="text-xs uppercase tracking-widest text-white/30 hover:text-white/60 transition-colors" data-en="Execution"     data-nl="Uitvoering">Execution</a>
+<footer id="cms-footer" class="border-t border-white/[0.06] py-10 px-6" style="background:transparent;">
+  <div class="max-w-7xl mx-auto mb-8 flex flex-wrap justify-center gap-x-10 gap-y-3">
+    <a href="#creativity" class="flex flex-col items-center gap-1 group">
+      <span class="text-[10px] text-white/22 group-hover:text-white/40 transition-colors font-mono tracking-widest">01</span>
+      <span class="text-xs uppercase tracking-widest text-white/45 group-hover:text-white/75 transition-colors font-semibold" data-en="Creativity" data-nl="Creativiteit">Creativity</span>
+      <span class="text-[10px] text-white/20 group-hover:text-white/40 transition-colors" data-en="{{ nav.get('nav1_sub_en','Agents for every bottleneck') }}" data-nl="{{ nav.get('nav1_sub_nl','Agents op elk knelpunt') }}">{{ nav.get('nav1_sub_en','Agents for every bottleneck') }}</span>
+    </a>
+    <a href="#architecture" class="flex flex-col items-center gap-1 group">
+      <span class="text-[10px] text-white/22 group-hover:text-white/40 transition-colors font-mono tracking-widest">02</span>
+      <span class="text-xs uppercase tracking-widest text-white/45 group-hover:text-white/75 transition-colors font-semibold" data-en="Architecture" data-nl="Architectuur">Architecture</span>
+      <span class="text-[10px] text-white/20 group-hover:text-white/40 transition-colors" data-en="{{ nav.get('nav2_sub_en','The cognitive foundation') }}" data-nl="{{ nav.get('nav2_sub_nl','Het cognitieve fundament') }}">{{ nav.get('nav2_sub_en','The cognitive foundation') }}</span>
+    </a>
+    <a href="#integration" class="flex flex-col items-center gap-1 group">
+      <span class="text-[10px] text-white/22 group-hover:text-white/40 transition-colors font-mono tracking-widest">03</span>
+      <span class="text-xs uppercase tracking-widest text-white/45 group-hover:text-white/75 transition-colors font-semibold" data-en="Integration" data-nl="Integratie">Integration</span>
+      <span class="text-[10px] text-white/20 group-hover:text-white/40 transition-colors" data-en="{{ nav.get('nav3_sub_en','Built securely') }}" data-nl="{{ nav.get('nav3_sub_nl','Veilig opgebouwd') }}">{{ nav.get('nav3_sub_en','Built securely') }}</span>
+    </a>
+    <a href="#execution" class="flex flex-col items-center gap-1 group">
+      <span class="text-[10px] text-white/22 group-hover:text-white/40 transition-colors font-mono tracking-widest">04</span>
+      <span class="text-xs uppercase tracking-widest text-white/45 group-hover:text-white/75 transition-colors font-semibold" data-en="Execution" data-nl="Uitvoering">Execution</span>
+      <span class="text-[10px] text-white/20 group-hover:text-white/40 transition-colors" data-en="{{ nav.get('nav4_sub_en','No action without approval') }}" data-nl="{{ nav.get('nav4_sub_nl','Geen actie zonder akkoord') }}">{{ nav.get('nav4_sub_en','No action without approval') }}</span>
+    </a>
   </div>
   <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/30 mb-6">
     <div class="flex items-center gap-2">
-      <img src="/logo.png" alt="Aiventity" style="height:20px;width:auto;opacity:0.7;">
-      <span class="font-heading font-semibold text-white/60">Aiventity</span>
+      <img src="{{ nav.get('nav_logo','') }}" alt="" style="height:20px;width:auto;opacity:0.6;" />
       <span class="mx-2">·</span>
       <span data-en="{{ ft.get('tagline_en','') }}" data-nl="{{ ft.get('tagline_nl','') }}">{{ ft.get('tagline_en','') }}</span>
     </div>
@@ -966,13 +1207,67 @@
     <p>{{ ft.get('copyright','') }}</p>
   </div>
   <div style="border-top:1px solid rgba(255,255,255,0.04);padding-top:14px;text-align:center">
-    <span style="font-size:10px;color:rgba(255,255,255,0.18);letter-spacing:0.1em;font-family:'Inter',sans-serif;text-transform:uppercase">Powered by Topics</span>
+    <span style="font-size:12px;color:rgba(255,255,255,0.45);letter-spacing:0.08em;font-family:'Inter',sans-serif;">Powered by <strong style="color:rgba(255,255,255,0.7);font-weight:600;">Topics</strong></span>
   </div>
 </footer>
 
 <script>
-  // Geen js-ready meer — elementen zijn altijd zichtbaar, animatie alleen onder de vouw
   if (typeof lucide !== 'undefined') lucide.createIcons();
+
+  /* ── FAQ accordion ─────────────────────────────── */
+  function toggleFaq(btn) {
+    var item   = btn.closest('.faq-item');
+    var answer = item.querySelector('.faq-a');
+    var icon   = btn.querySelector('.faq-icon');
+    var isOpen = answer.classList.contains('expanded');
+    // close all
+    document.querySelectorAll('.faq-item').forEach(function(i) {
+      i.querySelector('.faq-a').classList.remove('expanded');
+      i.querySelector('.faq-a').classList.add('collapsed');
+      i.querySelector('.faq-icon').style.transform = 'rotate(0deg)';
+    });
+    // open this one if it was closed
+    if (!isOpen) {
+      answer.classList.remove('collapsed');
+      answer.classList.add('expanded');
+      icon.style.transform = 'rotate(45deg)';
+    }
+  }
+
+  /* ── Light / dark toggle ────────────────────────── */
+  var _styleCache = [];
+  function toggleLightMode() {
+    var body   = document.body;
+    var isLight = body.classList.toggle('light-mode');
+    try { localStorage.setItem('aiv_theme', isLight ? 'light' : 'dark'); } catch(e){}
+
+    if (isLight) {
+      // Cache & replace inline rgba(255,255,255,x) → rgba(0,0,0,x)
+      // Skip #dna-outer and .dark-zone elements
+      var dnaOuter = document.getElementById('dna-outer');
+      var darkZones = Array.from(document.querySelectorAll('.dark-zone'));
+      function inDarkArea(el) {
+        if (dnaOuter && (el === dnaOuter || dnaOuter.contains(el))) return true;
+        return darkZones.some(function(z){ return z === el || z.contains(el); });
+      }
+      document.querySelectorAll('*').forEach(function(el) {
+        if (inDarkArea(el)) return;
+        var s = el.getAttribute('style') || '';
+        if (s.match(/rgba\(255,\s*255,\s*255/)) {
+          _styleCache.push({ el: el, orig: s });
+          el.setAttribute('style', s.replace(/rgba\(255,\s*255,\s*255,\s*([\d.]+)\)/g, function(_,a){ return 'rgba(0,0,0,'+a+')'; }));
+        }
+      });
+    } else {
+      _styleCache.forEach(function(c){ c.el.setAttribute('style', c.orig); });
+      _styleCache = [];
+    }
+  }
+  // Default is light mode — only stay dark if user explicitly chose dark
+  try {
+    var _saved = localStorage.getItem('aiv_theme');
+    if (_saved !== 'dark') { toggleLightMode(); }
+  } catch(e) { toggleLightMode(); }
 
   /* ── Language toggle ─────────────────────────── */
   let currentLang = 'en';
@@ -984,10 +1279,10 @@
       var txt = el.getAttribute('data-' + lang);
       if (txt && txt.trim()) {
         el.textContent = txt;
-      } else if (lang === 'en') {
-        // EN ontbreekt — toon NL als fallback zodat er altijd tekst staat
-        var nl = el.getAttribute('data-nl');
-        if (nl && nl.trim()) el.textContent = nl;
+      } else {
+        var other = lang === 'en' ? 'nl' : 'en';
+        var fb = el.getAttribute('data-' + other);
+        if (fb && fb.trim()) el.textContent = fb;
       }
     });
     document.documentElement.lang = lang;
@@ -1186,31 +1481,18 @@
     document.getElementById('apply-success').classList.remove('hidden');
   }
 
-  /* ── Tool grid: logo image or emoji + hide empty ── */
+  /* ── Tool grid: inject logos + hide empty tiles ── */
   document.querySelectorAll('#tools-grid .tool-tile').forEach(function(tile) {
     var nameEl = tile.querySelector('.tool-name');
     var mediaEl = tile.querySelector('.tool-media');
-    var logo = tile.dataset.logo;
-    var icon = tile.dataset.icon;
-
-    if (!nameEl || !nameEl.textContent.trim()) {
-      tile.style.display = 'none';
-      return;
-    }
-
-    if (logo) {
+    if (!nameEl || !nameEl.textContent.trim()) { tile.style.display = 'none'; return; }
+    var logoUrl = tile.getAttribute('data-logo');
+    if (mediaEl && logoUrl && logoUrl.trim() && !mediaEl.querySelector('img')) {
       var img = document.createElement('img');
-      img.src = logo;
-      img.alt = nameEl.textContent.trim();
-      img.style.cssText = 'height:28px;width:28px;object-fit:contain;border-radius:4px;';
-      img.onerror = function() {
-        this.remove();
-        if (mediaEl && icon) mediaEl.textContent = icon;
-      };
-      if (mediaEl) mediaEl.appendChild(img);
-    } else if (icon && mediaEl) {
-      mediaEl.style.fontSize = '1.4rem';
-      mediaEl.textContent = icon;
+      img.src = logoUrl.trim();
+      img.alt = '';
+      img.style.cssText = 'width:28px;height:28px;object-fit:contain;flex-shrink:0;';
+      mediaEl.appendChild(img);
     }
   });
 </script>
