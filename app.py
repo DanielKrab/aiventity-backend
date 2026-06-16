@@ -934,4 +934,6 @@ def api_restore(idx):
 # ══════════════════════════════════════════════════════════════════════════
 
 if __name__ == '__main__':
+    import os as _os
+    _os.environ.setdefault('FLASK_SKIP_DOTENV', '1')
     app.run(debug=True, port=5001, host='0.0.0.0')

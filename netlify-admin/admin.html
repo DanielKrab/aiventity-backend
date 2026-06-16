@@ -430,6 +430,7 @@ input[type=color]{width:36px;height:36px;padding:2px;border-radius:var(--r-sm);b
           <button class="sb-sub-item" onclick="navToSection('architecture')" data-sec="architecture">Architecture</button>
           <button class="sb-sub-item" onclick="navToSection('integration')"  data-sec="integration">Integration</button>
           <button class="sb-sub-item" onclick="navToSection('execution')"    data-sec="execution">Execution</button>
+          <button class="sb-sub-item" onclick="navToSection('faq')"          data-sec="faq">FAQ</button>
           <button class="sb-sub-item" onclick="navToSection('apply')"        data-sec="apply">Apply</button>
           <button class="sb-sub-item" onclick="navToSection('footer')"       data-sec="footer">Footer</button>
         </div>
@@ -993,6 +994,7 @@ const SECTIONS = [
   {key:'architecture', label:'Architecture'},
   {key:'integration',  label:'Integration'},
   {key:'execution',    label:'Execution'},
+  {key:'faq',          label:'FAQ'},
   {key:'apply',        label:'Apply'},
   {key:'footer',       label:'Footer'},
 ];
@@ -1003,6 +1005,26 @@ const FIELDS = {
     content: [
       {f:'_div_logo', l:'── Logo', wide:true, divider:true},
       {f:'nav_logo', l:'Nav logo (afbeelding)', wide:true, logo:true, df:''},
+      {f:'_div_n1', l:'── Nav item 1 (→ Creativity)', wide:true, divider:true},
+      {f:'nav1_title_nl', l:'Titel NL', wide:false, df:'Hoe het werkt'},
+      {f:'nav1_title_en', l:'Titel EN', wide:false, df:'How it works'},
+      {f:'nav1_sub_nl',   l:'Ondertitel NL', wide:false, df:'Agents inzetbaar op elk knelpunt'},
+      {f:'nav1_sub_en',   l:'Ondertitel EN', wide:false, df:'Agents for every bottleneck'},
+      {f:'_div_n2', l:'── Nav item 2 (→ Architecture)', wide:true, divider:true},
+      {f:'nav2_title_nl', l:'Titel NL', wide:false, df:'Architectuur'},
+      {f:'nav2_title_en', l:'Titel EN', wide:false, df:'Architecture'},
+      {f:'nav2_sub_nl',   l:'Ondertitel NL', wide:false, df:'Het cognitieve fundament'},
+      {f:'nav2_sub_en',   l:'Ondertitel EN', wide:false, df:'The cognitive foundation'},
+      {f:'_div_n3', l:'── Nav item 3 (→ Integration)', wide:true, divider:true},
+      {f:'nav3_title_nl', l:'Titel NL', wide:false, df:'Integratie'},
+      {f:'nav3_title_en', l:'Titel EN', wide:false, df:'Integration'},
+      {f:'nav3_sub_nl',   l:'Ondertitel NL', wide:false, df:'Veilig opgebouwd'},
+      {f:'nav3_sub_en',   l:'Ondertitel EN', wide:false, df:'Built securely'},
+      {f:'_div_n4', l:'── Nav item 4 (→ Execution)', wide:true, divider:true},
+      {f:'nav4_title_nl', l:'Titel NL', wide:false, df:'Jouw beslissing'},
+      {f:'nav4_title_en', l:'Titel EN', wide:false, df:'Your decision'},
+      {f:'nav4_sub_nl',   l:'Ondertitel NL', wide:false, df:'Geen actie zonder akkoord'},
+      {f:'nav4_sub_en',   l:'Ondertitel EN', wide:false, df:'No action without approval'},
     ]
   },
   hero: {
@@ -1133,6 +1155,55 @@ const FIELDS = {
       {f:'_div_k4', l:'── Kaart 4', wide:true, divider:true},
       {f:'c4_title_nl',l:'Titel',wide:false},{f:'c4_title_en',l:'Titel',wide:false},
       {f:'c4_text_nl',l:'Tekst',wide:true,ta:true},{f:'c4_text_en',l:'Tekst',wide:true,ta:true},
+    ]
+  },
+  faq: {
+    content: [
+      {f:'_div_hdr',  l:'── Sectie header', wide:true, divider:true},
+      {f:'label_nl',  l:'Label NL',  wide:false, df:'Veelgestelde vragen'},
+      {f:'label_en',  l:'Label EN',  wide:false, df:'FAQ'},
+      {f:'title_nl',  l:'Titel NL',  wide:true,  df:'Alles wat je wil weten'},
+      {f:'title_en',  l:'Titel EN',  wide:true,  df:'Everything you want to know'},
+      {f:'_div_q1',   l:'── Vraag 1', wide:true, divider:true},
+      {f:'q1_nl',     l:'Vraag NL',  wide:true,  df:''},
+      {f:'q1_en',     l:'Vraag EN',  wide:true,  df:''},
+      {f:'a1_nl',     l:'Antwoord NL', wide:true, ta:true, df:''},
+      {f:'a1_en',     l:'Antwoord EN', wide:true, ta:true, df:''},
+      {f:'_div_q2',   l:'── Vraag 2', wide:true, divider:true},
+      {f:'q2_nl',     l:'Vraag NL',  wide:true,  df:''},
+      {f:'q2_en',     l:'Vraag EN',  wide:true,  df:''},
+      {f:'a2_nl',     l:'Antwoord NL', wide:true, ta:true, df:''},
+      {f:'a2_en',     l:'Antwoord EN', wide:true, ta:true, df:''},
+      {f:'_div_q3',   l:'── Vraag 3', wide:true, divider:true},
+      {f:'q3_nl',     l:'Vraag NL',  wide:true,  df:''},
+      {f:'q3_en',     l:'Vraag EN',  wide:true,  df:''},
+      {f:'a3_nl',     l:'Antwoord NL', wide:true, ta:true, df:''},
+      {f:'a3_en',     l:'Antwoord EN', wide:true, ta:true, df:''},
+      {f:'_div_q4',   l:'── Vraag 4', wide:true, divider:true},
+      {f:'q4_nl',     l:'Vraag NL',  wide:true,  df:''},
+      {f:'q4_en',     l:'Vraag EN',  wide:true,  df:''},
+      {f:'a4_nl',     l:'Antwoord NL', wide:true, ta:true, df:''},
+      {f:'a4_en',     l:'Antwoord EN', wide:true, ta:true, df:''},
+      {f:'_div_q5',   l:'── Vraag 5', wide:true, divider:true},
+      {f:'q5_nl',     l:'Vraag NL',  wide:true,  df:''},
+      {f:'q5_en',     l:'Vraag EN',  wide:true,  df:''},
+      {f:'a5_nl',     l:'Antwoord NL', wide:true, ta:true, df:''},
+      {f:'a5_en',     l:'Antwoord EN', wide:true, ta:true, df:''},
+      {f:'_div_q6',   l:'── Vraag 6', wide:true, divider:true},
+      {f:'q6_nl',     l:'Vraag NL',  wide:true,  df:''},
+      {f:'q6_en',     l:'Vraag EN',  wide:true,  df:''},
+      {f:'a6_nl',     l:'Antwoord NL', wide:true, ta:true, df:''},
+      {f:'a6_en',     l:'Antwoord EN', wide:true, ta:true, df:''},
+      {f:'_div_q7',   l:'── Vraag 7', wide:true, divider:true},
+      {f:'q7_nl',     l:'Vraag NL',  wide:true,  df:''},
+      {f:'q7_en',     l:'Vraag EN',  wide:true,  df:''},
+      {f:'a7_nl',     l:'Antwoord NL', wide:true, ta:true, df:''},
+      {f:'a7_en',     l:'Antwoord EN', wide:true, ta:true, df:''},
+      {f:'_div_q8',   l:'── Vraag 8', wide:true, divider:true},
+      {f:'q8_nl',     l:'Vraag NL',  wide:true,  df:''},
+      {f:'q8_en',     l:'Vraag EN',  wide:true,  df:''},
+      {f:'a8_nl',     l:'Antwoord NL', wide:true, ta:true, df:''},
+      {f:'a8_en',     l:'Antwoord EN', wide:true, ta:true, df:''},
     ]
   },
   apply: {
@@ -1665,19 +1736,39 @@ function setDevice(w,btn) {
   btn.classList.add('active');
 }
 
-async function reloadPreview() {
+async function reloadPreview(attempt=0) {
   const loading=document.getElementById('preview-loading');
   const iframe=document.getElementById('preview');
   if(loading) loading.style.display='flex';
   try {
-    const r=await fetch(API+'/preview',{headers:{'Authorization':'Bearer '+token}});
+    // Use POST (same as live preview) — more reliable than GET across all Netlify routing setups
+    if(!Object.keys(contentData).length) contentData=await apiFetch('/content');
+    const ctrl=new AbortController();
+    const tid=setTimeout(()=>ctrl.abort(),20000);
+    const r=await fetch(API+'/preview',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({content:contentData,theme:themeData||{}}),
+      signal:ctrl.signal
+    });
+    clearTimeout(tid);
     if(!r.ok) throw new Error(r.status);
     const html=injectPreviewBase(await r.text());
     iframe.onload=()=>{ if(loading) loading.style.display='none'; };
     iframe.srcdoc=html;
   } catch(e) {
     if(loading) loading.style.display='none';
-    iframe.srcdoc='<p style="color:red;font-family:sans-serif;padding:20px">Preview niet beschikbaar: '+e.message+'</p>';
+    if(attempt<2) {
+      setTimeout(()=>reloadPreview(attempt+1), attempt===0?1500:4000);
+    } else {
+      iframe.srcdoc=`<!DOCTYPE html><html><body style="margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0d1017;font-family:sans-serif">
+        <div style="text-align:center;color:rgba(255,255,255,0.4)">
+          <div style="font-size:32px;margin-bottom:12px">⚠️</div>
+          <div style="font-size:14px;margin-bottom:6px;color:rgba(255,255,255,0.6)">Preview tijdelijk niet beschikbaar</div>
+          <div style="font-size:11px;margin-bottom:16px">${e.name==='AbortError'?'Laden duurde te lang':'Fout '+e.message}</div>
+          <button onclick="window.parent.reloadPreview(0)" style="background:#007AFF;color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:13px;cursor:pointer">↺ Probeer opnieuw</button>
+        </div></body></html>`;
+    }
   }
 }
 
@@ -1711,6 +1802,18 @@ async function restoreVersion(idx) {
 // PUBLISH
 // ═══════════════════════════════════════════════════════════
 async function publishSite(btn) {
+  // Flush any pending auto-save BEFORE publishing to avoid race condition
+  // (user uploads image → auto-save queued for 4s → user clicks publish → old content read)
+  if(autoSaveTimer) {
+    clearTimeout(autoSaveTimer);
+    autoSaveTimer=null;
+    await saveSection(null, true);
+  }
+  // Also save theme if on the theme page (font sizes, colors etc. must be persisted first)
+  if(currentPage==='theme') {
+    const fakeBtn={disabled:false,innerHTML:''};
+    await saveTheme(fakeBtn);
+  }
   const orig=btn.innerHTML; btn.innerHTML='<span class="spinner"></span> Publiceren...'; btn.disabled=true;
   try {
     const r=await apiFetch('/publish','POST');

@@ -127,6 +127,7 @@ function bad(m="Ongeldig verzoek") { return resp(400,{error:m}); }
 // Render / Publish
 // ══════════════════════════════════════════════════════════════════════════
 const LOGO_URL=`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/static/logo.png`;
+const WORDMARK_URL=`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/static/logo-wordmark.png`;
 
 function escHtml(s){
   return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -184,7 +185,7 @@ body{font-family:'${bf}',sans-serif!important;}`.trim();
   });
   // Font size overrides (only injected when explicitly set)
   if(theme.hero_h1_size)    css+=`\n#cms-hero h1{font-size:${theme.hero_h1_size}!important;line-height:1.05!important;}`;
-  if(theme.section_h2_size) css+=`\n#creativity h2,#integration h2,#execution h2,#apply h2{font-size:${theme.section_h2_size}!important;}`;
+  if(theme.section_h2_size) css+=`\n#creativity h2,#architecture h2,#integration h2,#execution h2,#apply h2,#human-loop h2{font-size:${theme.section_h2_size}!important;}`;
   if(theme.body_font_size)  css+=`\nbody p,body li{font-size:${theme.body_font_size}!important;}`;
   return css;
 }
@@ -193,15 +194,15 @@ function renderWebsite(content,cfg={},themeOverride=null) {
   const sections={h:content.hero||{},cr:content.creativity||{},ig:content.integration||{},
                   ar:content.architecture||{},
                   ex:content.execution||{},ap:content.apply||{},ft:content.footer||{},
-                  ds:content.dna_slides||{}};
+                  ds:content.dna_slides||{},nav:content.navigation||{},fq:content.faq||{}};
   const tmplPath=path.join(__dirname,"templates","website.html");
   let html;
   try { html=fs.readFileSync(tmplPath,"utf-8"); } catch { return buildFallback(sections); }
   // Strip Jinja control flow, evaluate expressions
   html=html.replace(/\{%.*?%\}/gs,"");
   html=html.replace(/\{\{\s*(.+?)\s*\}\}/g,(_,e)=>{ try{return evalJinja(e.trim(),sections);}catch{return "";} });
-  // Fix logo URL — replace relative /logo.png with absolute CDN URL
   html=html.replace(/src="\/logo\.png"/g,`src="${LOGO_URL}"`);
+  html=html.replace(/src="\/logo-wordmark\.png"/g,`src="${WORDMARK_URL}"`);
   // Inject theme CSS
   const theme=themeOverride||(cfg&&cfg.theme)||{};
   if(Object.keys(theme).length>0) {
@@ -234,7 +235,7 @@ function buildFallback(s) {
 async function autoTranslateContent(content) {
   const out=JSON.parse(JSON.stringify(content));
 
-  // Verzamel ALLE NL velden — altijd opnieuw vertalen zodat gewijzigde NL ook EN updatet
+  // Alleen vertalen als EN veld leeg is — handmatig geschreven EN tekst nooit overschrijven
   const toTranslate=[];
   for(const section of Object.keys(out)){
     if(typeof out[section]!=="object"||Array.isArray(out[section])) continue;
@@ -243,6 +244,8 @@ async function autoTranslateContent(content) {
       const nlVal=out[section][key];
       if(!nlVal||typeof nlVal!=="string"||!nlVal.trim()) continue;
       const enKey=key.replace(/_nl$/,"_en");
+      const existingEn=out[section][enKey];
+      if(existingEn&&typeof existingEn==="string"&&existingEn.trim()) continue; // al ingevuld
       toTranslate.push({section,enKey,nlVal});
     }
   }
@@ -286,6 +289,35 @@ async function autoTranslateContent(content) {
   return out;
 }
 
+async function embedToolLogosInHtml(html, content) {
+  // Collect unique logo URLs from integration section
+  const ig = content.integration || {};
+  const urlToB64 = {};
+  const urls = [];
+  for (let i = 1; i <= 8; i++) {
+    const url = ig[`tool${i}_logo`];
+    if (url && url.startsWith("http") && !urlToB64[url]) { urlToB64[url] = null; urls.push(url); }
+  }
+  // Download all logos in parallel
+  await Promise.all(urls.map(async url => {
+    try {
+      const buf = await httpRequest(url, {headers:{"User-Agent":"AiventityCMS/2.0"}}, null, true);
+      const ext = url.split("?")[0].split(".").pop().toLowerCase();
+      const mimeMap = {png:"image/png",jpg:"image/jpeg",jpeg:"image/jpeg",webp:"image/webp",svg:"image/svg+xml",gif:"image/gif"};
+      const mime = mimeMap[ext] || "image/png";
+      urlToB64[url] = `data:${mime};base64,${buf.toString("base64")}`;
+    } catch(e) {}
+  }));
+  // Replace each tool-tile's empty tool-media span with the logo img
+  let result = html;
+  result = result.replace(/(class="tool-tile[^"]*"[^>]*data-logo="([^"]*)"[^>]*>)\s*(<span class="tool-media shrink-0"><\/span>)/g, (m, before, logoUrl, span) => {
+    const b64 = logoUrl && urlToB64[logoUrl];
+    if (!b64) return m;
+    return `${before}<span class="tool-media shrink-0"><img src="${b64}" style="width:28px;height:28px;object-fit:contain;" alt=""></span>`;
+  });
+  return result;
+}
+
 async function doPublish(body={}) {
   const {data:content}=await ghGet("content.json");
   const {data:cfg,sha:cfgSha}=await ghGet("config.json");
@@ -294,21 +326,29 @@ async function doPublish(body={}) {
   if(!token||!siteId) throw new Error("Netlify token of site ID ontbreekt");
   // Auto-translate NL → EN before rendering
   const translatedContent=await autoTranslateContent(content);
-  const html=renderWebsite(translatedContent,cfg);
+  let html=renderWebsite(translatedContent,cfg);
+  // Embed tool logos + site logo as base64
+  html=await embedToolLogosInHtml(html, translatedContent);
+  html=html.replace(/src="\/logo\.png"/g,`src="${LOGO_URL}"`);
+  html=html.replace(/src="\/logo-wordmark\.png"/g,`src="${WORDMARK_URL}"`);
+  try {
+    const [logoBuf,wordmarkBuf]=await Promise.all([
+      httpRequest(LOGO_URL,{headers:{"User-Agent":"AiventityCMS/2.0"}},null,true),
+      httpRequest(WORDMARK_URL,{headers:{"User-Agent":"AiventityCMS/2.0"}},null,true).catch(()=>null),
+    ]);
+    const logoB64=`data:image/png;base64,${logoBuf.toString("base64")}`;
+    html=html.replace(new RegExp(`src="${LOGO_URL.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}"`),'src="'+logoB64+'"');
+    if(wordmarkBuf){
+      const wB64=`data:image/png;base64,${wordmarkBuf.toString("base64")}`;
+      html=html.replace(new RegExp(`src="${WORDMARK_URL.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}"`),'src="'+wB64+'"');
+    }
+  } catch{}
   const htmlBuf=Buffer.from(html,"utf-8");
   const htmlSha1=crypto.createHash("sha1").update(htmlBuf).digest("hex");
   const hdrsBuf=Buffer.from("/*\n  Content-Type: text/html; charset=utf-8\n  Cache-Control: public, max-age=0, must-revalidate\n  X-Frame-Options: SAMEORIGIN\n");
   const hdrsSha1=crypto.createHash("sha1").update(hdrsBuf).digest("hex");
 
-  // Fetch logo to include in deploy
-  let logoBuf=null; let logoSha1=null;
-  try {
-    logoBuf=await httpRequest(LOGO_URL,{headers:{"User-Agent":"AiventityCMS/2.0"}},null,true);
-    logoSha1=crypto.createHash("sha1").update(logoBuf).digest("hex");
-  } catch{}
-
   const files={"/index.html":htmlSha1,"/_headers":hdrsSha1};
-  if(logoSha1) files["/logo.png"]=logoSha1;
   const manifest=JSON.stringify({files});
   const nlH={Authorization:`Bearer ${token}`,"Content-Type":"application/json"};
   const dep=JSON.parse(await httpRequest(`https://api.netlify.com/api/v1/sites/${siteId}/deploys`,{method:"POST",headers:nlH},manifest));
@@ -317,7 +357,6 @@ async function doPublish(body={}) {
     [htmlSha1]:{n:"index.html",b:htmlBuf,ct:"text/html; charset=utf-8"},
     [hdrsSha1]:{n:"_headers",b:hdrsBuf,ct:"text/plain"},
   };
-  if(logoSha1&&logoBuf) fm[logoSha1]={n:"logo.png",b:logoBuf,ct:"image/png"};
   for(const sha of required){ if(fm[sha]){ const {n,b,ct}=fm[sha]; await httpRequest(`https://api.netlify.com/api/v1/deploys/${did}/files/${n}`,{method:"PUT",headers:{Authorization:`Bearer ${token}`,"Content-Type":ct}},b); } }
   cfg.last_published=new Date().toLocaleString("nl-NL",{timeZone:"Europe/Amsterdam"});
   await ghPut("config.json",cfg,cfgSha,"CMS: publish timestamp");
@@ -329,8 +368,16 @@ async function doPublish(body={}) {
 // MAIN HANDLER
 // ══════════════════════════════════════════════════════════════════════════
 exports.handler = async (event) => {
+  // Robust path extraction: try event.path, then rawUrl, then headers
   const method=(event.httpMethod||"GET").toUpperCase();
-  const rawPath=event.path||"/";
+  let rawPath=event.path||"/";
+  // Netlify sometimes passes the function path; extract real path from rawUrl if needed
+  if(rawPath==="/"||rawPath===""||rawPath.endsWith("/api")){
+    try{
+      const u=new URL(event.rawUrl||"",`https://x`);
+      if(u.pathname&&u.pathname.length>1) rawPath=u.pathname;
+    }catch{}
+  }
   const p=rawPath.replace(/^\/?\.netlify\/functions\/api/,"").replace(/\/$/,"")||"/";
 
   if(method==="OPTIONS") return {statusCode:204,headers:CORS,body:""};
@@ -379,17 +426,19 @@ exports.handler = async (event) => {
   // ── Preview (returns HTML) ────────────────────────────────────────────────
   if(p==="/api/preview") {
     if(method==="GET") {
-      // Full preview: load saved content+theme from GitHub
+      // Full preview: load saved content+theme from GitHub, embed logos
       const {data:content}=await ghGet("content.json");
       const {data:cfg}=await ghGet("config.json");
-      const html=renderWebsite(content,cfg);
+      let html=renderWebsite(content,cfg);
+      html=await embedToolLogosInHtml(html,content);
       return {statusCode:200,headers:{...CORS,"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store"},body:html};
     }
     if(method==="POST") {
-      // Live preview: render with provided data (no GitHub writes — fast!)
+      // Live preview: render with provided data + embed logos
       const content=body.content||{};
       const themeOverride=body.theme||null;
-      const html=renderWebsite(content,{},themeOverride);
+      let html=renderWebsite(content,{},themeOverride);
+      html=await embedToolLogosInHtml(html,content);
       return {statusCode:200,headers:{...CORS,"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store"},body:html};
     }
   }
@@ -415,7 +464,21 @@ exports.handler = async (event) => {
     if(method==="POST"){
       const {data:c,sha}=await ghGet("content.json");
       for(const [s,f] of Object.entries(body)) { const sec=Object.keys(body)[0]; c[s]={...(c[s]||{}),...f}; }
-      await ghPut("content.json",c,sha,"CMS: save content");
+      // Auto-translate NL → EN and merge back before saving
+      try {
+        const translated=await autoTranslateContent(c);
+        // Merge translated EN fields back into c
+        for(const sec of Object.keys(translated)){
+          if(typeof translated[sec]==="object"&&!Array.isArray(translated[sec])){
+            for(const key of Object.keys(translated[sec])){
+              if(key.endsWith("_en")) c[sec]=c[sec]||{}, c[sec][key]=translated[sec][key];
+            }
+          }
+        }
+      } catch(e){}
+      // Re-fetch sha in case it changed during translation (race condition safety)
+      const {sha:sha2}=await ghGet("content.json");
+      await ghPut("content.json",c,sha2,"CMS: save content + EN translations");
       // Save history snapshot if requested
       if(body._snapshot) {
         const {data:h,sha:hSha}=await ghGet("content_history.json");
@@ -425,8 +488,7 @@ exports.handler = async (event) => {
         await ghPut("content_history.json",arr.slice(-30),hSha,"CMS: save snapshot");
       }
       await logActivity("content_save",`Sectie opgeslagen: ${Object.keys(body).filter(k=>k!=='_snapshot').join(", ")}`);
-      try { await doPublish({}); } catch(e) {}
-      return resp(200,{ok:true,auto_published:true});
+      return resp(200,{ok:true});
     }
   }
 
