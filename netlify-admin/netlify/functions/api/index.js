@@ -157,11 +157,13 @@ function buildThemeCSS(theme={}) {
   }
   css+=`
 :root{--p:${p};--a:${a};}
-.btn-primary{background:${p}!important;border-color:${p}!important;}
+.btn-primary{background:${p}!important;border-color:${p}!important;color:#ffffff!important;}
 .btn-primary:hover{filter:brightness(1.12)!important;}
 .text-ai-blue{color:${p}!important;}
 h1 .text-ai-blue,h1 span:nth-child(2){color:${p}!important;}
-a.btn-primary{color:#fff!important;}
+a.btn-primary{color:#ffffff!important;}
+button.btn-primary{color:#ffffff!important;}
+body.light-mode .btn-primary,body.light-mode a.btn-primary,body.light-mode button.btn-primary{color:#ffffff!important;}
 .glass-blue{border-color:${p}33!important;}
 .lbtn-on{background:${p}!important;}
 .ping-dot{background-color:${a}!important;}
