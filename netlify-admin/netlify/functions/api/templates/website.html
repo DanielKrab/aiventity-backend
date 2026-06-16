@@ -201,6 +201,13 @@
     body.light-mode .text-white\/22 { color: rgba(100,116,139,0.32) !important; }
     body.light-mode .text-white\/20 { color: rgba(100,116,139,0.28) !important; }
     body.light-mode .lbtn-off  { color: rgba(15,23,42,0.40) !important; }
+    /* ── Blauwe knoppen: tekst altijd wit, ook in light mode ── */
+    body.light-mode .btn-primary,
+    body.light-mode .btn-primary.text-white,
+    body.light-mode .text-white.btn-primary,
+    body.light-mode a.btn-primary,
+    body.light-mode button.btn-primary,
+    body.light-mode a.btn-primary.text-white { color: #ffffff !important; }
     /* Footer — light slate */
     body.light-mode footer { background: #F1F5F9 !important; border-color: rgba(0,0,0,0.06) !important; }
     /* Cross/grid pattern — black at 0.14 opacity, clearly visible on #FAFAFA */
@@ -215,6 +222,7 @@
     /* ══ LIVE WORKFLOW ENGINE — stays dark inside light page ══ */
     body.light-mode #hero-console {
       background: #0d1424 !important;
+      color: rgba(255,255,255,0.80) !important;
       border-color: rgba(255,255,255,0.07) !important;
       box-shadow: 0 32px 80px rgba(0,0,0,0.30), 0 0 0 1px rgba(255,255,255,0.06), 0 0 60px rgba(0,122,255,0.08) !important;
     }
