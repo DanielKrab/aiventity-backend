@@ -187,6 +187,8 @@ body{font-family:'${bf}',sans-serif!important;}`.trim();
   if(theme.hero_h1_size)    css+=`\n#cms-hero h1{font-size:${theme.hero_h1_size}!important;line-height:1.05!important;}`;
   if(theme.section_h2_size) css+=`\n#creativity h2,#architecture h2,#integration h2,#execution h2,#apply h2,#human-loop h2{font-size:${theme.section_h2_size}!important;}`;
   if(theme.body_font_size)  css+=`\nbody p,body li{font-size:${theme.body_font_size}!important;}`;
+  // custom_css: raw CSS injected as-is, never touched by the admin form
+  if(theme.custom_css) css+=`\n${theme.custom_css}`;
   return css;
 }
 
