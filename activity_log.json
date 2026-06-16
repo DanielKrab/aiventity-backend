@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-08T20:38:29.946Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation"
-  },
-  {
     "ts": "2026-06-08T20:38:36.960Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation"
@@ -996,6 +991,11 @@
   },
   {
     "ts": "2026-06-16T08:01:04.694Z",
+    "action": "publish",
+    "detail": "Website gepubliceerd op Netlify"
+  },
+  {
+    "ts": "2026-06-16T08:06:45.964Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
   }
