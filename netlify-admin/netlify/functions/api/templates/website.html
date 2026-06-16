@@ -1557,10 +1557,11 @@
     document.getElementById('apply-success').classList.remove('hidden');
   }
 
-  /* ── Tool grid: toon alleen tiles met naam (start allemaal hidden) ── */
+  /* ── Tool grid: verberg lege tiles (server-side al gedaan bij publish, dit als fallback) ── */
   document.querySelectorAll('#tools-grid .tool-tile').forEach(function(tile) {
     var nameEl = tile.querySelector('.tool-name');
-    if (nameEl && nameEl.textContent.trim()) { tile.style.display = 'flex'; }
+    if (!nameEl || !nameEl.textContent.trim()) { tile.style.display = 'none'; }
+    else { tile.style.display = 'flex'; }
   });
 
   /* ── ig-bubble logo cloud: emoji fallback when no logo embedded ── */

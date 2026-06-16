@@ -205,6 +205,10 @@ function renderWebsite(content,cfg={},themeOverride=null) {
   html=html.replace(/\{\{\s*(.+?)\s*\}\}/g,(_,e)=>{ try{return evalJinja(e.trim(),sections);}catch{return "";} });
   html=html.replace(/src="\/logo\.png"/g,`src="${LOGO_URL}"`);
   html=html.replace(/src="\/logo-wordmark\.png"/g,`src="${WORDMARK_URL}"`);
+  // Server-side: verwijder display:none van tool-tiles met een naam (glass-blue grid tiles)
+  // Tiles zonder naam blijven verborgen. Zo werkt het ook zonder JS.
+  html=html.replace(/(<div class="tool-tile glass-blue[^>]*?) style="display:none"([^>]*>[\s\S]*?<span class="[^"]*tool-name[^"]*">)(\s*\S[^<]*\S\s*|[^\s<][^<]*)(<\/span>)/g,
+    '$1$2$3$4');
   // Inject theme CSS
   const theme=themeOverride||(cfg&&cfg.theme)||{};
   if(Object.keys(theme).length>0) {
