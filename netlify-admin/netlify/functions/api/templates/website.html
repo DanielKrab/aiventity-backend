@@ -903,28 +903,28 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </div>
-      <!-- RIGHT: hub-and-spoke — alle tools verbinden naar Aiventity logo -->
+      <!-- RIGHT: hub-and-spoke — Aiventity centraal onderin, tools symmetrisch erboven -->
       <div class="hidden md:block relative shrink-0" style="width:310px;height:210px">
-        <!-- rechte lijnen van elke tool naar Aiventity hub (center: 30,145) -->
+        <!-- Rechte lijnen van elke tool naar Aiventity hub (center: 155,172) -->
         <svg style="position:absolute;inset:0;width:310px;height:210px;overflow:visible;pointer-events:none" viewBox="0 0 310 210">
-          <line x1="60"  y1="46"  x2="30" y2="145" stroke="rgba(0,122,255,0.28)" stroke-width="1.5" stroke-dasharray="5 4"/>
-          <line x1="155" y1="26"  x2="30" y2="145" stroke="rgba(0,122,255,0.28)" stroke-width="1.5" stroke-dasharray="5 4"/>
-          <line x1="270" y1="40"  x2="30" y2="145" stroke="rgba(0,122,255,0.28)" stroke-width="1.5" stroke-dasharray="5 4"/>
-          <line x1="126" y1="104" x2="30" y2="145" stroke="rgba(0,122,255,0.28)" stroke-width="1.5" stroke-dasharray="5 4"/>
-          <line x1="260" y1="100" x2="30" y2="145" stroke="rgba(0,122,255,0.28)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="26"  y1="26"  x2="155" y2="172" stroke="rgba(0,122,255,0.30)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="91"  y1="26"  x2="155" y2="172" stroke="rgba(0,122,255,0.30)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="155" y1="26"  x2="155" y2="172" stroke="rgba(0,122,255,0.30)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="219" y1="26"  x2="155" y2="172" stroke="rgba(0,122,255,0.30)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="284" y1="26"  x2="155" y2="172" stroke="rgba(0,122,255,0.30)" stroke-width="1.5" stroke-dasharray="5 4"/>
         </svg>
-        <!-- logo bubbles — tool1-5 -->
-        <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:20px;left:34px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool1_logo','') }}" data-icon="{{ ig.get('tool1_icon','💬') }}"><span class="tool-media shrink-0"></span></div>
-        <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:0px;left:129px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool2_logo','') }}" data-icon="{{ ig.get('tool2_icon','📁') }}"><span class="tool-media shrink-0"></span></div>
-        <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:14px;right:14px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool3_logo','') }}" data-icon="{{ ig.get('tool3_icon','#️⃣') }}"><span class="tool-media shrink-0"></span></div>
-        <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:78px;left:100px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool5_logo','') }}" data-icon="{{ ig.get('tool5_icon','📋') }}"><span class="tool-media shrink-0"></span></div>
-        <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:74px;right:24px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool4_logo','') }}" data-icon="{{ ig.get('tool4_icon','📸') }}"><span class="tool-media shrink-0"></span></div>
-        <!-- Aiventity hub — vervangt de gekleurde puntjes, center: 30,145 -->
-        <div style="position:absolute;top:115px;left:0px;width:60px;height:60px;border-radius:16px;background:#0F172A;border:2px solid rgba(0,122,255,0.45);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,122,255,0.22)">
+        <!-- 5 tools in één rij bovenaan, gelijkmatig verdeeld -->
+        <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:0px;left:0px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool1_logo','') }}" data-icon="{{ ig.get('tool1_icon','💬') }}"><span class="tool-media shrink-0"></span></div>
+        <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:0px;left:65px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool2_logo','') }}" data-icon="{{ ig.get('tool2_icon','📁') }}"><span class="tool-media shrink-0"></span></div>
+        <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:0px;left:129px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool3_logo','') }}" data-icon="{{ ig.get('tool3_icon','#️⃣') }}"><span class="tool-media shrink-0"></span></div>
+        <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:0px;left:193px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool4_logo','') }}" data-icon="{{ ig.get('tool4_icon','📸') }}"><span class="tool-media shrink-0"></span></div>
+        <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:0px;left:258px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool5_logo','') }}" data-icon="{{ ig.get('tool5_icon','📋') }}"><span class="tool-media shrink-0"></span></div>
+        <!-- Aiventity hub centraal onderin, center: 155,172 -->
+        <div style="position:absolute;top:142px;left:125px;width:60px;height:60px;border-radius:16px;background:#0F172A;border:2px solid rgba(0,122,255,0.45);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,122,255,0.22)">
           <img src="/logo.png" alt="Aiventity" style="width:38px;height:38px;object-fit:contain"/>
         </div>
-        <!-- +100 badge -->
-        <div style="position:absolute;bottom:16px;right:10px;background:rgba(0,122,255,0.10);border:1.5px solid rgba(0,122,255,0.28);border-radius:10px;padding:5px 13px">
+        <!-- +100 badge rechtsonder -->
+        <div style="position:absolute;bottom:8px;right:0px;background:rgba(0,122,255,0.10);border:1.5px solid rgba(0,122,255,0.28);border-radius:10px;padding:5px 13px">
           <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#007AFF">+100</span>
         </div>
       </div>
@@ -1560,7 +1560,7 @@
   /* ── Tool grid: toon alleen tiles met naam (start allemaal hidden) ── */
   document.querySelectorAll('#tools-grid .tool-tile').forEach(function(tile) {
     var nameEl = tile.querySelector('.tool-name');
-    if (nameEl && nameEl.textContent.trim()) { tile.style.display = ''; }
+    if (nameEl && nameEl.textContent.trim()) { tile.style.display = 'flex'; }
   });
 
   /* ── ig-bubble logo cloud: emoji fallback when no logo embedded ── */
