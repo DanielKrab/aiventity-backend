@@ -13,8 +13,8 @@
   "netlify_site_id": "5559f234-9246-4edf-a2c5-778983c63285",
   "secret_key": "00e3323101f0141b53f24be521309c051da43d3947fad78ffe6fe29a7cf719d0",
   "theme": {
-    "primary_color": "#0433ff",
-    "accent_color": "#10b981",
+    "primary_color": "#ffffff",
+    "accent_color": "#a78bfa",
     "heading_font": "Inter",
     "body_font": "Open Sans",
     "nav_bg": "#070d1c",
