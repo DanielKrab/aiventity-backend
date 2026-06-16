@@ -23,7 +23,7 @@
     "body_font_size": "0.8125rem",
     "custom_css": "/* ── Dark navy logo in light mode ── */\nbody.light-mode #site-nav-logo{filter:brightness(0) invert(1) sepia(1) saturate(5000%) hue-rotate(160deg) brightness(0.22) saturate(0.47)!important;opacity:1!important;}\n/* ── Pure black nav links in light mode ── */\nbody.light-mode #nav ul li a{color:#000000!important;}\nbody.light-mode #nav ul li a:hover{color:#007AFF!important;}"
   },
-  "last_published": "16-6-2026, 13:16:32",
+  "last_published": "16-6-2026, 13:28:37",
   "site_name": "Aiventity",
   "instagram_url": "aiventity"
 }
