@@ -1346,12 +1346,22 @@
       _styleCache.forEach(function(c){ c.el.setAttribute('style', c.orig); });
       _styleCache = [];
     }
+    // ── Knoptekst altijd wit, ongeacht Tailwind CDN override ──
+    document.querySelectorAll('.btn-primary').forEach(function(el) {
+      el.style.setProperty('color', '#ffffff', 'important');
+    });
   }
   // Default is light mode — only stay dark if user explicitly chose dark
   try {
     var _saved = localStorage.getItem('aiv_theme');
     if (_saved !== 'dark') { toggleLightMode(); }
   } catch(e) { toggleLightMode(); }
+  // Knoptekst garantie: forceer wit na Tailwind CDN init (kleine vertraging)
+  setTimeout(function() {
+    document.querySelectorAll('.btn-primary').forEach(function(el) {
+      el.style.setProperty('color', '#ffffff', 'important');
+    });
+  }, 50);
 
   /* ── Language toggle ─────────────────────────── */
   let currentLang = 'en';
