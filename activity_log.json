@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-08T21:33:11.067Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: integration"
-  },
-  {
     "ts": "2026-06-08T21:33:14.997Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
@@ -996,6 +991,11 @@
   },
   {
     "ts": "2026-06-16T12:19:25.249Z",
+    "action": "theme_save",
+    "detail": "Thema-instellingen opgeslagen"
+  },
+  {
+    "ts": "2026-06-16T12:19:31.872Z",
     "action": "theme_save",
     "detail": "Thema-instellingen opgeslagen"
   }
