@@ -903,29 +903,25 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </div>
-      <!-- RIGHT: floating logo cloud -->
+      <!-- RIGHT: hub-and-spoke — alle tools verbinden naar Aiventity logo -->
       <div class="hidden md:block relative shrink-0" style="width:310px;height:210px">
-        <!-- connecting lines -->
+        <!-- rechte lijnen van elke tool naar Aiventity hub (center: 30,145) -->
         <svg style="position:absolute;inset:0;width:310px;height:210px;overflow:visible;pointer-events:none" viewBox="0 0 310 210">
-          <line x1="60" y1="46" x2="126" y2="104" stroke="rgba(148,163,184,0.3)" stroke-width="1.5" stroke-dasharray="5 4"/>
-          <line x1="155" y1="22" x2="126" y2="104" stroke="rgba(148,163,184,0.3)" stroke-width="1.5" stroke-dasharray="5 4"/>
-          <line x1="248" y1="40" x2="206" y2="100" stroke="rgba(148,163,184,0.3)" stroke-width="1.5" stroke-dasharray="5 4"/>
-          <line x1="126" y1="104" x2="206" y2="100" stroke="rgba(148,163,184,0.3)" stroke-width="1.5" stroke-dasharray="5 4"/>
-          <line x1="52" y1="148" x2="126" y2="104" stroke="rgba(148,163,184,0.3)" stroke-width="1.5" stroke-dasharray="5 4"/>
-          <line x1="180" y1="162" x2="206" y2="100" stroke="rgba(148,163,184,0.3)" stroke-width="1.5" stroke-dasharray="5 4"/>
-          <line x1="52" y1="148" x2="180" y2="162" stroke="rgba(148,163,184,0.3)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="60"  y1="46"  x2="30" y2="145" stroke="rgba(0,122,255,0.28)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="155" y1="26"  x2="30" y2="145" stroke="rgba(0,122,255,0.28)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="270" y1="40"  x2="30" y2="145" stroke="rgba(0,122,255,0.28)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="126" y1="104" x2="30" y2="145" stroke="rgba(0,122,255,0.28)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="260" y1="100" x2="30" y2="145" stroke="rgba(0,122,255,0.28)" stroke-width="1.5" stroke-dasharray="5 4"/>
         </svg>
-        <!-- logo bubbles — tool1-6 as floating tiles -->
+        <!-- logo bubbles — tool1-5 -->
         <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:20px;left:34px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool1_logo','') }}" data-icon="{{ ig.get('tool1_icon','💬') }}"><span class="tool-media shrink-0"></span></div>
         <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:0px;left:129px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool2_logo','') }}" data-icon="{{ ig.get('tool2_icon','📁') }}"><span class="tool-media shrink-0"></span></div>
         <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:14px;right:14px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool3_logo','') }}" data-icon="{{ ig.get('tool3_icon','#️⃣') }}"><span class="tool-media shrink-0"></span></div>
         <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:78px;left:100px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool5_logo','') }}" data-icon="{{ ig.get('tool5_icon','📋') }}"><span class="tool-media shrink-0"></span></div>
         <div class="tool-tile ig-bubble glass feature-card" style="position:absolute;top:74px;right:24px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center" data-logo="{{ ig.get('tool4_logo','') }}" data-icon="{{ ig.get('tool4_icon','📸') }}"><span class="tool-media shrink-0"></span></div>
-        <!-- decorative dots -->
-        <div style="position:absolute;top:134px;left:26px;display:flex;gap:6px;align-items:center">
-          <div style="width:18px;height:18px;border-radius:50%;background:#ef4444;opacity:0.75"></div>
-          <div style="width:18px;height:18px;border-radius:50%;background:#10b981;opacity:0.75"></div>
-          <div style="width:16px;height:16px;border-radius:50%;background:#8b5cf6;opacity:0.65"></div>
+        <!-- Aiventity hub — vervangt de gekleurde puntjes, center: 30,145 -->
+        <div style="position:absolute;top:115px;left:0px;width:60px;height:60px;border-radius:16px;background:#0F172A;border:2px solid rgba(0,122,255,0.45);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,122,255,0.22)">
+          <img src="/logo.png" alt="Aiventity" style="width:38px;height:38px;object-fit:contain"/>
         </div>
         <!-- +100 badge -->
         <div style="position:absolute;bottom:16px;right:10px;background:rgba(0,122,255,0.10);border:1.5px solid rgba(0,122,255,0.28);border-radius:10px;padding:5px 13px">
