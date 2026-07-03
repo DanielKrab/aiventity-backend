@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-09T18:20:52.170Z",
-    "action": "media_upload",
-    "detail": "Bestand geüpload: Screenshot_2026-06-09_at_20.20.03.png"
-  },
-  {
     "ts": "2026-06-09T18:20:58.728Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: architecture"
@@ -996,6 +991,11 @@
   },
   {
     "ts": "2026-07-03T11:02:37.297Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero"
+  },
+  {
+    "ts": "2026-07-03T11:03:10.909Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero"
   }
