@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-09T18:34:19.603Z",
-    "action": "theme_save",
-    "detail": "Thema-instellingen opgeslagen"
-  },
-  {
     "ts": "2026-06-09T18:35:37.748Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: creativity"
@@ -996,6 +991,11 @@
   },
   {
     "ts": "2026-07-03T11:46:46.973Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero"
+  },
+  {
+    "ts": "2026-07-03T11:46:48.700Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero"
   }
