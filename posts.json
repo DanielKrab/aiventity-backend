@@ -1,1 +1,17 @@
-{"posts":[]}
+{
+  "posts": [
+    {
+      "id": "mr4xjidulswx",
+      "slug": "test",
+      "title": "test",
+      "excerpt": "",
+      "content": "test inhoud",
+      "cover_image": "",
+      "author": "Aiventity",
+      "published": true,
+      "published_at": "2026-07-03T12:48:55.506Z",
+      "created_at": "2026-07-03T12:48:55.506Z",
+      "updated_at": "2026-07-03T12:48:55.506Z"
+    }
+  ]
+}
