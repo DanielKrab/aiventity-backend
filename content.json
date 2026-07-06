@@ -235,5 +235,33 @@
     "q8_en": "What does it cost?",
     "a8_nl": "De prijs hangt af van omvang en complexiteit. We starten met een vrijblijvende demo en kennismakingsgesprek om je grootste knelpunten in kaart te brengen, en stellen op basis daarvan een voorstel op met een duidelijke verwachte opbrengst.",
     "a8_en": "The price depends on scope and complexity. We start with a no-obligation demo and introductory conversation to map out your biggest bottlenecks, and draw up a proposal with a clear expected return."
+  },
+  "consultancy": {
+    "label_nl": "AI Consultancy",
+    "title_nl": "Strategische ondersteuning voor AI-adoptie",
+    "subtitle_nl": "Wij begeleiden organisaties bij het identificeren, prioriteren en implementeren van AI-oplossingen.",
+    "c1_title_nl": "Use Case Identificatie",
+    "c1_text_nl": "dddd",
+    "c2_title_nl": "Implementatie Roadmap en Training",
+    "c2_text_nl": "",
+    "c3_title_nl": "AI Businesscase en ROI-modellering",
+    "c3_text_nl": "",
+    "c4_title_nl": "Ontwerp van het AI Operating Model",
+    "c4_text_nl": "",
+    "meet_title_nl": "Meet met Daniel.",
+    "meet_text_nl": "Plan een introductie om je unieke behoeften in kaart te brengen.",
+    "btn_nl": "Boek een intro",
+    "btn_href": "/contact",
+    "c1_text_en": "ddd",
+    "subtitle_en": "We guide organizations in identifying, prioritizing and implementing AI solutions.",
+    "label_en": "AI Consultancy",
+    "c1_title_en": "Use Case Identification",
+    "title_en": "Strategic support for AI adoption",
+    "meet_title_en": "Meet with Daniel.",
+    "c2_title_en": "Implementation Roadmap and Training",
+    "c3_title_en": "AI Business Case and ROI Modeling",
+    "c4_title_en": "Design of the AI ​​Operating Model",
+    "meet_text_en": "Schedule an introduction to identify your unique needs.",
+    "btn_en": "Book an intro"
   }
 }
