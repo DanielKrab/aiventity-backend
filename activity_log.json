@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-15T12:39:09.219Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: execution"
-  },
-  {
     "ts": "2026-06-15T12:39:21.856Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: apply"
@@ -996,6 +991,11 @@
   },
   {
     "ts": "2026-07-07T18:57:37.911Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero"
+  },
+  {
+    "ts": "2026-07-07T18:59:05.195Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero"
   }
