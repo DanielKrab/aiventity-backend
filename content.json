@@ -272,5 +272,33 @@
     "c2_text_en": "A good idea only matters once teams can actually work with it. We define the right rollout sequence together with you and make sure staff gain the knowledge and confidence to use AI effectively in their day-to-day work.",
     "c3_text_en": "Before you invest, you want to know what it delivers. We translate the selected use cases into a clear business case with measurable outcomes, so decisions are grounded in numbers rather than assumptions.",
     "c4_text_en": "Scaling AI requires clarity on who owns what. We help you set up ownership, decision-making lines, and governance so AI becomes a structural part of the organization, not a standalone project."
+  },
+  "contact": {
+    "label_nl": "Laten we kennismaken",
+    "title_nl": "Hoe kunnen wij jou helpen?",
+    "subtitle_nl": "",
+    "about_label_nl": "Wie we zijn",
+    "about_title_nl": "Het team achter Aiventity",
+    "about_text_nl": "",
+    "p1_title_nl": "AI Strategie",
+    "p1_text_nl": "Wij bepalen samen met u waar een agent binnen uw organisatie het snelst waarde levert, zonder dat u meteen alles hoeft om te gooien.",
+    "p2_title_nl": "Veilige Agents",
+    "p2_text_nl": "",
+    "p3_title_nl": "Meetbare Impact",
+    "p3_text_nl": "",
+    "form_title_nl": "Plan een kennismaking",
+    "form_subtitle_nl": "",
+    "form_btn_nl": "Stuur mijn bericht →",
+    "contact_email": "hello@aiventity.com",
+    "label_en": "Let's get acquainted",
+    "about_title_en": "The team behind Aiventity",
+    "title_en": "How can we help you?",
+    "p1_title_en": "AI Strategy",
+    "about_label_en": "Who we are",
+    "form_title_en": "Plan an introduction",
+    "p1_text_en": "We determine together with you where an agent within your organization will deliver value the fastest, without you having to change everything immediately.",
+    "p3_title_en": "Measurable Impact",
+    "p2_title_en": "Safe Agents",
+    "form_btn_en": "Send my message →"
   }
 }
