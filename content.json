@@ -283,7 +283,7 @@
     "p1_title_nl": "AI Strategie",
     "p1_text_nl": "Wij bepalen samen met u waar een agent binnen uw organisatie het snelst waarde levert, zonder dat u meteen alles hoeft om te gooien.",
     "p2_title_nl": "Veilige Agents",
-    "p2_text_nl": "",
+    "p2_text_nl": "Elke agent werkt binnen uw eigen beveiligingskaders en met menselijke goedkeuring op de kritieke momenten, nooit als black box.\n",
     "p3_title_nl": "Meetbare Impact",
     "p3_text_nl": "",
     "form_title_nl": "Plan een kennismaking",
@@ -299,6 +299,7 @@
     "p1_text_en": "We determine together with you where an agent within your organization will deliver value the fastest, without you having to change everything immediately.",
     "p3_title_en": "Measurable Impact",
     "p2_title_en": "Safe Agents",
-    "form_btn_en": "Send my message →"
+    "form_btn_en": "Send my message →",
+    "p2_text_en": "Each agent works within your own security frameworks and with human approval at critical moments, never as a black box."
   }
 }
