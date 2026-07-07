@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-09T19:00:22.858Z",
-    "action": "media_upload",
-    "detail": "Bestand geüpload: Screenshot_2026-06-09_at_20.20.03.png"
-  },
-  {
     "ts": "2026-06-09T19:00:30.622Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: architecture"
@@ -998,5 +993,10 @@
     "ts": "2026-07-07T18:41:10.974Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation, faq, consultancy"
+  },
+  {
+    "ts": "2026-07-07T18:41:14.557Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: navigation"
   }
 ]
