@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-15T14:06:24.921Z",
-    "action": "publish",
-    "detail": "Website gepubliceerd op Netlify"
-  },
-  {
     "ts": "2026-06-15T14:09:14.719Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
@@ -998,5 +993,10 @@
     "ts": "2026-07-07T19:19:26.684Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: contact"
+  },
+  {
+    "ts": "2026-07-07T19:19:30.295Z",
+    "action": "publish",
+    "detail": "Website gepubliceerd op Netlify"
   }
 ]
