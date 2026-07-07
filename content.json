@@ -285,7 +285,7 @@
     "p2_title_nl": "Veilige Agents",
     "p2_text_nl": "Elke agent werkt binnen uw eigen beveiligingskaders en met menselijke goedkeuring op de kritieke momenten, nooit als black box.\n",
     "p3_title_nl": "Meetbare Impact",
-    "p3_text_nl": "",
+    "p3_text_nl": "Van bespaarde tijd tot minder fouten, resultaten die u zelf kunt zien en die het vertrouwen in de workforce laten groeien.",
     "form_title_nl": "Plan een kennismaking",
     "form_subtitle_nl": "",
     "form_btn_nl": "Stuur mijn bericht →",
@@ -300,6 +300,7 @@
     "p3_title_en": "Measurable Impact",
     "p2_title_en": "Safe Agents",
     "form_btn_en": "Send my message →",
-    "p2_text_en": "Each agent works within your own security frameworks and with human approval at critical moments, never as a black box."
+    "p2_text_en": "Each agent works within your own security frameworks and with human approval at critical moments, never as a black box.",
+    "p3_text_en": "From saved time to fewer errors, results that you can see for yourself and that grow confidence in the workforce."
   }
 }
