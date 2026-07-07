@@ -279,7 +279,7 @@
     "subtitle_nl": "",
     "about_label_nl": "Wie we zijn",
     "about_title_nl": "Het team achter Aiventity",
-    "about_text_nl": "",
+    "about_text_nl": "Wij bouwen geen los AI-hulpmiddel, maar een synthetische organisatie: gespecialiseerde AI-agents die naast uw team meedraaien, als digitale collega's in plaats van software. Van strategie tot dagelijkse uitvoering.",
     "p1_title_nl": "AI Strategie",
     "p1_text_nl": "Wij bepalen samen met u waar een agent binnen uw organisatie het snelst waarde levert, zonder dat u meteen alles hoeft om te gooien.",
     "p2_title_nl": "Veilige Agents",
@@ -301,6 +301,7 @@
     "p2_title_en": "Safe Agents",
     "form_btn_en": "Send my message →",
     "p2_text_en": "Each agent works within your own security frameworks and with human approval at critical moments, never as a black box.",
-    "p3_text_en": "From saved time to fewer errors, results that you can see for yourself and that grow confidence in the workforce."
+    "p3_text_en": "From saved time to fewer errors, results that you can see for yourself and that grow confidence in the workforce.",
+    "about_text_en": "We do not build a separate AI tool, but a synthetic organization: specialized AI agents that work alongside your team, as digital colleagues instead of software. From strategy to daily execution."
   }
 }
