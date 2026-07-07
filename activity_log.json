@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-15T12:47:15.993Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: creativity"
-  },
-  {
     "ts": "2026-06-15T12:47:24.125Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
@@ -996,6 +991,11 @@
   },
   {
     "ts": "2026-07-07T19:01:52.099Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: consultancy"
+  },
+  {
+    "ts": "2026-07-07T19:01:59.100Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: consultancy"
   }
