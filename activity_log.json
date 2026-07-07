@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-09T19:00:30.622Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: architecture"
-  },
-  {
     "ts": "2026-06-09T19:00:33.738Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: architecture"
@@ -998,5 +993,10 @@
     "ts": "2026-07-07T18:41:14.557Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: navigation"
+  },
+  {
+    "ts": "2026-07-07T18:41:18.390Z",
+    "action": "publish",
+    "detail": "Website gepubliceerd op Netlify"
   }
 ]
