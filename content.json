@@ -250,7 +250,7 @@
     "c4_text_nl": "",
     "meet_title_nl": "Meet met Daniel.",
     "meet_text_nl": "Plan een introductie om je unieke behoeften in kaart te brengen.",
-    "btn_nl": "Boek een intro",
+    "btn_nl": "Plan een kennismaking",
     "btn_href": "/contact",
     "c1_text_en": "ddd",
     "subtitle_en": "We guide organizations in identifying, prioritizing and implementing AI solutions.",
@@ -262,6 +262,6 @@
     "c3_title_en": "AI Business Case and ROI Modeling",
     "c4_title_en": "Design of the AI ​​Operating Model",
     "meet_text_en": "Schedule an introduction to identify your unique needs.",
-    "btn_en": "Book an intro"
+    "btn_en": "Book a meeting"
   }
 }
