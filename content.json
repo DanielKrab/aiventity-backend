@@ -248,7 +248,7 @@
     "c3_text_nl": "",
     "c4_title_nl": "Ontwerp van het AI Operating Model",
     "c4_text_nl": "",
-    "meet_title_nl": "Meet onze consultants.",
+    "meet_title_nl": "onze consultants.",
     "meet_text_nl": "Plan een kennismaking en ontdek hoe we jouw organisatie kunnen versterken.",
     "btn_nl": "Plan een kennismaking",
     "btn_href": "/contact",
@@ -262,6 +262,12 @@
     "c3_title_en": "AI Business Case and ROI Modeling",
     "c4_title_en": "Design of the AI ​​Operating Model",
     "meet_text_en": "Book an intro call and discover how we can strengthen your organisation.",
-    "btn_en": "Book a meeting"
+    "btn_en": "Book a meeting",
+    "consultant1_photo": "",
+    "consultant1_name": "",
+    "consultant2_photo": "",
+    "consultant2_name": "",
+    "consultant3_photo": "",
+    "consultant3_name": ""
   }
 }
