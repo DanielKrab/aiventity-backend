@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-15T14:10:46.117Z",
-    "action": "media_upload",
-    "detail": "Bestand geüpload: 655b60964be1a1b36c746e65_Pipedrive-Emblem__1_.png"
-  },
-  {
     "ts": "2026-06-15T14:11:01.361Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
@@ -998,5 +993,10 @@
     "ts": "2026-07-07T19:22:11.356Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation, faq, consultancy, contact"
+  },
+  {
+    "ts": "2026-07-07T19:22:15.057Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: navigation"
   }
 ]
