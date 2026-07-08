@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-15T14:16:42.733Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: integration"
-  },
-  {
     "ts": "2026-06-15T14:16:45.757Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
@@ -998,5 +993,10 @@
     "ts": "2026-07-08T16:31:53.855Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: Logo-Aiventity-Photoroom.png"
+  },
+  {
+    "ts": "2026-07-08T16:31:58.622Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation, faq, consultancy, contact"
   }
 ]
