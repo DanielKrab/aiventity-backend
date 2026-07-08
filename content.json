@@ -176,11 +176,11 @@
     "label_en": "02 — ARCHITECTURE"
   },
   "navigation": {
-    "nav_logo": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/Logo-Aiventity__1_-Photoroom.png",
-    "nav_logo_height": "44",
+    "nav_logo": "",
+    "nav_logo_height": "22",
     "nav_bar_padding": "1",
-    "nav_bar_alpha": "0.42",
-    "nav_bar_height": "49",
+    "nav_bar_alpha": "0.10",
+    "nav_bar_height": "48",
     "nav1_title_nl": "Hoe het werkt",
     "nav1_title_en": "How it works",
     "nav1_sub_nl": "Agents op elk knelpunt",
