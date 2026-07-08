@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-15T14:11:58.614Z",
-    "action": "content_save",
-    "detail": "Sectie opgeslagen: integration"
-  },
-  {
     "ts": "2026-06-15T14:16:30.819Z",
     "action": "media_upload",
     "detail": "Bestand geüpload: instagram-vector-logo-icon-social-media-logotype_901408-392-Photoroom.png"
@@ -996,6 +991,11 @@
   },
   {
     "ts": "2026-07-08T16:25:24.824Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation, faq, consultancy, contact"
+  },
+  {
+    "ts": "2026-07-08T16:26:16.163Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation, faq, consultancy, contact"
   }
