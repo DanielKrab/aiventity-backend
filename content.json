@@ -176,7 +176,7 @@
     "label_en": "02 — ARCHITECTURE"
   },
   "navigation": {
-    "nav_logo": "",
+    "nav_logo": "https://raw.githubusercontent.com/DanielKrab/aiventity-backend/data/media/Logo-Aiventity-Photoroom.png",
     "nav_logo_height": "60",
     "nav_bar_padding": "1",
     "nav_bar_alpha": "0.10",
