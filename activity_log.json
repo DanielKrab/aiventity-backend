@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-15T14:11:51.006Z",
-    "action": "media_upload",
-    "detail": "Bestand geüpload: instagram-logo_971166-164438.avif"
-  },
-  {
     "ts": "2026-06-15T14:11:58.614Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
@@ -998,5 +993,10 @@
     "ts": "2026-07-07T19:22:20.908Z",
     "action": "publish",
     "detail": "Website gepubliceerd op Netlify"
+  },
+  {
+    "ts": "2026-07-08T16:25:24.824Z",
+    "action": "content_save",
+    "detail": "Sectie opgeslagen: hero, creativity, integration, execution, apply, footer, dna_slides, architecture, navigation, faq, consultancy, contact"
   }
 ]
