@@ -1,10 +1,5 @@
 [
   {
-    "ts": "2026-06-16T08:34:11.889Z",
-    "action": "media_upload",
-    "detail": "Bestand geüpload: instagram-vector-logo-icon-social-media-logotype_901408-392-Photoroom.png"
-  },
-  {
     "ts": "2026-06-16T08:34:18.459Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: integration"
@@ -998,5 +993,10 @@
     "ts": "2026-07-08T18:44:08.317Z",
     "action": "content_save",
     "detail": "Sectie opgeslagen: contact"
+  },
+  {
+    "ts": "2026-07-10T09:53:08.246Z",
+    "action": "theme_save",
+    "detail": "Thema-instellingen opgeslagen"
   }
 ]
