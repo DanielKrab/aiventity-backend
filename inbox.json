@@ -1,5 +1,16 @@
 [
   {
+    "id": "mrm7ilclhgu7",
+    "name": "TEST van Claude — mag verwijderd",
+    "lastname": "",
+    "email": "danielcloud@hotmail.nl",
+    "phone": "",
+    "subject": "Bericht via contactformulier — Formuliertest",
+    "message": "Testbericht om het gerepareerde contactformulier te verifiëren.",
+    "ts": "2026-07-15T15:00:13.845Z",
+    "read": false
+  },
+  {
     "id": "mqt6uukre8k0",
     "name": "danielcloud@hotmail.nl",
     "lastname": "",
